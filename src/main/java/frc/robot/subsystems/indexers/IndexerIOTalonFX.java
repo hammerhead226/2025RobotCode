@@ -9,10 +9,10 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.measure.measure.Angle;
-import edu.wpi.first.units.measure.measure.AngularVelocity;
-import edu.wpi.first.units.measure.measure.Current;
-import edu.wpi.first.units.measure.measure.Voltage;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Voltage;
 
 public class IndexerIOTalonFX implements IndexerIO {
   private final TalonFX talon;
