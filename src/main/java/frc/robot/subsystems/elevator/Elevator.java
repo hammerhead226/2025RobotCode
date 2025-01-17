@@ -121,9 +121,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void setPositionExtend(double position, double velocity) {
-    elevator.setPositionSetpoint(
-        position,
-        elevatorFFModel.calculate(velocity));
+    elevator.setPositionSetpoint(position, elevatorFFModel.calculate(velocity));
   }
 
   public void elevatorStop() {
@@ -175,9 +173,9 @@ public class Elevator extends SubsystemBase {
       elevator.configurePID(kP.get(), kI.get(), 0);
     }
     if (kS.hasChanged(hashCode())
-      || kG.hasChanged(hashCode())
-      || kV.hasChanged(hashCode())
-      || kA.hasChanged(hashCode())) {
+        || kG.hasChanged(hashCode())
+        || kV.hasChanged(hashCode())
+        || kA.hasChanged(hashCode())) {
       elevatorFFModel = new ElevatorFeedforward(kS.get(), kG.get(), kV.get(), kA.get());
     }
   }

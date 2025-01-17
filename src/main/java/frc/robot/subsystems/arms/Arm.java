@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems.arms;
 
-
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -13,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.SimConstants;
 import frc.robot.constants.SubsystemConstants;
 import frc.robot.util.LoggedTunableNumber;
-
 import org.littletonrobotics.junction.Logger;
 
 public class Arm extends SubsystemBase {
@@ -98,12 +96,7 @@ public class Arm extends SubsystemBase {
   public void setPositionDegs(double positionDegs, double velocityDegsPerSec) {
     // positionDegs = MathUtil.clamp(positionDegs, 33, 120);
     arm.setPositionSetpointDegs(
-        positionDegs,
-        armFFModel
-            .calculate(
-               positionDegs,
-               velocityDegsPerSec)
-           );
+        positionDegs, armFFModel.calculate(positionDegs, velocityDegsPerSec));
   }
 
   public void armStop() {

@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.SimConstants;
 import frc.robot.constants.SubsystemConstants;
 import frc.robot.util.LoggedTunableNumber;
-
 import org.littletonrobotics.junction.Logger;
 
 public class Indexer extends SubsystemBase {
@@ -95,8 +94,7 @@ public class Indexer extends SubsystemBase {
 
     indexer.setPositionSetpoint(
         indexerCurrentStateRotations.position * 360,
-        ff.calculate(
-                indexerCurrentStateRotations.velocity));
+        ff.calculate(indexerCurrentStateRotations.velocity));
 
     Logger.processInputs("Indexer", iInputs);
 
