@@ -23,8 +23,8 @@ public class Arm extends SubsystemBase {
   private static LoggedTunableNumber kG = new LoggedTunableNumber("Pivot/kG: ");
   private static LoggedTunableNumber kV = new LoggedTunableNumber("Pivot/kV: ");
 
-  private final PivotVis measuredVisualizer;
-  private final PivotVis setpointVisualizer;
+  public static PivotVis measuredVisualizer;
+  public static PivotVis setpointVisualizer;
 
   private static double maxVelocityDegPerSec;
   private static double maxAccelerationDegPerSecSquared;
@@ -77,7 +77,7 @@ public class Arm extends SubsystemBase {
         new TrapezoidProfile.Constraints(maxVelocityDegPerSec, maxAccelerationDegPerSecSquared);
     armProfile = new TrapezoidProfile(armConstraints);
 
-     setArmGoal(0);
+    setArmGoal(0);
     // setArmCurrent(getArmPositionDegs());
     armCurrentStateDegrees = armProfile.calculate(0, armCurrentStateDegrees, armGoalStateDegrees);
 
