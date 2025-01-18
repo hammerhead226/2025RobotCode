@@ -25,7 +25,6 @@ public class Arm extends SubsystemBase {
 
   private final PivotVis measuredVisualizer;
   private final PivotVis setpointVisualizer;
-  private final PivotVis goalVisualizer;
 
   private static double maxVelocityDegPerSec;
   private static double maxAccelerationDegPerSecSquared;
@@ -68,7 +67,6 @@ public class Arm extends SubsystemBase {
     }
     measuredVisualizer = new PivotVis("Measured", Color.kBlack);
     setpointVisualizer = new PivotVis("Setpoint", Color.kGreen);
-    goalVisualizer = new PivotVis("Goal", Color.kBlue);
 
     // CHANGE PER ARM
     maxVelocityDegPerSec = 60;
@@ -79,7 +77,7 @@ public class Arm extends SubsystemBase {
         new TrapezoidProfile.Constraints(maxVelocityDegPerSec, maxAccelerationDegPerSecSquared);
     armProfile = new TrapezoidProfile(armConstraints);
 
-    // setArmGoal(90);
+     setArmGoal(0);
     // setArmCurrent(getArmPositionDegs());
     armCurrentStateDegrees = armProfile.calculate(0, armCurrentStateDegrees, armGoalStateDegrees);
 
@@ -130,13 +128,14 @@ public class Arm extends SubsystemBase {
   @Override
   public void periodic() {
     arm.updateInputs(pInputs);
-    measuredVisualizer.update(pInputs.positionDegs);
-    setpointVisualizer.update(pInputs.positionSetpointDegs);
+
     armCurrentStateDegrees =
         armProfile.calculate(
             SubsystemConstants.LOOP_PERIOD_SECONDS, armCurrentStateDegrees, armGoalStateDegrees);
 
     setPositionDegs(armCurrentStateDegrees.position, armCurrentStateDegrees.velocity);
+    measuredVisualizer.update(armCurrentStateDegrees.position);
+    setpointVisualizer.update(armGoalStateDegrees.position);
 
     Logger.processInputs("Arm", pInputs);
     Logger.recordOutput("arm error", getArmError());

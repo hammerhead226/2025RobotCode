@@ -17,17 +17,16 @@ public class ElevatorVis {
 
     this.key = key;
     this.panel = new LoggedMechanism2d(100, 100, new Color8Bit(Color.kWhite));
-    this.root = panel.getRoot("mechanism", 30, 16);
+    this.root = panel.getRoot("mechanism", 50, 0);
     this.mecha =
-        root.append(new LoggedMechanismLigament2d("elevator", 5, 0, 10, new Color8Bit(color)));
+        root.append(new LoggedMechanismLigament2d("elevator", 0, 90, 10, new Color8Bit(color)));
 
-    Logger.recordOutput("ElevatorVis/mechanism2d/" + key, this.panel);
+    // Logger.recordOutput("ElevatorVis/mechanism2d/" + key, this.panel);
   }
 
   public void update(double position) {
     mecha.setLength(position);
 
     Logger.recordOutput("ElevatorVis/mechanism2d/" + key, this.panel);
-    // Logger.recordOutput(key, null);
   }
 }

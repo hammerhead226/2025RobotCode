@@ -26,11 +26,9 @@ public class Elevator extends SubsystemBase {
   private static final LoggedTunableNumber kV = new LoggedTunableNumber("Elevator/kV");
   private static final LoggedTunableNumber kA = new LoggedTunableNumber("Elevator/kA");
 
-  private static final LoggedTunableNumber barkG = new LoggedTunableNumber("Bar/kG");
-
   // CHANGE THESE VALUES TO MATCH THE ELEVATOR
-  private static final int maxVelocityExtender = 1;
-  private static final int maxAccelerationExtender = 1;
+  private static final int maxVelocityExtender = 5;
+  private static final int maxAccelerationExtender = 10;
 
   private TrapezoidProfile extenderProfile;
   private TrapezoidProfile.Constraints extenderConstraints =
@@ -56,7 +54,6 @@ public class Elevator extends SubsystemBase {
         kP.initDefault(0);
         kI.initDefault(0);
 
-        barkG.initDefault(0);
         break;
       case REPLAY:
         kS.initDefault(0);
@@ -67,7 +64,6 @@ public class Elevator extends SubsystemBase {
         kP.initDefault(0);
         kI.initDefault(0);
 
-        barkG.initDefault(0);
         break;
       case SIM:
         kS.initDefault(0);
@@ -78,7 +74,6 @@ public class Elevator extends SubsystemBase {
         kP.initDefault(1);
         kI.initDefault(0);
 
-        barkG.initDefault(0);
         break;
       default:
         kS.initDefault(0);
@@ -89,14 +84,13 @@ public class Elevator extends SubsystemBase {
         kP.initDefault(0);
         kI.initDefault(0);
 
-        barkG.initDefault(0);
         break;
     }
-    measuredVisualizer = new ElevatorVis("ElevatorVis/", Color.kBlack);
-    setpointVisualizer = new ElevatorVis("ElevatorVis/", Color.kGreen);
+    measuredVisualizer = new ElevatorVis("MeasuredVisualizer/", Color.kWhite);
+    setpointVisualizer = new ElevatorVis("SetpointVisualizer/", Color.kGreen);
 
     // CHANGE THIS VALUE TO MATCH THE ELEVATOR
-    setExtenderGoal(10);
+    setExtenderGoal(1);
     extenderProfile = new TrapezoidProfile(extenderConstraints);
     extenderCurrent = extenderProfile.calculate(0, extenderCurrent, extenderGoal);
 
@@ -150,16 +144,15 @@ public class Elevator extends SubsystemBase {
     return extenderGoal.position == SubsystemConstants.ElevatorConstants.EXTEND_SETPOINT_INCH;
   }
 
-  public Command setElevatorTarget(double goalInches, double thersholdInches) {
+  public Command setElevatorTarget(double goalInches, double thresholdInches) {
 
     return new InstantCommand(() -> setExtenderGoal(goalInches), this)
-        .until(() -> elevatorAtSetpoint(thersholdInches));
+        .until(() -> elevatorAtSetpoint(thresholdInches));
   }
 
   @Override
   public void periodic() {
-    measuredVisualizer.update(eInputs.elevatorPositionInch);
-    setpointVisualizer.update(eInputs.positionSetpointInch);
+
     Logger.recordOutput("Alliance", DriverStation.getAlliance().isPresent());
 
     elevator.updateInputs(eInputs);
@@ -171,6 +164,8 @@ public class Elevator extends SubsystemBase {
     setPositionExtend(extenderCurrent.position, extenderCurrent.velocity);
 
     Logger.processInputs("Elevator", eInputs);
+    measuredVisualizer.update(extenderCurrent.position);
+    setpointVisualizer.update(eInputs.positionSetpointInch);
     updateTunableNumbers();
   }
 

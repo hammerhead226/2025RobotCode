@@ -127,8 +127,10 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void test() {
-    // controller.y().onTrue(arm.setArmTarget(90, 3));
-    controller.y().onTrue(elevator.setElevatorTarget(90, 3));
+    controller.a().whileTrue(arm.setArmTarget(90, 3));
+    controller.a().whileFalse(arm.setArmTarget(0, 3));
+    controller.x().whileTrue(elevator.setElevatorTarget(3, 3));
+    controller.x().whileFalse(elevator.setElevatorTarget(0.25, 1));
   }
 
   private void configureButtonBindings() {
