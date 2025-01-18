@@ -26,7 +26,7 @@ public class ElevatorVis {
 
   public void update(double position) {
     mecha.setLength(position);
-    mecha.setAngle(position);
+
     Logger.recordOutput("ElevatorVis/mechanism2d/" + key, this.panel);
     // Logger.recordOutput(key, null);
   }

@@ -25,12 +25,16 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.constants.SimConstants;
 import frc.robot.constants.TunerConstants;
+import frc.robot.subsystems.arms.Arm;
+import frc.robot.subsystems.arms.ArmIOSim;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.ElevatorIOSim;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -42,7 +46,8 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
-
+  private final Elevator elevator;
+  private final Arm arm;
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
 
@@ -61,6 +66,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
+
         break;
 
       case SIM:
@@ -83,8 +89,12 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
+
         break;
     }
+
+    arm = new Arm(new ArmIOSim());
+    elevator = new Elevator(new ElevatorIOSim());
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -106,7 +116,8 @@ public class RobotContainer {
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     // Configure the button bindings
-    configureButtonBindings();
+    // configureButtonBindings();
+    test();
   }
 
   /**
@@ -115,6 +126,11 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
+  private void test() {
+    // controller.y().onTrue(arm.setArmTarget(90, 3));
+    controller.y().onTrue(elevator.setElevatorTarget(90, 3));
+  }
+
   private void configureButtonBindings() {
     // Default command, normal field-relative drive
     drive.setDefaultCommand(

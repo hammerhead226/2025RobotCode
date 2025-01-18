@@ -6,6 +6,7 @@ package frc.robot.subsystems.arms;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,9 +19,13 @@ public class Arm extends SubsystemBase {
   private final ArmIO arm;
   private final ArmIOInputsAutoLogged pInputs = new ArmIOInputsAutoLogged();
 
-  private static LoggedTunableNumber kP;
-  private static LoggedTunableNumber kG;
-  private static LoggedTunableNumber kV;
+  private static LoggedTunableNumber kP = new LoggedTunableNumber("Pivot/kP: ");
+  private static LoggedTunableNumber kG = new LoggedTunableNumber("Pivot/kG: ");
+  private static LoggedTunableNumber kV = new LoggedTunableNumber("Pivot/kV: ");
+
+  private final PivotVis measuredVisualizer;
+  private final PivotVis setpointVisualizer;
+  private final PivotVis goalVisualizer;
 
   private static double maxVelocityDegPerSec;
   private static double maxAccelerationDegPerSecSquared;
@@ -43,6 +48,7 @@ public class Arm extends SubsystemBase {
         kG.initDefault(0.29);
         kV.initDefault(1);
         kP.initDefault(1.123);
+
         break;
       case REPLAY:
         kG.initDefault(0.29);
@@ -50,9 +56,9 @@ public class Arm extends SubsystemBase {
         kP.initDefault(1.123);
         break;
       case SIM:
-        kG.initDefault(0.29);
-        kV.initDefault(1);
-        kP.initDefault(1.123);
+        kG.initDefault(1.765); // 0.29
+        kV.initDefault(3); // 1
+        kP.initDefault(1.123); // 1.123
         break;
       default:
         kG.initDefault(0.29);
@@ -60,10 +66,13 @@ public class Arm extends SubsystemBase {
         kP.initDefault(1.123);
         break;
     }
+    measuredVisualizer = new PivotVis("Measured", Color.kBlack);
+    setpointVisualizer = new PivotVis("Setpoint", Color.kGreen);
+    goalVisualizer = new PivotVis("Goal", Color.kBlue);
 
     // CHANGE PER ARM
-    maxVelocityDegPerSec = 1;
-    maxAccelerationDegPerSecSquared = 1;
+    maxVelocityDegPerSec = 60;
+    maxAccelerationDegPerSecSquared = 120;
     // maxAccelerationDegPerSecSquared = 180;
 
     armConstraints =
@@ -121,7 +130,8 @@ public class Arm extends SubsystemBase {
   @Override
   public void periodic() {
     arm.updateInputs(pInputs);
-
+    measuredVisualizer.update(pInputs.positionDegs);
+    setpointVisualizer.update(pInputs.positionSetpointDegs);
     armCurrentStateDegrees =
         armProfile.calculate(
             SubsystemConstants.LOOP_PERIOD_SECONDS, armCurrentStateDegrees, armGoalStateDegrees);

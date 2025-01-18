@@ -3,6 +3,7 @@ package frc.robot.subsystems.elevator;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -39,6 +40,8 @@ public class Elevator extends SubsystemBase {
 
   private double goal;
   private ElevatorFeedforward elevatorFFModel;
+  private ElevatorVis measuredVisualizer;
+  private ElevatorVis setpointVisualizer;
 
   public Elevator(ElevatorIO elevator) {
     this.elevator = elevator;
@@ -89,9 +92,11 @@ public class Elevator extends SubsystemBase {
         barkG.initDefault(0);
         break;
     }
+    measuredVisualizer = new ElevatorVis("ElevatorVis/", Color.kBlack);
+    setpointVisualizer = new ElevatorVis("ElevatorVis/", Color.kGreen);
 
     // CHANGE THIS VALUE TO MATCH THE ELEVATOR
-    setExtenderGoal(1);
+    setExtenderGoal(10);
     extenderProfile = new TrapezoidProfile(extenderConstraints);
     extenderCurrent = extenderProfile.calculate(0, extenderCurrent, extenderGoal);
 
@@ -153,6 +158,8 @@ public class Elevator extends SubsystemBase {
 
   @Override
   public void periodic() {
+    measuredVisualizer.update(eInputs.elevatorPositionInch);
+    setpointVisualizer.update(eInputs.positionSetpointInch);
     Logger.recordOutput("Alliance", DriverStation.getAlliance().isPresent());
 
     elevator.updateInputs(eInputs);
@@ -164,7 +171,6 @@ public class Elevator extends SubsystemBase {
     setPositionExtend(extenderCurrent.position, extenderCurrent.velocity);
 
     Logger.processInputs("Elevator", eInputs);
-
     updateTunableNumbers();
   }
 
