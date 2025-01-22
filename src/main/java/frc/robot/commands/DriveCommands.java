@@ -13,7 +13,17 @@
 
 package frc.robot.commands;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -28,13 +38,9 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.constants.SubsystemConstants;
 import frc.robot.subsystems.drive.Drive;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
+import frc.robot.subsystems.vision.ObjectDetection;
 
 public class DriveCommands {
   private static final double DEADBAND = 0.1;
@@ -46,6 +52,9 @@ public class DriveCommands {
   private static final double FF_RAMP_RATE = 0.1; // Volts/Sec
   private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
   private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
+  private static final double NOTE_FORWARD_OFFSET = -0.36;
+  private static PIDController sidewaysPID =
+      new PIDController(1.5, 0, 0, SubsystemConstants.LOOP_PERIOD_SECONDS);
 
   private DriveCommands() {}
 
@@ -154,6 +163,48 @@ public class DriveCommands {
 
         // Reset PID controller when command starts
         .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
+  }
+
+  private static double calculateWantedSidewaysVelocity(
+      Drive drive, ObjectDetection od, double sidewaysError, double forwardSpeed) {
+    double wantedSidewaysVelocityPID = sidewaysPID.calculate(sidewaysError);
+
+    double forwardDisplacementToNote =
+        od.getNotePositionRobotRelative().getX() + NOTE_FORWARD_OFFSET;
+    double maxTime;
+    double minVelocity;
+    if (forwardSpeed > 0 && forwardDisplacementToNote > 0) {
+      maxTime = calculateTime(forwardSpeed, forwardDisplacementToNote);
+      minVelocity = calculateVelocity(maxTime, od.getNotePositionRobotRelative().getY());
+
+      double wantedSidewaysVelocity =
+          Math.max(Math.abs(wantedSidewaysVelocityPID), Math.abs(minVelocity))
+              * (minVelocity / Math.abs(minVelocity));
+
+      wantedSidewaysVelocity =
+          MathUtil.clamp(
+              wantedSidewaysVelocity,
+              0.51 * -drive.getMaxLinearSpeedMetersPerSec(),
+              0.51 * drive.getMaxLinearSpeedMetersPerSec());
+
+      return wantedSidewaysVelocity;
+    } else {
+      return wantedSidewaysVelocityPID;
+    }
+  }
+
+  private static double calculateTime(double velocity, double displacement) {
+    double time = displacement / velocity;
+    Logger.recordOutput("Time to note", time);
+
+    return time;
+  }
+
+  private static double calculateVelocity(double time, double displacement) {
+    double velocity = displacement / time;
+    Logger.recordOutput("Velocity needed to note", velocity);
+
+    return velocity;
   }
 
   /**
