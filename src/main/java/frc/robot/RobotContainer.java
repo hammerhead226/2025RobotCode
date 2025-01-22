@@ -31,6 +31,9 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+
+import java.lang.ModuleLayer.Controller;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -45,6 +48,8 @@ public class RobotContainer {
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
+  private final CommandXboxController operatorcontroller = new CommandXboxController(1);
+
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -147,7 +152,14 @@ public class RobotContainer {
                             new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                     drive)
                 .ignoringDisable(true));
+                Controller.y().onTrue();
+                controller.x().onTrue();
+                controller.leftTrigger().onTrue();
+                controller.rightTrigger().onTrue();
+                controller.leftBumper().onTrue();
+                controller.rightBumper().onTrue();
   }
+ 
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
