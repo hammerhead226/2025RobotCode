@@ -158,6 +158,15 @@ public class RobotContainer {
                 controller.rightTrigger().onTrue();
                 controller.leftBumper().onTrue();
                 controller.rightBumper().onTrue();
+
+                operatorcontroller.a().onTrue();
+                operatorcontroller.b().onTrue();
+                operatorcontroller.y().onTrue();
+                operatorcontroller.x().onTrue();
+                operatorcontroller.leftTrigger().onTrue();
+                operatorcontroller.rightTrigger().onTrue();
+                operatorcontroller.leftBumper().onTrue();
+                operatorcontroller.rightBumper().onTrue();
   }
  
 
