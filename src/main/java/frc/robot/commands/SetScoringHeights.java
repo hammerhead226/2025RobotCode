@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.constants.FieldConstants.ReefHeight;
@@ -16,6 +17,7 @@ import frc.robot.subsystems.elevator.Elevator;
 public class SetScoringHeights extends SequentialCommandGroup {
   /** Creates a new SetArmAngleElevatorHeight. */
   double offsetInches = 0;
+
   public SetScoringHeights(ReefHeight height, Elevator elevator, CoralScorerArm csArm) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
@@ -24,6 +26,6 @@ public class SetScoringHeights extends SequentialCommandGroup {
     addCommands(
         csArm.setArmTarget(height == ReefHeight.L4 ? 90 : 60, 3),
         new WaitUntilCommand(() -> csArm.atGoal(10)),
-        elevator.setElevatorTarget(height.height + offsetInches, 3));
+        elevator.setElevatorTarget(Units.metersToInches(height.height) + offsetInches, 3));
   }
 }

@@ -22,6 +22,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.SetScoringHeights;
+import frc.robot.constants.FieldConstants.ReefHeight;
 import frc.robot.constants.SimConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.coralscorer.CoralScorerArm;
@@ -201,8 +203,11 @@ public class RobotContainer {
     //                 drive)
     //             .ignoringDisable(true));
 
-    keyboard.getVButton().onTrue(elevator.setElevatorTarget(10, 1));
-    keyboard.getVButton().onFalse(elevator.setElevatorTarget(4, 1));
+    // keyboard.getVButton().onTrue(elevator.setElevatorTarget(10, 1));
+    // keyboard.getXButton().onTrue(elevator.setElevatorTarget(4, 1));
+
+    keyboard.getVButton().onTrue(new SetScoringHeights(ReefHeight.L4, elevator, csArm));
+    keyboard.getXButton().onTrue(new SetScoringHeights(ReefHeight.L1, elevator, csArm));
   }
 
   /**

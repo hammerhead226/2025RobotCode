@@ -52,7 +52,7 @@ public class CoralScorerArm extends SubsystemBase {
         break;
       case SIM:
         kG.initDefault(0.29);
-        kV.initDefault(1);
+        kV.initDefault(14);
         kP.initDefault(1.123);
         break;
       default:
@@ -63,8 +63,8 @@ public class CoralScorerArm extends SubsystemBase {
     }
 
     // CHANGE PER ARM
-    maxVelocityDegPerSec = 1;
-    maxAccelerationDegPerSecSquared = 1;
+    maxVelocityDegPerSec = 90;
+    maxAccelerationDegPerSecSquared = 120;
     // maxAccelerationDegPerSecSquared = 180;
 
     armConstraints =

@@ -28,8 +28,8 @@ public class Elevator extends SubsystemBase {
   private static final LoggedTunableNumber barkG = new LoggedTunableNumber("Bar/kG");
 
   // CHANGE THESE VALUES TO MATCH THE ELEVATOR
-  private static final int maxVelocityExtender = 1;
-  private static final int maxAccelerationExtender = 1;
+  private static final int maxVelocityExtender = 10;
+  private static final int maxAccelerationExtender = 20;
 
   private TrapezoidProfile extenderProfile;
   private TrapezoidProfile.Constraints extenderConstraints =
@@ -38,7 +38,7 @@ public class Elevator extends SubsystemBase {
   private TrapezoidProfile.State extenderCurrent = new TrapezoidProfile.State();
 
   private double goal;
-  private ElevatorFeedforward elevatorFFModel;
+  private final ElevatorFeedforward elevatorFFModel;
 
   public Elevator(ElevatorIO elevator) {
     this.elevator = elevator;
@@ -69,10 +69,10 @@ public class Elevator extends SubsystemBase {
       case SIM:
         kS.initDefault(0);
         kG.initDefault(0);
-        kV.initDefault(0);
+        kV.initDefault(0.4);
         kA.initDefault(0);
 
-        kP.initDefault(1);
+        kP.initDefault(1.3);
         kI.initDefault(0);
 
         barkG.initDefault(0);
@@ -95,6 +95,7 @@ public class Elevator extends SubsystemBase {
     extenderProfile = new TrapezoidProfile(extenderConstraints);
     extenderCurrent = extenderProfile.calculate(0, extenderCurrent, extenderGoal);
 
+    elevatorFFModel = new ElevatorFeedforward(kS.get(), kG.get(), kV.get(), kA.get());
     updateTunableNumbers();
   }
 
@@ -172,11 +173,11 @@ public class Elevator extends SubsystemBase {
     if (kP.hasChanged(hashCode()) || kI.hasChanged(hashCode())) {
       elevator.configurePID(kP.get(), kI.get(), 0);
     }
-    if (kS.hasChanged(hashCode())
-        || kG.hasChanged(hashCode())
-        || kV.hasChanged(hashCode())
-        || kA.hasChanged(hashCode())) {
-      elevatorFFModel = new ElevatorFeedforward(kS.get(), kG.get(), kV.get(), kA.get());
-    }
+    // if (kS.hasChanged(hashCode())
+    //     || kG.hasChanged(hashCode())
+    //     || kV.hasChanged(hashCode())
+    //     || kA.hasChanged(hashCode())) {
+    //   elevatorFFModel = new ElevatorFeedforward(kS.get(), kG.get(), kV.get(), kA.get());
+    // }
   }
 }
