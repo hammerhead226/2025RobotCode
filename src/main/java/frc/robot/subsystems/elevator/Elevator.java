@@ -1,5 +1,7 @@
 package frc.robot.subsystems.elevator;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -8,14 +10,17 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.SimConstants;
 import frc.robot.constants.SubsystemConstants;
+import frc.robot.subsystems.commoniolayers.DistanceIO;
+import frc.robot.subsystems.commoniolayers.DistanceSensorIOInputsAutoLogged;
 import frc.robot.util.LoggedTunableNumber;
-import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends SubsystemBase {
 
   private final ElevatorIO elevator;
+  private final DistanceIO distanceSensor;
 
   private final ElevatorIOInputsAutoLogged eInputs = new ElevatorIOInputsAutoLogged();
+  private final DistanceSensorIOInputsAutoLogged dInputs = new DistanceSensorIOInputsAutoLogged();
 
   private static final LoggedTunableNumber kP = new LoggedTunableNumber("Elevator/kP");
   private static final LoggedTunableNumber kI = new LoggedTunableNumber("Elevator/kI");
@@ -40,8 +45,9 @@ public class Elevator extends SubsystemBase {
   private double goal;
   private ElevatorFeedforward elevatorFFModel;
 
-  public Elevator(ElevatorIO elevator) {
+  public Elevator(ElevatorIO elevator, DistanceIO distanceSensor) {
     this.elevator = elevator;
+    this.distanceSensor = distanceSensor;
 
     switch (SimConstants.currentMode) {
       case REAL:
@@ -156,6 +162,7 @@ public class Elevator extends SubsystemBase {
     Logger.recordOutput("Alliance", DriverStation.getAlliance().isPresent());
 
     elevator.updateInputs(eInputs);
+    distanceSensor.updateInputs(dInputs);
 
     extenderCurrent =
         extenderProfile.calculate(

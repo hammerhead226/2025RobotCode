@@ -9,16 +9,19 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.constants.SubsystemConstants;
+import frc.robot.subsystems.commoniolayers.DistanceIO;
 import frc.robot.util.Conversions;
 
 public class ElevatorIOTalonFX implements ElevatorIO {
   private final TalonFX leader;
   private final TalonFX follower;
+  private final DistanceIO distanceSensor;
 
   private double positionSetpoint;
   private final StatusSignal<Angle> elevatorPosition;
@@ -26,7 +29,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   private final StatusSignal<Voltage> appliedVolts;
   private final StatusSignal<Current> currentAmps;
 
-  public ElevatorIOTalonFX(int lead, int follow) {
+  public ElevatorIOTalonFX(int lead, int follow, DistanceIO distanceSensor) {
     TalonFXConfiguration config = new TalonFXConfiguration();
     config.CurrentLimits.StatorCurrentLimit = SubsystemConstants.ElevatorConstants.CURRENT_LIMIT;
     config.CurrentLimits.StatorCurrentLimitEnable =
@@ -47,6 +50,8 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     elevatorVelocity = leader.getVelocity();
     appliedVolts = leader.getMotorVoltage();
     currentAmps = leader.getStatorCurrent();
+
+    this.distanceSensor = distanceSensor;
 
     BaseStatusSignal.setUpdateFrequencyForAll(
         100, elevatorPosition, elevatorVelocity, appliedVolts, currentAmps);

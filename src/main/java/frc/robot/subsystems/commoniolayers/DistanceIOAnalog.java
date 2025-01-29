@@ -1,5 +1,6 @@
 package frc.robot.subsystems.commoniolayers;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.AnalogInput;
 
 public class DistanceIOAnalog implements DistanceIO {
@@ -13,7 +14,7 @@ public class DistanceIOAnalog implements DistanceIO {
 
   @Override
   public void updateInputs(DistanceSensorIOInputs inputs) {
-    inputs.distance = proxSensor.getValue();
+    inputs.distanceInches = Units.d proxSensor.getValue();
     inputs.sustain = this.sustain;
   }
 
