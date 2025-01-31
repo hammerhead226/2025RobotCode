@@ -6,12 +6,16 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.constants.SubsystemConstants;
 import frc.robot.util.Conversions;
@@ -19,14 +23,15 @@ import frc.robot.util.Conversions;
 public class ElevatorIOTalonFX implements ElevatorIO {
   private final TalonFX leader;
   private final TalonFX follower;
-
+  private final CANrange distance; //creates a CANrange object 
+  private boolean useCANRange = false; // creates a boolean variable useCANRange
   private double positionSetpoint;
   private final StatusSignal<Angle> elevatorPosition;
   private final StatusSignal<AngularVelocity> elevatorVelocity;
   private final StatusSignal<Voltage> appliedVolts;
   private final StatusSignal<Current> currentAmps;
 
-  public ElevatorIOTalonFX(int lead, int follow) {
+  public ElevatorIOTalonFX(int lead, int follow, CANrange distance) {
     TalonFXConfiguration config = new TalonFXConfiguration();
     config.CurrentLimits.StatorCurrentLimit = SubsystemConstants.ElevatorConstants.CURRENT_LIMIT;
     config.CurrentLimits.StatorCurrentLimitEnable =
@@ -36,6 +41,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
     leader = new TalonFX(lead, SubsystemConstants.CANBUS);
     follower = new TalonFX(follow, SubsystemConstants.CANBUS);
+    this.distance = distance;
 
     leader.getConfigurator().apply(config);
 
@@ -55,19 +61,29 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   @Override
   public void updateInputs(ElevatorIOInputs inputs) {
     BaseStatusSignal.refreshAll(elevatorPosition, elevatorVelocity, appliedVolts, currentAmps);
-    inputs.elevatorPositionInch =
-        Conversions.motorRotToInches(
-            elevatorPosition.getValueAsDouble(),
-            5.97,
-            SubsystemConstants.ElevatorConstants.ELEVATOR_GEAR_RATIO);
-    inputs.elevatorVelocityInchesPerSecond =
-        Conversions.motorRotToInches(
-            elevatorVelocity.getValueAsDouble() * 60.,
-            5.97,
-            SubsystemConstants.ElevatorConstants.ELEVATOR_GEAR_RATIO);
+    useCANRange = distance.getDistance().getValueAsDouble()>10 ? true:false; //decides whether to use CANrange or not
+
+    if(!useCANRange) { 
+      inputs.elevatorPositionInch =
+      Conversions.motorRotToInches(
+          elevatorPosition.getValueAsDouble(),
+          5.97,
+          SubsystemConstants.ElevatorConstants.ELEVATOR_GEAR_RATIO);
+      
+  }
+  else{
+    inputs.elevatorPositionInch = Units.metersToInches(distance.getDistance().getValueAsDouble());
+  }
+
+  inputs.elevatorVelocityInchesPerSecond =
+      Conversions.motorRotToInches(
+          elevatorVelocity.getValueAsDouble() * 60.,
+          5.97,
+          SubsystemConstants.ElevatorConstants.ELEVATOR_GEAR_RATIO);
     inputs.appliedVolts = appliedVolts.getValueAsDouble();
     inputs.currentAmps = currentAmps.getValueAsDouble();
     inputs.positionSetpointInch = positionSetpoint;
+   
   }
 
   @Override
