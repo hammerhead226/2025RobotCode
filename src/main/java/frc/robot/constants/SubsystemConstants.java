@@ -66,6 +66,10 @@ public final class SubsystemConstants {
     public static final double COLOR_VIOLET = 0.91;
   }
 
+  public static class CoralIntakeFlywheelConstants {
+    public static final double CORAL_DIST = 13;
+  }
+
   public static enum LED_STATE {
     BLUE,
     RED,
@@ -91,6 +95,13 @@ public final class SubsystemConstants {
     REPLAY
   }
 
+  public static enum CoralState {
+    NO_CORAL,
+    SENSOR,
+    CURRENT,
+    DEFAULT
+  }
+
   public static class CoralScorerConstants {
     public static class CoralScorerArmConstants {
       public static final double CURRENT_LIMIT = 35.0;
@@ -100,7 +111,14 @@ public final class SubsystemConstants {
       public static final double ARM_GEAR_RATIO = 1;
 
       public static final double ARM_ZERO_ANGLE = 0;
-      public static final double STOW_SETPOINT_DEG = 0;
+      public static final double INTAKE_SETPOINT_DEG = 1000;
+      public static final double STOW_SETPOINT_DEG = 100;
+
+      public static final double ARM_VELOCITY_DEGPERSEC = 200;
+    }
+
+    public static class CoralScorerFlywheelConstants {
+      public static final double FLYWHEEL_VELOCITY_DEGPERSEC = 20;
     }
   }
 }

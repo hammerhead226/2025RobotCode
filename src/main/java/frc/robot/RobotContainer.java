@@ -23,11 +23,15 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.IntakeFromSourceTest;
 import frc.robot.constants.SimConstants;
+import frc.robot.constants.SubsystemConstants.CoralState;
 import frc.robot.constants.TunerConstants;
+import frc.robot.subsystems.coralIntake.flywheels.CoralIntakeSensorIO;
 import frc.robot.subsystems.coralscorer.CoralScorerArm;
 import frc.robot.subsystems.coralscorer.CoralScorerArmIOSim;
 import frc.robot.subsystems.coralscorer.CoralScorerArmIOTalonFX;
+import frc.robot.subsystems.coralscorer.CoralScorerFlywheel;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -38,6 +42,7 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.elevator.ElevatorIOTalonFX;
+import frc.robot.subsystems.flywheel.FlywheelIOSim;
 import frc.robot.subsystems.newalgaeintake.AlgaeIntakeArm;
 import frc.robot.subsystems.newalgaeintake.AlgaeIntakeArmIOSim;
 import frc.robot.subsystems.newalgaeintake.AlgaeIntakeArmIOTalonFX;
@@ -67,6 +72,7 @@ public class RobotContainer {
   private final Elevator elevator;
   private final AlgaeIntakeArm algaeArm;
   private final Vision vision;
+  private final CoralScorerFlywheel csFlywheel;
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -85,7 +91,9 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackRight));
 
         csArm = new CoralScorerArm(new CoralScorerArmIOTalonFX(1));
-
+        csFlywheel =
+            new CoralScorerFlywheel(
+                new FlywheelIOSim(), new CoralIntakeSensorIO() {}, CoralState.DEFAULT);
         vision =
             new Vision(
                 drive.getToPoseEstimatorConsumer(),
@@ -109,6 +117,9 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackRight));
 
         csArm = new CoralScorerArm(new CoralScorerArmIOSim());
+        csFlywheel =
+            new CoralScorerFlywheel(
+                new FlywheelIOSim(), new CoralIntakeSensorIO() {}, CoralState.DEFAULT);
         vision =
             new Vision(
                 drive.getToPoseEstimatorConsumer(),
@@ -131,6 +142,9 @@ public class RobotContainer {
                 new ModuleIO() {});
 
         csArm = new CoralScorerArm(new CoralScorerArmIOSim());
+        csFlywheel =
+            new CoralScorerFlywheel(
+                new FlywheelIOSim(), new CoralIntakeSensorIO() {}, CoralState.DEFAULT);
         vision =
             new Vision(
                 drive.getToPoseEstimatorConsumer(),
@@ -211,11 +225,13 @@ public class RobotContainer {
     controller.y().whileTrue(elevator.setElevatorTarget(1.83, 1));
     controller.y().whileFalse(elevator.setElevatorTarget(1, 1));
 
-    controller.x().whileTrue(csArm.setArmTarget(90, 1));
-    controller.x().whileFalse(csArm.setArmTarget(-90, 1));
+    controller.b().whileTrue(csArm.setArmTarget(90, 1));
+    controller.b().whileFalse(csArm.setArmTarget(-90, 1));
 
     controller.b().whileTrue(algaeArm.setArmTarget(70, 2));
     controller.b().whileFalse(algaeArm.setArmTarget(20, 2));
+
+    controller.a().onTrue(new IntakeFromSourceTest(csFlywheel, csArm, elevator));
   }
 
   /**

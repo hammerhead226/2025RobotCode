@@ -347,13 +347,19 @@ public class Drive extends SubsystemBase {
 
   @AutoLogOutput(key = "bodo")
   public Pose2d boof() {
-    return new Pose2d(poseEstimator.getEstimatedPosition().getX() , poseEstimator.getEstimatedPosition().getY() + 0.25, poseEstimator.getEstimatedPosition().getRotation());
-  }
-  @AutoLogOutput(key = "godo")
-  public Pose2d doof() {
-    return new Pose2d(poseEstimator.getEstimatedPosition().getX() , poseEstimator.getEstimatedPosition().getY() - 0.25, poseEstimator.getEstimatedPosition().getRotation());
+    return new Pose2d(
+        poseEstimator.getEstimatedPosition().getX(),
+        poseEstimator.getEstimatedPosition().getY() + 0.25,
+        poseEstimator.getEstimatedPosition().getRotation());
   }
 
+  @AutoLogOutput(key = "godo")
+  public Pose2d doof() {
+    return new Pose2d(
+        poseEstimator.getEstimatedPosition().getX(),
+        poseEstimator.getEstimatedPosition().getY() - 0.25,
+        poseEstimator.getEstimatedPosition().getRotation());
+  }
 
   @AutoLogOutput(key = "flipped odo")
   public Pose3d goof() {

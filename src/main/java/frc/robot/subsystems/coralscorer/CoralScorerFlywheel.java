@@ -9,20 +9,35 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.constants.SimConstants;
+import frc.robot.constants.SubsystemConstants;
+import frc.robot.constants.SubsystemConstants.CoralState;
 import frc.robot.subsystems.commoniolayers.FlywheelIO;
 import frc.robot.subsystems.commoniolayers.FlywheelIOInputsAutoLogged;
+import frc.robot.subsystems.coralIntake.flywheels.CoralIntakeSensorIO;
+import frc.robot.subsystems.coralIntake.flywheels.CoralIntakeSensorIOInputsAutoLogged;
+import frc.robot.subsystems.newalgaeintake.FeederIOInputsAutoLogged;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class CoralScorerFlywheel extends SubsystemBase {
-  private final FlywheelIO io;
+  private final FlywheelIO flywheel;
+  private final CoralIntakeSensorIO sensor;
   private final FlywheelIOInputsAutoLogged inputs = new FlywheelIOInputsAutoLogged();
+  private final CoralIntakeSensorIOInputsAutoLogged sInputs =
+      new CoralIntakeSensorIOInputsAutoLogged();
   private final SimpleMotorFeedforward ffModel;
   private final SysIdRoutine sysId;
 
+  private CoralState lastCoralState;
+
+  private final FeederIOInputsAutoLogged feedInputs = new FeederIOInputsAutoLogged();
+
   /** Creates a new Flywheel. */
-  public CoralScorerFlywheel(FlywheelIO io) {
-    this.io = io;
+  public CoralScorerFlywheel(
+      FlywheelIO flywheel, CoralIntakeSensorIO sensor, CoralState lastCoralState) {
+    this.flywheel = flywheel;
+    this.sensor = sensor;
+    this.lastCoralState = lastCoralState;
 
     // Switch constants based on mode (the physics simulator is treated as a
     // separate robot with different tuning)
@@ -30,11 +45,11 @@ public class CoralScorerFlywheel extends SubsystemBase {
       case REAL:
       case REPLAY:
         ffModel = new SimpleMotorFeedforward(0.0, 0.0);
-        io.configurePID(0.0, 0.0, 0.0);
+        flywheel.configurePID(0.0, 0.0, 0.0);
         break;
       case SIM:
         ffModel = new SimpleMotorFeedforward(0.0, 0.0);
-        io.configurePID(0.0, 0.0, 0.0);
+        flywheel.configurePID(0.0, 0.0, 0.0);
         break;
       default:
         ffModel = new SimpleMotorFeedforward(0.0, 0.0);
@@ -54,19 +69,19 @@ public class CoralScorerFlywheel extends SubsystemBase {
 
   @Override
   public void periodic() {
-    io.updateInputs(inputs);
+    flywheel.updateInputs(inputs);
     Logger.processInputs("Flywheel", inputs);
   }
 
   /** Run open loop at the specified voltage. */
   public void runVolts(double volts) {
-    io.setVoltage(volts);
+    flywheel.setVoltage(volts);
   }
 
   /** Run closed loop at the specified velocity. */
   public void runVelocity(double velocityRPM) {
     var velocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(velocityRPM);
-    io.setVelocity(velocityRadPerSec, ffModel.calculate(velocityRadPerSec));
+    flywheel.setVelocity(velocityRadPerSec, ffModel.calculate(velocityRadPerSec));
 
     // Log flywheel setpoint
     Logger.recordOutput("Flywheel/SetpointRPM", velocityRPM);
@@ -88,7 +103,7 @@ public class CoralScorerFlywheel extends SubsystemBase {
 
   /** Stops the flywheel. */
   public void stop() {
-    io.stop();
+    flywheel.stop();
   }
 
   /** Returns a command to run a quasistatic test in the specified direction. */
@@ -110,5 +125,28 @@ public class CoralScorerFlywheel extends SubsystemBase {
   /** Returns the current velocity in radians per second. */
   public double getCharacterizationVelocity() {
     return inputs.velocityRadPerSec;
+  }
+
+  public CoralState seesCoral() {
+    Logger.recordOutput("see note val", "default");
+    if ((sInputs.distance < SubsystemConstants.CoralIntakeFlywheelConstants.CORAL_DIST)) {
+      Logger.recordOutput("see note val", "sensor");
+      lastCoralState = CoralState.SENSOR;
+      return CoralState.SENSOR;
+
+    } else if (feedInputs.currentAmps > 13) {
+      Logger.recordOutput("see note val", "current");
+      lastCoralState = CoralState.CURRENT;
+      return CoralState.CURRENT;
+
+    } else {
+      Logger.recordOutput("see note val", "no note");
+      lastCoralState = CoralState.NO_CORAL;
+      return CoralState.NO_CORAL;
+    }
+  }
+
+  public CoralState getLastCoralState() {
+    return lastCoralState;
   }
 }
