@@ -77,7 +77,7 @@ public class Elevator extends SubsystemBase {
         kV.initDefault(0);
         kA.initDefault(0);
 
-        kP.initDefault(1);
+        kP.initDefault(10);
         kI.initDefault(0);
 
         barkG.initDefault(0);

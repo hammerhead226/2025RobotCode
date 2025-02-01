@@ -19,11 +19,13 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.IntakeFromSourceTest;
+import frc.robot.commands.IntakeFromSourceTestTwo;
 import frc.robot.constants.SimConstants;
 import frc.robot.constants.SubsystemConstants.CoralState;
 import frc.robot.constants.TunerConstants;
@@ -222,18 +224,26 @@ public class RobotContainer {
     //                 drive)
     //             .ignoringDisable(true));
 
-    controller.y().whileTrue(elevator.setElevatorTarget(1.83, 1));
-    controller.y().whileFalse(elevator.setElevatorTarget(1, 1));
+    // keyboard.getZButton().whileTrue(elevator.setElevatorTarget(1.83, 1));
+    // keyboard.getZButton().whileFalse(elevator.setElevatorTarget(1, 1));
 
-    controller.b().whileTrue(csArm.setArmTarget(90, 1));
-    controller.b().whileFalse(csArm.setArmTarget(-90, 1));
+    // keyboard.getCButton().whileTrue(csArm.setArmTarget(90, 1));
+    // keyboard.getCButton().whileFalse(csArm.setArmTarget(-90, 1));
 
     controller.b().whileTrue(algaeArm.setArmTarget(70, 2));
     controller.b().whileFalse(algaeArm.setArmTarget(20, 2));
 
-    controller.a().onTrue(new IntakeFromSourceTest(csFlywheel, csArm, elevator));
-  }
+    // IntakeFromSourceTest intakeTest = new IntakeFromSourceTest(csFlywheel, csArm, elevator);
 
+    controller.y().onTrue(new IntakeFromSourceTestTwo(csFlywheel, csArm, elevator));
+    controller
+        .y()
+        .onFalse(
+            new ParallelCommandGroup(
+                csArm.setArmTarget(65, 4),
+                elevator.setElevatorTarget(0.75, 0.01),
+                new InstantCommand(() -> csFlywheel.runVolts(10))));
+  }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

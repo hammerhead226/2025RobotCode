@@ -21,7 +21,8 @@ public class IntakeFromSourceTest extends Command {
   private final CoralScorerArm arm;
   private final Elevator elevator;
 
-  public IntakeFromSourceTest(CoralScorerFlywheel coralIntake, CoralScorerArm arm, Elevator elevator) {
+  public IntakeFromSourceTest(
+      CoralScorerFlywheel coralIntake, CoralScorerArm arm, Elevator elevator) {
     this.coralIntake = coralIntake;
     this.elevator = elevator;
     this.arm = arm;
@@ -32,10 +33,8 @@ public class IntakeFromSourceTest extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    elevator.setElevatorTarget(2, ElevatorConstants.DEFAULT_THRESHOLD);
-    arm.setPositionDegs(
-        CoralScorerArmConstants.INTAKE_SETPOINT_DEG,
-        CoralScorerArmConstants.ARM_VELOCITY_DEGPERSEC);
+    elevator.setElevatorTarget(10, ElevatorConstants.DEFAULT_THRESHOLD);
+    arm.setArmTarget(70, 2);
     coralIntake.runVelocity(CoralScorerFlywheelConstants.FLYWHEEL_VELOCITY_DEGPERSEC);
   }
 
@@ -49,7 +48,7 @@ public class IntakeFromSourceTest extends Command {
     coralIntake.flywheelStop();
     arm.setPositionDegs(
         CoralScorerArmConstants.STOW_SETPOINT_DEG, CoralScorerArmConstants.ARM_VELOCITY_DEGPERSEC);
-    elevator.setElevatorTarget(0, ElevatorConstants.DEFAULT_THRESHOLD);
+    elevator.setElevatorTarget(1, ElevatorConstants.DEFAULT_THRESHOLD);
   }
 
   // Returns true when the command should end.

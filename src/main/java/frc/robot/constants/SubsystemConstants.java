@@ -42,7 +42,7 @@ public final class SubsystemConstants {
     public static final boolean CURRENT_LIMIT_ENABLED = true;
 
     public static final double RETRACT_SETPOINT_INCH = 0;
-    public static final double EXTEND_SETPOINT_INCH = 0;
+    public static final double EXTEND_SETPOINT_INCH = 20;
     public static final double DEFAULT_THRESHOLD = 1;
 
     public static final double ELEVATOR_GEAR_RATIO = 1;
@@ -56,7 +56,7 @@ public final class SubsystemConstants {
     public static final double ARM_GEAR_RATIO = 1;
 
     public static final double ARM_ZERO_ANGLE = 0;
-    public static final double STOW_SETPOINT_DEG = 0;
+    public static final double STOW_SETPOINT_DEG = 30;
   }
 
   public static class LEDConstants {
@@ -111,10 +111,10 @@ public final class SubsystemConstants {
       public static final double ARM_GEAR_RATIO = 1;
 
       public static final double ARM_ZERO_ANGLE = 0;
-      public static final double INTAKE_SETPOINT_DEG = 1000;
-      public static final double STOW_SETPOINT_DEG = 100;
+      public static final double INTAKE_SETPOINT_DEG = 100;
+      public static final double STOW_SETPOINT_DEG = 50;
 
-      public static final double ARM_VELOCITY_DEGPERSEC = 200;
+      public static final double ARM_VELOCITY_DEGPERSEC = 20;
     }
 
     public static class CoralScorerFlywheelConstants {
