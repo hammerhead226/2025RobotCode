@@ -21,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.SimConstants;
 import frc.robot.constants.TunerConstants;
+import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.ElevatorIOSim;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -153,6 +155,11 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+    robotContainer.getElevator().setExtenderGoal(0);;
+
+    /*new Elevator(new ElevatorIOSim()).runToZero().schedule();
+    CommandScheduler.getInstance().run();*/
+    //This works but is not preffered
   }
 
   /** This function is called periodically during operator control. */

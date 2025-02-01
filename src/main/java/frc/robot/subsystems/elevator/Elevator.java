@@ -28,8 +28,8 @@ public class Elevator extends SubsystemBase {
   private static final LoggedTunableNumber barkG = new LoggedTunableNumber("Bar/kG");
 
   // CHANGE THESE VALUES TO MATCH THE ELEVATOR
-  private static final int maxVelocityExtender = 1;
-  private static final int maxAccelerationExtender = 1;
+  private static final int maxVelocityExtender = 5;
+  private static final int maxAccelerationExtender = 2;
 
   private TrapezoidProfile extenderProfile;
   private TrapezoidProfile.Constraints extenderConstraints =
@@ -91,11 +91,16 @@ public class Elevator extends SubsystemBase {
     }
 
     // CHANGE THIS VALUE TO MATCH THE ELEVATOR
-    setExtenderGoal(1);
+    setExtenderGoal(2.5);
     extenderProfile = new TrapezoidProfile(extenderConstraints);
     extenderCurrent = extenderProfile.calculate(0, extenderCurrent, extenderGoal);
 
     updateTunableNumbers();
+  }
+
+  public Command runToZero() {
+    return new InstantCommand(() -> elevator.setVoltage(-1), this)
+        .until(() -> (Math.abs(eInputs.elevatorPositionInch) > 0.5));
   }
 
   public boolean atGoal() {

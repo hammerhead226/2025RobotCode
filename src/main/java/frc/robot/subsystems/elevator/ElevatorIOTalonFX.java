@@ -75,8 +75,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
       if (distance.getDistance().getValueAsDouble() - 0.13 > 0) {
         inputs.elevatorPositionInch =
             Units.metersToInches(distance.getDistance().getValueAsDouble());
-      }
-      else {
+      } else {
         inputs.elevatorPositionInch = 0;
       }
     }
