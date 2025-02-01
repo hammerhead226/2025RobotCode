@@ -60,7 +60,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   public void updateInputs(ElevatorIOInputs inputs) {
     BaseStatusSignal.refreshAll(elevatorPosition, elevatorVelocity, appliedVolts, currentAmps);
     useCANRange =
-        Units.metersToInches(distance.getDistance().getValueAsDouble()) > 10
+        Units.metersToInches(distance.getDistance().getValueAsDouble()) > 15.51
             ? false
             : true; // decides whether to use CANrange or not
 
@@ -72,7 +72,13 @@ public class ElevatorIOTalonFX implements ElevatorIO {
               SubsystemConstants.ElevatorConstants.ELEVATOR_GEAR_RATIO);
 
     } else {
-      inputs.elevatorPositionInch = Units.metersToInches(distance.getDistance().getValueAsDouble());
+      if (distance.getDistance().getValueAsDouble() - 0.13 > 0) {
+        inputs.elevatorPositionInch =
+            Units.metersToInches(distance.getDistance().getValueAsDouble());
+      }
+      else {
+        inputs.elevatorPositionInch = 0;
+      }
     }
 
     inputs.elevatorVelocityInchesPerSecond =

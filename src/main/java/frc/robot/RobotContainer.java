@@ -90,7 +90,7 @@ public class RobotContainer {
                 new VisionIOLimelight("limelight 3", drive.getRawGyroRotationSupplier()),
                 new VisionIOPhotonVision("photon", new Transform3d()));
         // TODO change lead, follower, gyro IDs, etc.
-        elevator = new Elevator(new ElevatorIOTalonFX(0, 0, new CANrange(1)));
+        elevator = new Elevator(new ElevatorIOTalonFX(0, 0, new CANrange(0, "CAN Bus 2")));
         break;
 
       case SIM:
