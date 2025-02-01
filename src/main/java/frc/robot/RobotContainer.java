@@ -13,6 +13,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.hardware.CANrange;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -89,7 +90,7 @@ public class RobotContainer {
                 new VisionIOLimelight("limelight 3", drive.getRawGyroRotationSupplier()),
                 new VisionIOPhotonVision("photon", new Transform3d()));
         // TODO change lead, follower, gyro IDs, etc.
-        elevator = new Elevator(new ElevatorIOTalonFX(0, 0));
+        elevator = new Elevator(new ElevatorIOTalonFX(0, 0, new CANrange(1)));
         break;
 
       case SIM:

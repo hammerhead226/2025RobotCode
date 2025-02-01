@@ -10,12 +10,10 @@ import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
-import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.constants.SubsystemConstants;
 import frc.robot.util.Conversions;
@@ -23,7 +21,7 @@ import frc.robot.util.Conversions;
 public class ElevatorIOTalonFX implements ElevatorIO {
   private final TalonFX leader;
   private final TalonFX follower;
-  private final CANrange distance; //creates a CANrange object 
+  private final CANrange distance; // creates a CANrange object
   private boolean useCANRange = false; // creates a boolean variable useCANRange
   private double positionSetpoint;
   private final StatusSignal<Angle> elevatorPosition;
@@ -61,29 +59,30 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   @Override
   public void updateInputs(ElevatorIOInputs inputs) {
     BaseStatusSignal.refreshAll(elevatorPosition, elevatorVelocity, appliedVolts, currentAmps);
-    useCANRange = distance.getDistance().getValueAsDouble()>10 ? true:false; //decides whether to use CANrange or not
+    useCANRange =
+        Units.metersToInches(distance.getDistance().getValueAsDouble()) > 10
+            ? false
+            : true; // decides whether to use CANrange or not
 
-    if(!useCANRange) { 
+    if (!useCANRange) {
       inputs.elevatorPositionInch =
-      Conversions.motorRotToInches(
-          elevatorPosition.getValueAsDouble(),
-          5.97,
-          SubsystemConstants.ElevatorConstants.ELEVATOR_GEAR_RATIO);
-      
-  }
-  else{
-    inputs.elevatorPositionInch = Units.metersToInches(distance.getDistance().getValueAsDouble());
-  }
+          Conversions.motorRotToInches(
+              elevatorPosition.getValueAsDouble(),
+              5.97,
+              SubsystemConstants.ElevatorConstants.ELEVATOR_GEAR_RATIO);
 
-  inputs.elevatorVelocityInchesPerSecond =
-      Conversions.motorRotToInches(
-          elevatorVelocity.getValueAsDouble() * 60.,
-          5.97,
-          SubsystemConstants.ElevatorConstants.ELEVATOR_GEAR_RATIO);
+    } else {
+      inputs.elevatorPositionInch = Units.metersToInches(distance.getDistance().getValueAsDouble());
+    }
+
+    inputs.elevatorVelocityInchesPerSecond =
+        Conversions.motorRotToInches(
+            elevatorVelocity.getValueAsDouble() * 60.,
+            5.97,
+            SubsystemConstants.ElevatorConstants.ELEVATOR_GEAR_RATIO);
     inputs.appliedVolts = appliedVolts.getValueAsDouble();
     inputs.currentAmps = currentAmps.getValueAsDouble();
     inputs.positionSetpointInch = positionSetpoint;
-   
   }
 
   @Override
