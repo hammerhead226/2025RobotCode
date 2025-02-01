@@ -9,20 +9,29 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.constants.SimConstants;
+import frc.robot.constants.SubsystemConstants.AlgaeState;
 import frc.robot.subsystems.commoniolayers.FlywheelIO;
 import frc.robot.subsystems.commoniolayers.FlywheelIOInputsAutoLogged;
+import frc.robot.subsystems.coralIntake.flywheels.CoralIntakeSensorIOInputsAutoLogged;
+import frc.robot.subsystems.newalgaeintake.FeederIOInputsAutoLogged;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class CoralScorerFlywheel extends SubsystemBase {
   private final FlywheelIO io;
   private final FlywheelIOInputsAutoLogged inputs = new FlywheelIOInputsAutoLogged();
+  private final CoralIntakeSensorIOInputsAutoLogged sInputs =
+      new CoralIntakeSensorIOInputsAutoLogged();
   private final SimpleMotorFeedforward ffModel;
   private final SysIdRoutine sysId;
 
+  private AlgaeState lastAlgaeState;
+  private final FeederIOInputsAutoLogged feedInputs = new FeederIOInputsAutoLogged();
+
   /** Creates a new Flywheel. */
-  public CoralScorerFlywheel(FlywheelIO io) {
+  public CoralScorerFlywheel(FlywheelIO io, AlgaeState lastAlgaeState) {
     this.io = io;
+    this.lastAlgaeState = lastAlgaeState;
 
     // Switch constants based on mode (the physics simulator is treated as a
     // separate robot with different tuning)
@@ -110,5 +119,23 @@ public class CoralScorerFlywheel extends SubsystemBase {
   /** Returns the current velocity in radians per second. */
   public double getCharacterizationVelocity() {
     return inputs.velocityRadPerSec;
+  }
+
+  public AlgaeState seesAlgae() {
+    Logger.recordOutput("see note val", "default");
+    if (feedInputs.currentAmps > 13) {
+      Logger.recordOutput("see note val", "current");
+      lastAlgaeState = AlgaeState.CURRENT;
+      return AlgaeState.CURRENT;
+
+    } else {
+      Logger.recordOutput("see note val", "no note");
+      lastAlgaeState = AlgaeState.NO_ALGAE;
+      return AlgaeState.NO_ALGAE;
+    }
+  }
+
+  public AlgaeState getLastCoralState() {
+    return lastAlgaeState;
   }
 }

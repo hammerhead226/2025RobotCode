@@ -91,6 +91,13 @@ public final class SubsystemConstants {
     REPLAY
   }
 
+  public static enum AlgaeState {
+    NO_ALGAE,
+    SENSOR,
+    CURRENT,
+    DEFAULT
+  }
+
   public static class CoralScorerConstants {
     public static class CoralScorerArmConstants {
       public static final double CURRENT_LIMIT = 35.0;
@@ -99,8 +106,16 @@ public final class SubsystemConstants {
       public static final double DEFAULT_THRESHOLD = 1;
       public static final double ARM_GEAR_RATIO = 1;
 
+      public static final double INTAKE_SETPOINT_DEG = 0;
+
+      public static final double ARM_VELOCITY_DEGPERSEC = 10;
+
       public static final double ARM_ZERO_ANGLE = 0;
-      public static final double STOW_SETPOINT_DEG = 0;
+      public static final double STOW_SETPOINT_DEG = 50;
+    }
+
+    public static class AlgaeScorerFlywheelConstants {
+      public static final double FLYWHEEL_VELOCITY_DEGPERSEC = 0;
     }
   }
 }
