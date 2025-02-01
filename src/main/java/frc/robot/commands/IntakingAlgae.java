@@ -32,9 +32,7 @@ public class IntakingAlgae extends Command {
   @Override
   public void initialize() {
     elevator.setElevatorTarget(12, ElevatorConstants.DEFAULT_THRESHOLD);
-    arm.setPositionDegs(
-        CoralScorerArmConstants.INTAKE_SETPOINT_DEG,
-        CoralScorerArmConstants.ARM_VELOCITY_DEGPERSEC);
+    arm.setArmGoal(CoralScorerArmConstants.INTAKE_SETPOINT_DEG);
     algaeIntake.runVelocity(AlgaeScorerFlywheelConstants.FLYWHEEL_VELOCITY_DEGPERSEC);
   }
 

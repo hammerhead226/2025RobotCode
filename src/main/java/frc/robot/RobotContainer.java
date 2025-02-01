@@ -19,11 +19,12 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.IntakingAlgae;
+import frc.robot.commands.IntakingAlgaeTwo;
 import frc.robot.constants.SimConstants;
 import frc.robot.constants.SubsystemConstants.AlgaeState;
 import frc.robot.constants.TunerConstants;
@@ -221,7 +222,12 @@ public class RobotContainer {
     keyboard.getVButton().onTrue(elevator.setElevatorTarget(10, 1));
     keyboard.getVButton().onFalse(elevator.setElevatorTarget(4, 1));
 
-    driveController.y().onTrue(new IntakingAlgae(elevator, algaeIntake, csArm));
+    driveController.y().onTrue(new IntakingAlgaeTwo(elevator, csArm));
+    driveController
+        .y()
+        .onFalse(
+            new ParallelCommandGroup(
+                csArm.setArmTarget(30, 4), elevator.setElevatorTarget(1, 0.1)));
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
