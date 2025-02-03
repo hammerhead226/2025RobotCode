@@ -29,7 +29,9 @@ import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
@@ -53,6 +55,8 @@ import frc.robot.constants.SimConstants;
 import frc.robot.constants.SimConstants.Mode;
 import frc.robot.constants.SubsystemConstants;
 import frc.robot.constants.TunerConstants;
+import frc.robot.subsystems.coralscorer.CoralScorerArm;
+import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.vision.ObjectDetection;
 import frc.robot.subsystems.vision.Vision.VisionConsumer;
 import frc.robot.util.LocalADStarAK;
@@ -344,6 +348,15 @@ public class Drive extends SubsystemBase {
   @AutoLogOutput(key = "Odometry/Robot")
   public Pose2d getPose() {
     return poseEstimator.getEstimatedPosition();
+  }
+
+  @AutoLogOutput(key = "goofy")
+  public Pose3d oogabooga() {
+    return new Pose3d(
+        0,
+        0,
+        Elevator.getElevatorPos3d() + 0.6,
+        new Rotation3d(new Rotation2d(Math.toRadians(0)).rotateBy(new Rotation2d(CoralScorerArm.armDegs))));
   }
 
   /** Returns the current odometry rotation. */

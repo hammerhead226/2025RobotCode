@@ -208,8 +208,10 @@ public class RobotContainer {
     //                 drive)
     //             .ignoringDisable(true));
 
-    keyboard.getVButton().onTrue(elevator.setElevatorTarget(10, 1));
-    keyboard.getVButton().onFalse(elevator.setElevatorTarget(4, 1));
+    driveController.a().onTrue(elevator.setElevatorTarget(1, .1));
+    driveController.a().onFalse(elevator.setElevatorTarget(0.4, 0.02));
+    driveController.b().onTrue(csArm.setArmTarget(80, 2));
+    driveController.b().onFalse(csArm.setArmTarget(0, 2));
   }
 
   /**

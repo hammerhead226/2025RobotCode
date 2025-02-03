@@ -26,7 +26,7 @@ public class Elevator extends SubsystemBase {
   private static final LoggedTunableNumber kA = new LoggedTunableNumber("Elevator/kA");
 
   private static final LoggedTunableNumber barkG = new LoggedTunableNumber("Bar/kG");
-
+  public static double elevatorPos = 0;
   // CHANGE THESE VALUES TO MATCH THE ELEVATOR
   private static final int maxVelocityExtender = 1;
   private static final int maxAccelerationExtender = 1;
@@ -42,6 +42,7 @@ public class Elevator extends SubsystemBase {
 
   public Elevator(ElevatorIO elevator) {
     this.elevator = elevator;
+    elevatorPos = extenderCurrent.position;
 
     switch (SimConstants.currentMode) {
       case REAL:
@@ -133,6 +134,11 @@ public class Elevator extends SubsystemBase {
     return angle;
   }
 
+  public static double getElevatorPos3d() {
+
+    return elevatorPos;
+  }
+
   public void setConstraints(
       double maxVelocityMetersPerSec, double maxAccelerationMetersPerSecSquared) {
     extenderConstraints =
@@ -164,6 +170,7 @@ public class Elevator extends SubsystemBase {
     setPositionExtend(extenderCurrent.position, extenderCurrent.velocity);
 
     Logger.processInputs("Elevator", eInputs);
+    elevatorPos = extenderCurrent.position;
 
     updateTunableNumbers();
   }

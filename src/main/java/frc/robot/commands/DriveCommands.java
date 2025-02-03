@@ -13,7 +13,6 @@
 
 package frc.robot.commands;
 
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -65,7 +64,6 @@ public class DriveCommands {
 
   private static Pose2d nearestReefSide = null;
   // private static ProfiledPIDController goof = new ProfiledPIDController(1.5, 0, 0, )
- 
 
   // profiled controllers
 
@@ -155,11 +153,6 @@ public class DriveCommands {
                   linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
                   omega * drive.getMaxAngularSpeedRadPerSec());
 
-         
-    
-       
-       
-
           double forwardSpeed = speeds.vxMetersPerSecond;
 
           double sidewaysSpeed = speeds.vyMetersPerSecond;
@@ -199,7 +192,6 @@ public class DriveCommands {
             wantedSidewaysVelocity = profileSideways.calculate(sidewaysError);
             sidewaysAssistEffort = (wantedSidewaysVelocity - sidewaysSpeed) * speedDebuf;
 
-          
             Rotation2d targeRotation2d;
 
             targeRotation2d = getClosestSource(drive).getRotation();

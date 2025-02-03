@@ -31,7 +31,7 @@ public class CoralScorerArm extends SubsystemBase {
 
   private TrapezoidProfile.State armGoalStateDegrees = new TrapezoidProfile.State();
   private TrapezoidProfile.State armCurrentStateDegrees = new TrapezoidProfile.State();
-
+  public static double armDegs = 0;
   double goalDegrees;
 
   private ArmFeedforward armFFModel;
@@ -39,6 +39,7 @@ public class CoralScorerArm extends SubsystemBase {
   /** Creates a new Arm. */
   public CoralScorerArm(ArmIO arm) {
     this.coralScorerArm = arm;
+    armDegs = armCurrentStateDegrees.position;
     switch (SimConstants.currentMode) {
       case REAL:
         kG.initDefault(0.29);
@@ -63,8 +64,8 @@ public class CoralScorerArm extends SubsystemBase {
     }
 
     // CHANGE PER ARM
-    maxVelocityDegPerSec = 1;
-    maxAccelerationDegPerSecSquared = 1;
+    maxVelocityDegPerSec = 100;
+    maxAccelerationDegPerSecSquared = 100;
     // maxAccelerationDegPerSecSquared = 180;
 
     armConstraints =
@@ -134,7 +135,7 @@ public class CoralScorerArm extends SubsystemBase {
 
     Logger.recordOutput("arm goal", goalDegrees);
     // This method will be called once per scheduler run
-
+    armDegs = armCurrentStateDegrees.position;
     updateTunableNumbers();
   }
 
