@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.constants.SubsystemConstants;
 import frc.robot.subsystems.drive.Drive;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -51,7 +52,7 @@ public class DriveCommands {
   private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
   private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
   private static PIDController rotationPID =
-      new PIDController(2.54, 0, 0, SConstants.LOOP_PERIOD_SECS);
+      new PIDController(2.54, 0, 0, SubsystemConstants.LOOP_PERIOD_SECONDS);
       private static final double NOTE_FORWARD_OFFSET = -0.36;
       private static double sideWaysError = 0;
       private static double wantedSidewaysVelocity = 0;
@@ -60,7 +61,7 @@ public class DriveCommands {
       private static double rotationAssistEffort = 0;
       private static double forwardConstantVelocity = 0;
       private static PIDController sidewaysPID =
-          new PIDController(1.5, 0, 0, Constants.LOOP_PERIOD_SECS);
+          new PIDController(1.5, 0, 0, SubsystemConstants.LOOP_PERIOD_SECONDS);
 
     public static PIDController getRotationPID() {
         return rotationPID;
@@ -71,7 +72,7 @@ public class DriveCommands {
     }
 
 
-  private DriveCommands() {}
+  public DriveCommands() {}
 
   private static Translation2d getLinearVelocityFromJoysticks(double x, double y) {
     // Apply deadband
@@ -94,8 +95,7 @@ public class DriveCommands {
       Drive drive,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
-      DoubleSupplier omegaSupplier,
-      BooleanSupplier turnToAmpSupplier) {
+      DoubleSupplier omegaSupplier) {
     return Commands.run(
         () -> {
           // Get linear velocity
@@ -171,7 +171,7 @@ public class DriveCommands {
       Drive drive,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
-      Supplier<Rotation2d> rotationSupplierr,
+      Supplier<Rotation2d> rotationSupplier
       ){
 
     // Create PID controller

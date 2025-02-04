@@ -25,7 +25,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.AlignToReefAuto;
 import frc.robot.commands.AutoAlignToSource;
+import frc.robot.commands.AutoPickupCoral;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.IntakeFromSource;
 import frc.robot.constants.SimConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.drive.Drive;
@@ -40,6 +42,10 @@ import frc.robot.subsystems.led.LED_IOCANdle;
 import frc.robot.subsystems.led.LED_IOSim;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+import frc.robot.subsystems.vision.ObjectDetection;
+import frc.robot.subsystems.vision.ObjectDetection.ObjectDetectionConsumer;
+import frc.robot.subsystems.vision.ObjectDetectionIO;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -51,7 +57,10 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;
   private final LED led;
-
+  private final ObjectDetection objectDetection;
+  private final ObjectDetectionConsumer odConsumer;
+  private final ObjectDetectionIO odIo;
+  private final IntakeFromSource coralIntake;
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
 
@@ -71,8 +80,8 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
         led = new LED(new LED_IOCANdle(0, ""));
-        break;
-
+        objectDetection = new ObjectDetection(odConsumer, odIo);
+        break; 
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
         drive =
@@ -83,6 +92,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
         led = new LED(new LED_IOSim());
+        objectDetection = new ObjectDetection(odConsumer, odIo);
         break;
 
       default:
@@ -95,6 +105,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
         led = new LED(new LED_IO() {});
+        objectDetection = new ObjectDetection(new ObjectionDetectionConsumer() {}, new ObjectDetectionIO() {});
         break;
     }
 
@@ -118,6 +129,13 @@ public class RobotContainer {
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     NamedCommands.registerCommand("AlignToReefAuto", new AlignToReefAuto(drive, led));
+    NamedCommands.registerCommand("AutoAlignToSource", new AutoAlignToSource(drive, led));
+    //TODO: Add instantiation of objectDetection
+    NamedCommands.registerCommand("AutoPickupCoral", new AutoPickupCoral(objectDetection, drive, led));
+    NamedCommands.registerCommand("DriveCommands", new DriveCommands());
+    //TODO: Add instantiation of intakeFromSource
+    NamedCommands.registerCommand("IntakeFromSource", new IntakeFromSource(coralIntake));
+
     // autoChooser.addOption("toReefTest", AutoBuilder.buildAuto("toReefTest"));
     // Configure the button bindings
     configureButtonBindings();
