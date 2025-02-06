@@ -25,7 +25,7 @@ import frc.robot.constants.SimConstants;
 import frc.robot.constants.SubsystemConstants.CoralState;
 import frc.robot.subsystems.commoniolayers.FlywheelIO;
 import frc.robot.subsystems.commoniolayers.FlywheelIOInputsAutoLogged;
-import frc.robot.subsystems.newalgaeintake.WinchIOInputsAutoLogged;
+import frc.robot.subsystems.newalgaeintake.FeederIOInputsAutoLogged;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -37,7 +37,7 @@ public class Flywheel extends SubsystemBase {
 
   private CoralState lastCoralState;
   private final FlywheelIOInputsAutoLogged flyInputs = new FlywheelIOInputsAutoLogged();
-  private final WinchIOInputsAutoLogged feedInputs = new WinchIOInputsAutoLogged();
+  private final FeederIOInputsAutoLogged feedInputs = new FeederIOInputsAutoLogged();
   // private final DistanceSensorIOInputsAutoLogged sInputs = new
   // DistanceSensorIOInputsAutoLogged();
   /** Creates a new Flywheel. */
