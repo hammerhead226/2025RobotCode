@@ -13,18 +13,18 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.constants.SubsystemConstants;
 
-public class AlgaeIntakeFeederIOTalonFX implements AlgaeIntakeFeederIO {
+public class AlgaeIntakeFlywheelIOTalonFX implements AlgaeIntakeFlywheelIO {
 
-  private final TalonFX feeder;
+  private final TalonFX flywheel;
 
-  private final StatusSignal<AngularVelocity> feederVelocityRPS;
+  private final StatusSignal<AngularVelocity> flywheelVelocityRPS;
   private final StatusSignal<Voltage> appliedVolts;
   private final StatusSignal<Current> currentAmps;
-  private final StatusSignal<Angle> feederRotations;
+  private final StatusSignal<Angle> flywheelRotations;
 
   private double velocitySetpointRPS = 0;
 
-  public AlgaeIntakeFeederIOTalonFX(int id) {
+  public AlgaeIntakeFlywheelIOTalonFX(int id) {
 
     TalonFXConfiguration config = new TalonFXConfiguration();
     config.CurrentLimits.StatorCurrentLimit =
@@ -33,26 +33,26 @@ public class AlgaeIntakeFeederIOTalonFX implements AlgaeIntakeFeederIO {
         SubsystemConstants.CoralScorerConstants.AlgaeScorerFlywheelConstants.CURRENT_LIMIT_ENABLED;
     config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-    feeder = new TalonFX(id, SubsystemConstants.CANBUS);
+    flywheel = new TalonFX(id, SubsystemConstants.CANBUS);
 
-    feeder.getConfigurator().apply(config);
+    flywheel.getConfigurator().apply(config);
 
-    feederVelocityRPS = feeder.getVelocity();
-    appliedVolts = feeder.getMotorVoltage();
-    currentAmps = feeder.getStatorCurrent();
-    feederRotations = feeder.getPosition();
+    flywheelVelocityRPS = flywheel.getVelocity();
+    appliedVolts = flywheel.getMotorVoltage();
+    currentAmps = flywheel.getStatorCurrent();
+    flywheelRotations = flywheel.getPosition();
 
     BaseStatusSignal.setUpdateFrequencyForAll(
-        100, feederVelocityRPS, appliedVolts, currentAmps, feederRotations);
+        100, flywheelVelocityRPS, appliedVolts, currentAmps, flywheelRotations);
   }
 
   @Override
-  public void updateInputs(FeederIOInputs inputs) {
-    BaseStatusSignal.refreshAll(feederVelocityRPS, appliedVolts, currentAmps, feederRotations);
+  public void updateInputs(FlywheelIOInputs inputs) {
+    BaseStatusSignal.refreshAll(flywheelVelocityRPS, appliedVolts, currentAmps, flywheelRotations);
 
-    inputs.feederRotations = feederRotations.getValueAsDouble();
+    inputs.flywheelRotations = flywheelRotations.getValueAsDouble();
     inputs.velocitySetpointRPM = velocitySetpointRPS * 60.;
-    inputs.feederVelocityRPM = feederVelocityRPS.getValueAsDouble() * 60.;
+    inputs.flywheelVelocityRPM = flywheelVelocityRPS.getValueAsDouble() * 60.;
     inputs.appliedVolts = appliedVolts.getValueAsDouble();
     inputs.currentAmps = currentAmps.getValueAsDouble();
   }
@@ -60,12 +60,12 @@ public class AlgaeIntakeFeederIOTalonFX implements AlgaeIntakeFeederIO {
   @Override
   public void setVelocityRPS(double velocityRPS, double ffVolts) {
     this.velocitySetpointRPS = velocityRPS;
-    feeder.setControl(new VelocityVoltage(velocityRPS));
+    flywheel.setControl(new VelocityVoltage(velocityRPS));
   }
 
   @Override
   public void stop() {
-    feeder.stopMotor();
+    flywheel.stopMotor();
     velocitySetpointRPS = 0;
   }
 
@@ -77,6 +77,6 @@ public class AlgaeIntakeFeederIOTalonFX implements AlgaeIntakeFeederIO {
     configs.kI = kI;
     configs.kD = kD;
 
-    feeder.getConfigurator().apply(configs);
+    flywheel.getConfigurator().apply(configs);
   }
 }

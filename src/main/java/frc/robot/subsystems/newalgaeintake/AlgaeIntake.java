@@ -9,7 +9,7 @@ import frc.robot.util.LoggedTunableNumber;
 public class AlgaeIntake extends SubsystemBase {
   SimpleMotorFeedforward feederFFModel;
 
-  private final AlgaeIntakeFeederIO feeder;
+  private final AlgaeIntakeFlywheelIO feeder;
   private final AlgaeIntakeArmIO arm;
 
   private static final LoggedTunableNumber feederkP = new LoggedTunableNumber("feederkP");
@@ -19,7 +19,7 @@ public class AlgaeIntake extends SubsystemBase {
   private static LoggedTunableNumber armkG = new LoggedTunableNumber("armkG");
   private static LoggedTunableNumber armkV = new LoggedTunableNumber("armkV");
 
-  public AlgaeIntake(AlgaeIntakeFeederIO feeder, AlgaeIntakeArmIO arm) {
+  public AlgaeIntake(AlgaeIntakeFlywheelIO feeder, AlgaeIntakeArmIO arm) {
     switch (SimConstants.currentMode) {
       case REAL:
         feederFFModel = new SimpleMotorFeedforward(0, 0, 0);
