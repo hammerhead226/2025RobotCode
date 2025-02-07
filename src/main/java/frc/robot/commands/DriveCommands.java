@@ -63,7 +63,12 @@ public class DriveCommands {
 
   private static Pose2d nearestReefSide = null;
   static ProfiledPIDController sidewaysPID =
-      new ProfiledPIDController(7, 1, 0.5, new TrapezoidProfile.Constraints(1, 0.6));
+      new ProfiledPIDController(7, 1, 0.5, new TrapezoidProfile.Constraints(3, 4.5));
+  static ProfiledPIDController forwardsPID =
+      new ProfiledPIDController(7, 1, 0.5, new TrapezoidProfile.Constraints(3, 4.5));
+  static ProfiledPIDController rotationPID =
+      new ProfiledPIDController(2.9, 0., 0.2, new TrapezoidProfile.Constraints(120, 150));
+      // new ProfiledPIDController(0, 0., 0, new TrapezoidProfile.Constraints(70, 120));
   static int count = 0;
 
   private DriveCommands() {}
@@ -93,13 +98,7 @@ public class DriveCommands {
       BooleanSupplier reefAlignAssistSupplier,
       BooleanSupplier sourceAlignSupplier) {
 
-    ProfiledPIDController forwardsPID =
-        new ProfiledPIDController(7, 1, 0.5, new TrapezoidProfile.Constraints(3, 4));
-    // private static ProfiledPIDController forwardsPID =
-    //     new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(3, 4));
-    ProfiledPIDController rotationPID =
-        // new ProfiledPIDController(2.9, 0., 0.2, new TrapezoidProfile.Constraints(70, 120));
-        new ProfiledPIDController(0, 0., 0, new TrapezoidProfile.Constraints(70, 120));
+   
 
     return Commands.run(
         () -> {
@@ -108,30 +107,6 @@ public class DriveCommands {
           sidewaysPID.setTolerance(0.1);
           forwardsPID.setTolerance(0.1);
 
-          // profileSideways =
-          //     new ProfiledPIDController(
-          //         5,
-          //         0,
-          //         0,
-          //         new TrapezoidProfile.Constraints(drive.getMaxLinearSpeedMetersPerSec(), 15));
-          // profileForward =
-          //     new ProfiledPIDController(
-          //         5,
-          //         0,
-          //         0,
-          //         new TrapezoidProfile.Constraints(drive.getMaxLinearSpeedMetersPerSec(), 15));
-          // profileRotation =
-          //     new ProfiledPIDController(
-          //         2.54,
-          //         0,
-          //         0,
-          //         new TrapezoidProfile.Constraints(
-          //             Math.toDegrees(drive.getMaxAngularSpeedRadPerSec()), 1500));
-
-          // profileForward.setTolerance(0.1);
-          // profileSideways.setTolerance(0.1);
-          // profileRotation.setTolerance(1);
-          // profileRotation.enableContinuousInput(-180, 180);
           // Get linear velocity
           Translation2d linearVelocity =
               getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
@@ -155,33 +130,27 @@ public class DriveCommands {
 
           double rotationSpeed = speeds.omegaRadiansPerSecond;
 
-          double speedDebuf = 0.7;
 
           if (reefAlignAssistSupplier.getAsBoolean()) {
             count++;
             if (count == 1) {
-              // sidewaysPID =
-              // new ProfiledPIDController(7, 1, 0.5, new TrapezoidProfile.Constraints(1, 0.6));
+              sidewaysPID.reset(drive.getPose().getY());
+              forwardsPID.reset(drive.getPose().getX());
+              rotationPID.reset(drive.getRotation().getDegrees());
             }
 
             nearestReefSide = drive.getNearestSide();
 
-            // sidewaysPID.setGoal(nearestReefSide.getY());
             sidewaysError = drive.getPose().getY() - drive.getNearestSide().getY();
             Logger.recordOutput("Sideways Error", sidewaysError);
-            // wantedSidewaysVelocity =
-            //     MathUtil.clamp(
-            //         sidewaysPID.calculate(drive.getPose().getY(), nearestReefSide.getY()),
-            //         -drive.getMaxLinearSpeedMetersPerSec(),
-            //         drive.getMaxLinearSpeedMetersPerSec());
-            // sidewaysPID.setGoal(0);
-
-            // Logger.recordOutput("sidegoal", sidewaysPID.getGoal().position);
+          
             wantedSidewaysVelocity =
                 MathUtil.clamp(
-                    sidewaysPID.calculate(drive.getPose().getY(), drive.getNearestSide().getY()),
-                    -1,
-                    1);
+                    sidewaysPID.calculate(
+                        drive.getPose().getY(),
+                        drive.getNearestSide().getY()),
+                    -3,
+                    3);
             sidewaysAssistEffort = wantedSidewaysVelocity - sidewaysSpeed;
             Logger.recordOutput("sidethere", sidewaysPID.atGoal());
             Logger.recordOutput("sidewaysSet", sidewaysPID.getSetpoint().velocity);
@@ -192,16 +161,11 @@ public class DriveCommands {
             forwardsPID.setGoal(nearestReefSide.getX());
             forwardsError = drive.getPose().getX() - nearestReefSide.getX();
             Logger.recordOutput("Forwards Error", forwardsError);
-            // wantedForwardsVelocity =
-            //     MathUtil.clamp(
-            //         forwardsPID.calculate(drive.getPose().getX(), nearestReefSide.getX()),
-            //         -drive.getMaxLinearSpeedMetersPerSec(),
-            //         drive.getMaxLinearSpeedMetersPerSec());
             wantedForwardsVelocity =
                 MathUtil.clamp(
-                    forwardsPID.calculate(drive.getPose().getX()),
-                    -drive.getMaxLinearSpeedMetersPerSec(),
-                    drive.getMaxLinearSpeedMetersPerSec());
+                    forwardsPID.calculate(drive.getPose().getX(), nearestReefSide.getX()),
+                    -3,
+                    3);
             forwardsAssistEffort = wantedForwardsVelocity - forwardSpeed;
 
             Logger.recordOutput("forwardsSet", forwardsPID.getSetpoint().velocity);
@@ -246,7 +210,7 @@ public class DriveCommands {
               ChassisSpeeds.fromFieldRelativeSpeeds(
                   new ChassisSpeeds(
                       MathUtil.clamp(
-                          forwardSpeed, // forwardSpeed + forwardsAssistEffort,
+                          forwardSpeed +forwardsAssistEffort, // forwardSpeed + forwardsAssistEffort,
                           -drive.getMaxLinearSpeedMetersPerSec(),
                           drive.getMaxLinearSpeedMetersPerSec()),
                       MathUtil.clamp(

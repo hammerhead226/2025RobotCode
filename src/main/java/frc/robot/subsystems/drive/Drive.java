@@ -242,7 +242,7 @@ public class Drive extends SubsystemBase {
 
     Logger.recordOutput("isatreef", isAtReefSide());
     Logger.recordOutput("balls", getReefPose());
-    Logger.recordOutput("sdaofads", nearestSide.getTranslation().getDistance(getPose().getTranslation()));
+    Logger.recordOutput("sdaofads", getPose().getY() - nearestSide.getY());
 
     // Update gyro alert
     gyroDisconnectedAlert.set(!gyroInputs.connected && SimConstants.currentMode != Mode.SIM);
@@ -438,7 +438,7 @@ public class Drive extends SubsystemBase {
   }
 
   public Pose2d getNearestSide() {
-    
+
     return nearestSide;
   }
 
