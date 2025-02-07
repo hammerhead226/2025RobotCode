@@ -493,12 +493,20 @@ public class Drive extends SubsystemBase {
   }
 
   public Pose2d getReefPose() {
-    return new Pose2d(nearestSide.getTranslation().minus(offset), nearestSide.getRotation());
+    return nearestSide == null
+        // ? new Pose2d(0, 0, Rotation2d.fromDegrees(20))
+        ? new Pose2d(nearestSide.getTranslation().minus(offset), nearestSide.getRotation())
+        : new Pose2d(0, 0, Rotation2d.fromDegrees(20));
   }
 
-  public Command createPathFindingCommand(Pose2d target) {
-    Pose2d coord = target;
-    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(getPose(), coord);
+  public Command createPathFindingCommand(Supplier<Pose2d> reefSide) {
+    Logger.recordOutput("hello there!", reefSide.get());
+    List<Waypoint> waypoints =
+        PathPlannerPath.waypointsFromPoses(
+          getPose(),
+            new Pose2d(10, 0, Rotation2d.fromDegrees(20)),
+            reefSide.get(),
+            new Pose2d(1, 0, Rotation2d.fromDegrees(20)));
     // List<Waypoint> waypoints = new ArrayList();
     // waypoints.add(new Waypoint(getPose().getTranslation(), null, coord.getTranslation()));
     PathConstraints constraints =
@@ -512,7 +520,7 @@ public class Drive extends SubsystemBase {
             new GoalEndState(0, rawGyroRotation));
     // new Waypoint(getPose().getTranslation(), null, coord.getTranslation()), constraints, new
     // IdealStartingState(0, getRotation()), new GoalEndState(0, getReefPose().getRotation())
-
+    path.preventFlipping = true;
     return AutoBuilder.followPath(path);
   }
 }

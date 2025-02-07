@@ -68,7 +68,7 @@ public class DriveCommands {
       new ProfiledPIDController(7, 1, 0.5, new TrapezoidProfile.Constraints(3, 4.5));
   static ProfiledPIDController rotationPID =
       new ProfiledPIDController(2.9, 0., 0.2, new TrapezoidProfile.Constraints(120, 150));
-      // new ProfiledPIDController(0, 0., 0, new TrapezoidProfile.Constraints(70, 120));
+  // new ProfiledPIDController(0, 0., 0, new TrapezoidProfile.Constraints(70, 120));
   static int count = 0;
 
   private DriveCommands() {}
@@ -97,8 +97,6 @@ public class DriveCommands {
       DoubleSupplier omegaSupplier,
       BooleanSupplier reefAlignAssistSupplier,
       BooleanSupplier sourceAlignSupplier) {
-
-   
 
     return Commands.run(
         () -> {
@@ -130,7 +128,6 @@ public class DriveCommands {
 
           double rotationSpeed = speeds.omegaRadiansPerSecond;
 
-
           if (reefAlignAssistSupplier.getAsBoolean()) {
             count++;
             if (count == 1) {
@@ -143,15 +140,13 @@ public class DriveCommands {
 
             sidewaysError = drive.getPose().getY() - drive.getNearestSide().getY();
             Logger.recordOutput("Sideways Error", sidewaysError);
-          
+
             wantedSidewaysVelocity =
                 MathUtil.clamp(
-                    sidewaysPID.calculate(
-                        drive.getPose().getY(),
-                        drive.getNearestSide().getY()),
+                    sidewaysPID.calculate(drive.getPose().getY(), drive.getNearestSide().getY()),
                     -3,
                     3);
-            sidewaysAssistEffort = wantedSidewaysVelocity - sidewaysSpeed;
+            sidewaysAssistEffort = wantedSidewaysVelocity - sidewaysSpeed * 0.3;
             Logger.recordOutput("sidethere", sidewaysPID.atGoal());
             Logger.recordOutput("sidewaysSet", sidewaysPID.getSetpoint().velocity);
 
@@ -163,10 +158,8 @@ public class DriveCommands {
             Logger.recordOutput("Forwards Error", forwardsError);
             wantedForwardsVelocity =
                 MathUtil.clamp(
-                    forwardsPID.calculate(drive.getPose().getX(), nearestReefSide.getX()),
-                    -3,
-                    3);
-            forwardsAssistEffort = wantedForwardsVelocity - forwardSpeed;
+                    forwardsPID.calculate(drive.getPose().getX(), nearestReefSide.getX()), -3, 3);
+            forwardsAssistEffort = wantedForwardsVelocity - forwardSpeed * 0.3;
 
             Logger.recordOutput("forwardsSet", forwardsPID.getSetpoint().velocity);
 
@@ -181,7 +174,7 @@ public class DriveCommands {
                             nearestReefSide.getRotation().getDegrees())),
                     -drive.getMaxAngularSpeedRadPerSec(),
                     drive.getMaxAngularSpeedRadPerSec());
-            rotationAssistEffort = wantedRotationVelocity - rotationSpeed;
+            rotationAssistEffort = wantedRotationVelocity - rotationSpeed * 0.3;
 
             Logger.recordOutput("rotationSet", rotationPID.getSetpoint().velocity);
           } else {
@@ -210,7 +203,8 @@ public class DriveCommands {
               ChassisSpeeds.fromFieldRelativeSpeeds(
                   new ChassisSpeeds(
                       MathUtil.clamp(
-                          forwardSpeed +forwardsAssistEffort, // forwardSpeed + forwardsAssistEffort,
+                          forwardSpeed
+                              + forwardsAssistEffort, // forwardSpeed + forwardsAssistEffort,
                           -drive.getMaxLinearSpeedMetersPerSec(),
                           drive.getMaxLinearSpeedMetersPerSec()),
                       MathUtil.clamp(
