@@ -21,6 +21,11 @@ import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.IdealStartingState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.Waypoint;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
@@ -40,6 +45,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Units.*;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
@@ -56,6 +62,7 @@ import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.vision.ObjectDetection;
 import frc.robot.subsystems.vision.Vision.VisionConsumer;
 import frc.robot.util.LocalADStarAK;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
@@ -110,6 +117,7 @@ public class Drive extends SubsystemBase {
       TimeInterpolatableBuffer.createBuffer(OBJECT_BUFFER_SIZE_SECONDS);
 
   private Pose2d nearestSide = new Pose2d();
+  private Translation2d offset = new Translation2d();
 
   private SwerveModulePosition[] lastModulePositions = // For delta tracking
       new SwerveModulePosition[] {
@@ -231,6 +239,10 @@ public class Drive extends SubsystemBase {
       // Apply update
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
     }
+
+    Logger.recordOutput("isatreef", isAtReefSide());
+    Logger.recordOutput("balls", getReefPose());
+    Logger.recordOutput("sdaofads", nearestSide.getTranslation().getDistance(getPose().getTranslation()));
 
     // Update gyro alert
     gyroDisconnectedAlert.set(!gyroInputs.connected && SimConstants.currentMode != Mode.SIM);
@@ -426,7 +438,12 @@ public class Drive extends SubsystemBase {
   }
 
   public Pose2d getNearestSide() {
+    
     return nearestSide;
+  }
+
+  public boolean isAtReefSide() {
+    return getPose().getTranslation().getDistance(nearestSide.getTranslation()) < 0.2;
   }
 
   public void setNearestReefSide() {
@@ -460,7 +477,7 @@ public class Drive extends SubsystemBase {
 
     // back up target position (so it doesn't clip)
     // x is nearer/farther, y is sideways
-    Translation2d offsetFromBranch = new Translation2d(-0.7, 0);
+    Translation2d offsetFromBranch = new Translation2d(-1.3, 0);
     offsetFromBranch = offsetFromBranch.rotateBy(rotation2d);
     Translation2d translation2d = result.getTranslation().plus(offsetFromBranch);
 
@@ -468,5 +485,34 @@ public class Drive extends SubsystemBase {
 
     Logger.recordOutput("align to reef target Pose2d", result);
     nearestSide = result;
+    offset = offsetFromBranch;
+  }
+
+  public Translation2d getOffset() {
+    return offset;
+  }
+
+  public Pose2d getReefPose() {
+    return new Pose2d(nearestSide.getTranslation().minus(offset), nearestSide.getRotation());
+  }
+
+  public Command createPathFindingCommand(Pose2d target) {
+    Pose2d coord = target;
+    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(getPose(), coord);
+    // List<Waypoint> waypoints = new ArrayList();
+    // waypoints.add(new Waypoint(getPose().getTranslation(), null, coord.getTranslation()));
+    PathConstraints constraints =
+        new PathConstraints(1, 2, Units.degreesToRadians(540), Units.degreesToRadians(720));
+    // PathPlannerPath p = new
+    PathPlannerPath path =
+        new PathPlannerPath(
+            waypoints,
+            constraints,
+            new IdealStartingState(0, rawGyroRotation),
+            new GoalEndState(0, rawGyroRotation));
+    // new Waypoint(getPose().getTranslation(), null, coord.getTranslation()), constraints, new
+    // IdealStartingState(0, getRotation()), new GoalEndState(0, getReefPose().getRotation())
+
+    return AutoBuilder.followPath(path);
   }
 }

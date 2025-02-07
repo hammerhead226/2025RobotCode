@@ -182,6 +182,13 @@ public class RobotContainer {
             () -> driveController.leftBumper().getAsBoolean(),
             () -> driveController.rightBumper().getAsBoolean()));
     driveController.leftBumper().onTrue(new InstantCommand(() -> drive.setNearestReefSide()));
+    // driveController
+    //     .leftBumper()
+    //     .onFalse(
+    //         new ConditionalCommand(
+    //             drive.createPathFindingCommand(drive.getReefPose()),
+    //             new InstantCommand(),
+    //             () -> drive.isAtReefSide()));
     // // Lock to 0° when A button is held
     // controller
     //     .a()
