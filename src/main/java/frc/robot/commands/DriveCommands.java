@@ -175,8 +175,12 @@ public class DriveCommands {
             sidewaysAssistEffort = (wantedSidewaysVelocity - sidewaysSpeed) * speedDebuf;
             // sidewaysAssistEffort = (wantedSpeeds.vyMetersPerSecond - sidewaysSpeed) * speedDebuf;
 
-            forwardsError = drive.getPose().getX() - nearestReefSide.getX();
+            forwardsError =
+                distance.getDistance().getValueAsDouble() < 0.5
+                    ? forwardsError = drive.getPose().getX() - nearestReefSide.getX()
+                    : distance.getDistance().getValueAsDouble();
             Logger.recordOutput("Forwards Error", forwardsError);
+
             wantedForwardsVelocity = profileForward.calculate(forwardsError);
             forwardsAssistEffort = (wantedForwardsVelocity - forwardSpeed) * speedDebuf;
             // forwardsAssistEffort = (wantedSpeeds.vxMetersPerSecond - forwardSpeed) * speedDebuf;
@@ -189,7 +193,11 @@ public class DriveCommands {
             //  (wantedSpeeds.omegaRadiansPerSecond - rotationSpeed) * speedDebuf;
 
           } else if (sourceAlignSupplier.getAsBoolean()) {
-            forwardsError = drive.getPose().getX() - (getClosestSource(drive).getX() + 0.4);
+            forwardSpeed =
+                distance.getDistance().getValueAsDouble() < 0.5
+                    ? forwardsError =
+                        drive.getPose().getX() - (getClosestSource(drive).getX() + 0.4)
+                    : distance.getDistance().getValueAsDouble();
             wantedForwardsVelocity = profileForward.calculate(forwardsError);
             forwardsAssistEffort = (wantedForwardsVelocity - forwardSpeed) * speedDebuf;
 
