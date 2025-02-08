@@ -13,6 +13,7 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix6.hardware.CANrange;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -63,6 +64,7 @@ public class DriveCommands {
   private static double rotationAssistEffort = 0;
 
   private static Pose2d nearestReefSide = null;
+  private static CANrange distance = new CANrange(0, "CAN Bus 2"); // TODO: Modify device ID.
   // private static ProfiledPIDController goof = new ProfiledPIDController(1.5, 0, 0, )
 
   // profiled controllers
@@ -79,7 +81,9 @@ public class DriveCommands {
   private static PIDController rotationPID =
       new PIDController(2.54, 0, 0, SubsystemConstants.LOOP_PERIOD_SECONDS);
 
-  private DriveCommands() {}
+  private DriveCommands(CANrange distance) {
+    this.distance = new CANrange(0, "CAN Bus 2"); // TODO: Modify device ID.
+  }
 
   private static Translation2d getLinearVelocityFromJoysticks(double x, double y) {
     // Apply deadband
@@ -208,7 +212,9 @@ public class DriveCommands {
           } else if (processorAlignSupplier.getAsBoolean()) {
 
             forwardsError =
-                drive.getPose().getX() - (FieldConstants.Processor.centerFace.getX() + 0.2);
+                distance.getDistance().getValueAsDouble() < 0.5
+                    ? drive.getPose().getX() - (FieldConstants.Processor.centerFace.getX() + 0.2)
+                    : distance.getDistance().getValueAsDouble();
             wantedForwardsVelocity = profileForward.calculate(forwardsError);
             forwardsAssistEffort = (wantedForwardsVelocity - forwardSpeed) * speedDebuf * 0.5;
 

@@ -13,6 +13,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.hardware.CANrange;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -54,7 +55,6 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.elevator.ElevatorIOTalonFX;
-import frc.robot.subsystems.flywheel.Flywheel;
 import frc.robot.subsystems.led.LED;
 import frc.robot.subsystems.led.LED_IO;
 import frc.robot.subsystems.led.LED_IOCANdle;
@@ -92,6 +92,7 @@ public class RobotContainer {
   private final Elevator elevator;
   private final AlgaeIntakeArm algaeArm;
   private final Vision vision;
+  private final CANrange distance;
 
   private final CoralScorerFlywheel csFlywheel;
 
@@ -112,6 +113,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackRight));
 
         csArm = new CoralScorerArm(new CoralScorerArmIOTalonFX(1));
+        distance = new CANrange(0, "CAN Bus 2"); // TODO Change device ID.
 
         vision =
             new Vision(
@@ -143,6 +145,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackRight));
 
         csArm = new CoralScorerArm(new CoralScorerArmIOSim());
+        distance = new CANrange(0, "CAN Bus 2"); // not needed for SIM
 
         vision =
             new Vision(
@@ -173,6 +176,8 @@ public class RobotContainer {
                 new ModuleIO() {});
 
         csArm = new CoralScorerArm(new CoralScorerArmIOSim());
+        distance = new CANrange(0, "CAN Bus 2"); // not needed for SIM
+
         vision =
             new Vision(
                 drive.getToPoseEstimatorConsumer(),
@@ -225,13 +230,6 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-
-    keyboard
-        .getXButton()
-        .onTrue(new IntakingAlgaeParallel(elevator, csArm, csFlywheel, ReefHeight.L2));
-    keyboard
-        .getZButton()
-        .onTrue(new IntakingAlgaeParallel(elevator, csArm, csFlywheel, ReefHeight.L1));
 
     // Default command, normal field-relative drive
     drive.setDefaultCommand(
@@ -319,9 +317,7 @@ public class RobotContainer {
     manipController.y().onFalse(new Stow(elevator, csArm));
 
     // manipController.leftBumper().whileTrue(new AutoAlignToSource(drive, led));
-    manipController
-        .leftBumper()
-        .onTrue(new IntakeFromSourceParallel(csFlywheel, csArm, elevator));
+    manipController.leftBumper().onTrue(new IntakeFromSourceParallel(csFlywheel, csArm, elevator));
     manipController.leftBumper().onFalse(new Stow(elevator, csArm));
     manipController
         .rightBumper()

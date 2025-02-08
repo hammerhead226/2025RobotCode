@@ -39,12 +39,15 @@ public class AlignToProcessor extends Command {
 
     // back up target position (so it doesn't clip)
     // x is nearer/farther, y is sideways
-    Translation2d offsetFromBranch = new Translation2d(-0.7, 0);
+    Translation2d offsetFromBranch =
+        new Translation2d(
+            -0.7,
+            0); // TODO: This appears to be overwritten in DriveCommands.java/isn't affecting the
+    // targetPose of pathCommand.
     offsetFromBranch = offsetFromBranch.rotateBy(rotation2d);
     Translation2d translation2d = targetPose.getTranslation().plus(offsetFromBranch);
 
     targetPose = new Pose2d(translation2d, rotation2d);
-
     Logger.recordOutput("align to reef target Pose2d", targetPose);
 
     List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(drive.getPose(), targetPose);
