@@ -21,7 +21,7 @@ public class ReleaseClaw extends Command {
     this.elevator = elevator;
     this.flywheel = flywheel;
     this.scoringLevel = scoringLevel;
-    addRequirements(elevator, pivot);
+    addRequirements(elevator, pivot, flywheel);
   }
 
   @Override
@@ -29,6 +29,7 @@ public class ReleaseClaw extends Command {
     elevator.setExtenderGoal(scoringLevel.height);
     pivot.setArmGoal(scoringLevel.pitch);
     flywheel.runVolts(12);
+
     end(true);
   }
 

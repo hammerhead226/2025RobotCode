@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -28,6 +29,7 @@ import frc.robot.commands.AlignToReefAuto;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.IntakeFromSourceParallel;
 import frc.robot.commands.IntakingAlgaeParallel;
+import frc.robot.commands.ReleaseClaw;
 import frc.robot.commands.SetClawLevel;
 import frc.robot.commands.Stow;
 import frc.robot.commands.algaeintoprocesser.AlgaeIntoProcesser;
@@ -54,7 +56,6 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.elevator.ElevatorIOTalonFX;
-import frc.robot.subsystems.flywheel.Flywheel;
 import frc.robot.subsystems.led.LED;
 import frc.robot.subsystems.led.LED_IO;
 import frc.robot.subsystems.led.LED_IOCANdle;
@@ -191,6 +192,8 @@ public class RobotContainer {
         led = new LED(new LED_IO() {});
         break;
     }
+    csFlywheel.setDefaultCommand(csFlywheel.runVoltsCommmand(0));
+
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
