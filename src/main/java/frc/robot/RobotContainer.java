@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.commands.ApproachReefPerpendicular;
 import frc.robot.commands.DriveCommands;
 import frc.robot.constants.SimConstants;
 import frc.robot.constants.TunerConstants;
@@ -183,13 +184,13 @@ public class RobotContainer {
             () -> driveController.leftBumper().getAsBoolean(),
             () -> driveController.rightBumper().getAsBoolean()));
     driveController.leftBumper().onTrue(new InstantCommand(() -> drive.setNearestReefSide()));
-    // driveController
-    //     .leftBumper()
-    //     .onFalse(
-    //         new ConditionalCommand(
-    //             drive.createPathFindingCommand(() -> drive.getReefPose()),
-    //             new InstantCommand(),
-    //             () -> drive.isAtReefSide()));
+    driveController
+        .leftBumper()
+        .onFalse(
+            new ConditionalCommand(
+                new ApproachReefPerpendicular(drive),
+                new InstantCommand(),
+                () -> drive.isAtReefSide()));
     // // Lock to 0° when A button is held
     // controller
     //     .a()

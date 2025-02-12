@@ -499,19 +499,13 @@ public class Drive extends SubsystemBase {
         : new Pose2d(0, 0, Rotation2d.fromDegrees(20));
   }
 
-  public Command createPathFindingCommand(Supplier<Pose2d> reefSide) {
-    Logger.recordOutput("hello there!", reefSide.get());
-    List<Waypoint> waypoints =
-        PathPlannerPath.waypointsFromPoses(
-          getPose(),
-            new Pose2d(10, 0, Rotation2d.fromDegrees(20)),
-            reefSide.get(),
-            new Pose2d(1, 0, Rotation2d.fromDegrees(20)));
+  public PathPlannerPath createPathFindingCommand(Pose2d start, Pose2d end) {
+    Logger.recordOutput("hello there!", end);
+    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(end, end);
     // List<Waypoint> waypoints = new ArrayList();
     // waypoints.add(new Waypoint(getPose().getTranslation(), null, coord.getTranslation()));
     PathConstraints constraints =
         new PathConstraints(1, 2, Units.degreesToRadians(540), Units.degreesToRadians(720));
-    // PathPlannerPath p = new
     PathPlannerPath path =
         new PathPlannerPath(
             waypoints,
@@ -521,6 +515,6 @@ public class Drive extends SubsystemBase {
     // new Waypoint(getPose().getTranslation(), null, coord.getTranslation()), constraints, new
     // IdealStartingState(0, getRotation()), new GoalEndState(0, getReefPose().getRotation())
     path.preventFlipping = true;
-    return AutoBuilder.followPath(path);
+    return path;
   }
 }
