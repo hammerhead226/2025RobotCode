@@ -70,12 +70,12 @@ public class CoralScorerArm extends SubsystemBase {
         kI.initDefault(1);
         break;
       case SIM:
-        kG.initDefault(0);
-        kV.initDefault(1);
+        kG.initDefault(0.04);
+        kV.initDefault(0.015);
         kP.initDefault(1);
-        kA.initDefault(1);
-        kS.initDefault(1);
-        kI.initDefault(1);
+        kA.initDefault(0);
+        kS.initDefault(0);
+        kI.initDefault(0.01);
         break;
       default:
         kG.initDefault(0.29);
