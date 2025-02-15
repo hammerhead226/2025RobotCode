@@ -48,7 +48,7 @@ public class AlignToReefAuto extends Command {
     pathCommand.initialize();
   }
 
-  private Pose2d getNearestReefSide() {
+  public Pose2d getNearestReefSide() {
     Translation2d start = FieldConstants.Reef.center;
     Translation2d end = drive.getPose().getTranslation();
     Translation2d v = end.minus(start);

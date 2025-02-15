@@ -15,7 +15,10 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -32,6 +35,7 @@ import frc.robot.commands.AutoAlignToSource;
 import frc.robot.commands.AutoPickupCoral;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.IntakeFromSourceParallel;
+import frc.robot.commands.IntakingAlgae;
 import frc.robot.commands.IntakingAlgaeParallel;
 import frc.robot.commands.ReleaseClawParallel;
 import frc.robot.commands.Stow;
@@ -104,6 +108,7 @@ public class RobotContainer {
   private final Vision vision;
 
   private final ClimbStateMachine climbStateMachine;
+  private final Pose2d pose2d;
   // private final ObjectDetection objectDetection;
   // private final ObjectDetectionConsumer odConsumer;
   // private final ObjectDetectionIO odIO;
@@ -112,6 +117,8 @@ public class RobotContainer {
   private final CommandXboxController manipController = new CommandXboxController(1);
   private final CoralScorerFlywheel csFlywheel;
 
+  private Pose2d nearestSide = new Pose2d();
+
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
@@ -119,7 +126,40 @@ public class RobotContainer {
     return climbStateMachine.getTargetState();
   }
 
+  public ReefHeight getNearestReefSideAndConvertToAlgaeHeight() {
+    Translation2d start = FieldConstants.Reef.center;
+    Translation2d end = drive.getPose().getTranslation();
+    Translation2d v = end.minus(start);
+    Rotation2d angle = new Rotation2d(v.getX(), v.getY());
+
+    // https://www.desmos.com/calculator/44dd9koglh
+
+    // negate since branchPositions is CW not CCW
+    // +6/12 since branchPositions starts at branch B not the +x axis
+    double rawRotations = angle.getRotations();
+    double adjustedRotations = -rawRotations + (7.0 / 12.0);
+
+    // % 1 to just get the fractional part of the rotation
+    // multiply by 12 before flooring so [0,1) maps to 0,1,2...10,11 evenly
+    double fractionalRotation = adjustedRotations % 1;
+    if (fractionalRotation < 0) {
+      fractionalRotation++;
+    }
+    int index = (int) Math.floor(fractionalRotation * 12);
+
+    switch (index) {
+      case 0, 1, 4, 5, 8, 9:
+        return ReefHeight.L1;
+      case 2, 3, 6, 7, 10, 11:
+        return ReefHeight.L2;
+      default:
+        return ReefHeight.L1;
+    }
+  }
+
   private final Command climbCommands;
+
+  private final Command intakeAlgaeCommands;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -229,6 +269,17 @@ public class RobotContainer {
 
     climbStateMachine = new ClimbStateMachine(csArm);
 
+    AlignToReefAuto alignToReef = new AlignToReefAuto(drive, led);
+    intakeAlgaeCommands =
+        new SelectCommand<>(
+            Map.ofEntries(
+                Map.entry(
+                    ReefHeight.L1,
+                    new IntakingAlgae(elevator, csFlywheel, csArm, FieldConstants.ReefHeight.L1)),
+                Map.entry(
+                    ReefHeight.L2,
+                    new IntakingAlgae(elevator, csFlywheel, csArm, FieldConstants.ReefHeight.L2))),
+            this::getNearestReefSideAndConvertToAlgaeHeight);
     // angles in none and retract aren't set, CHANGE THEM!!
     climbCommands =
         new SelectCommand<>(
@@ -249,6 +300,7 @@ public class RobotContainer {
                         .setArmTarget(30, 5)
                         .andThen(climbStateMachine::advanceTargetState, algaeArm))),
             this::climbSelect);
+
     // Set up auto routines
 
     // Set up SysId routines
@@ -357,6 +409,7 @@ public class RobotContainer {
             () -> driveController.leftBumper().getAsBoolean(),
             () -> driveController.rightBumper().getAsBoolean()));
     driveController.leftBumper().onTrue(new InstantCommand(() -> drive.setNearestReefSide()));
+
     // // Lock to 0° when A button is held
     // controller
     //     .a()
