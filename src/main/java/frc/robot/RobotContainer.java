@@ -241,12 +241,12 @@ public class RobotContainer {
                 Map.entry(
                     CLIMB_STATES.RETRACT,
                     algaeArm
-                        .setArmTarget(60, 5)
+                        .setArmTarget(65, 5)
                         .andThen(climbStateMachine::advanceTargetState, algaeArm)),
                 Map.entry(
                     CLIMB_STATES.NONE,
                     algaeArm
-                        .setArmTarget(30, 5)
+                        .setArmTarget(65, 5)
                         .andThen(climbStateMachine::advanceTargetState, algaeArm))),
             this::climbSelect);
     // Set up auto routines
@@ -272,7 +272,7 @@ public class RobotContainer {
         "IntakeFromSource", new IntakeFromSourceParallel(csFlywheel, csArm, elevator));
     NamedCommands.registerCommand(
         "IntakingAlgae", new IntakingAlgaeParallel(elevator, csArm, csFlywheel));
-    NamedCommands.registerCommand("Stow", new Stow(csArm, elevator));
+    NamedCommands.registerCommand("Stow", new Stow(csArm, elevator, led));
 
     // NamedCommands.registerCommand(
     // "AlgaeIntoProcessor", new AlgaeIntoProcessor(elevator, csArm, csFlywheel));
@@ -401,7 +401,7 @@ public class RobotContainer {
                 elevator.setElevatorTarget(0.2, 0.05),
                 new InstantCommand(() -> csFlywheel.runVolts(12))));
 
-    manipController.rightTrigger().onTrue(new Stow(csArm, elevator));
+    manipController.rightTrigger().onTrue(new Stow(csArm, elevator, led));
     // driveController.a().whileTrue(new ReleaseClawParallel(scoringLevel, elevator, csArm,
     // csFlywheel));
     driveController.rightBumper().onTrue(new AlignToReefAuto(drive, led));

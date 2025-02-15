@@ -123,9 +123,10 @@ public class CoralScorerArm extends SubsystemBase {
   }
 
   public Command setArmTarget(double goalDegrees, double thresholdDegrees) {
-    //TODO: Change the wait time to an accurate value
+    // TODO: Change the wait time to an accurate value
     return new InstantCommand(() -> setArmGoal(goalDegrees), this)
-        .until(() -> atGoal(thresholdDegrees)).withTimeout(5);
+        .until(() -> atGoal(thresholdDegrees))
+        .withTimeout(5);
   }
 
   @Override

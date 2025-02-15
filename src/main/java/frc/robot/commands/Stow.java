@@ -5,8 +5,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.SubsystemConstants.LED_STATE;
 import frc.robot.subsystems.coralscorer.CoralScorerArm;
 import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.led.LED;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Stow extends Command {
@@ -14,12 +16,14 @@ public class Stow extends Command {
   private final Elevator elevator;
   private double elevatorpos;
   private double armangle;
+  private final LED led;
 
   /** Creates a new Stow. */
-  public Stow(CoralScorerArm arm, Elevator elevator) {
+  public Stow(CoralScorerArm arm, Elevator elevator, LED led) {
 
     this.arm = arm;
     this.elevator = elevator;
+    this.led = led;
   }
 
   // Called when the command is initially scheduled.
@@ -35,7 +39,6 @@ public class Stow extends Command {
     elevatorpos = elevator.getElevatorPosition();
     armangle = arm.getArmPositionDegs();
     led.setState(LED_STATE.GREEN);
-
   }
 
   // Called once the command ends or is interrupted.
