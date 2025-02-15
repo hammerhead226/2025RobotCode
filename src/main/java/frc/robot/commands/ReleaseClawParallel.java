@@ -12,6 +12,7 @@ public class ReleaseClawParallel extends ParallelCommandGroup {
   private final CoralScorerArm pivot;
   private final CoralScorerFlywheel flywheel;
   private final ReefHeight scoringLevel;
+  private final LED led;
 
   public ReleaseClawParallel(
       ReefHeight scoringLevel,
@@ -23,6 +24,7 @@ public class ReleaseClawParallel extends ParallelCommandGroup {
     this.elevator = elevator;
     this.flywheel = flywheel;
     this.scoringLevel = scoringLevel;
+    this.led = led;
     addCommands(
         elevator.setElevatorTarget(scoringLevel.height, 0.5),
         pivot.setArmTarget(scoringLevel.pitch, 1),

@@ -43,6 +43,7 @@ import frc.robot.commands.algaeintosource.ReleaseAlgae;
 // import frc.robot.commands.algaeintoprocesser.AlgaeIntoProcesser;
 import frc.robot.constants.FieldConstants;
 // import frc.robot.commands.IntakeFromSource;
+import frc.robot.commands.ReleaseClawParallel;
 import frc.robot.constants.FieldConstants.ReefHeight;
 import frc.robot.constants.SimConstants;
 import frc.robot.constants.SubsystemConstants.AlgaeState;
@@ -108,7 +109,6 @@ public class RobotContainer {
   private final Vision vision;
 
   private final ClimbStateMachine climbStateMachine;
-  private final Pose2d pose2d;
   // private final ObjectDetection objectDetection;
   // private final ObjectDetectionConsumer odConsumer;
   // private final ObjectDetectionIO odIO;
@@ -275,10 +275,10 @@ public class RobotContainer {
             Map.ofEntries(
                 Map.entry(
                     ReefHeight.L1,
-                    new IntakingAlgae(elevator, csFlywheel, csArm, FieldConstants.ReefHeight.L1)),
+                    new IntakingAlgae(elevator, csFlywheel, csArm, FieldConstants.ReefHeight.L1, led)),
                 Map.entry(
                     ReefHeight.L2,
-                    new IntakingAlgae(elevator, csFlywheel, csArm, FieldConstants.ReefHeight.L2))),
+                    new IntakingAlgae(elevator, csFlywheel, csArm, FieldConstants.ReefHeight.L2, led))),
             this::getNearestReefSideAndConvertToAlgaeHeight);
     // angles in none and retract aren't set, CHANGE THEM!!
     climbCommands =
@@ -307,16 +307,16 @@ public class RobotContainer {
 
     NamedCommands.registerCommand(
         "ReleaseClawL1",
-        new ReleaseClawParallel(FieldConstants.ReefHeight.L1, elevator, csArm, csFlywheel));
+        new ReleaseClawParallel(FieldConstants.ReefHeight.L1, elevator, csArm, csFlywheel, led));
     NamedCommands.registerCommand(
         "ReleaseClawL2",
-        new ReleaseClawParallel(FieldConstants.ReefHeight.L2, elevator, csArm, csFlywheel));
+        new ReleaseClawParallel(FieldConstants.ReefHeight.L2, elevator, csArm, csFlywheel, led));
     NamedCommands.registerCommand(
         "ReleaseClawL3",
-        new ReleaseClawParallel(FieldConstants.ReefHeight.L3, elevator, csArm, csFlywheel));
+        new ReleaseClawParallel(FieldConstants.ReefHeight.L3, elevator, csArm, csFlywheel, led));
     NamedCommands.registerCommand(
         "ReleaseClawL4",
-        new ReleaseClawParallel(FieldConstants.ReefHeight.L4, elevator, csArm, csFlywheel));
+        new ReleaseClawParallel(FieldConstants.ReefHeight.L4, elevator, csArm, csFlywheel, led));
 
     NamedCommands.registerCommand("AlignToReefAuto", new AlignToReefAuto(drive, led));
     NamedCommands.registerCommand("AutoAlignToSource", new AutoAlignToSource(drive, led));
@@ -383,17 +383,17 @@ public class RobotContainer {
   private void test() {
     keyboard
         .getXButton()
-        .onTrue(new ReleaseClawParallel(ReefHeight.L2, elevator, csArm, csFlywheel));
+        .onTrue(new ReleaseClawParallel(ReefHeight.L2, elevator, csArm, csFlywheel, led));
     keyboard
         .getZButton()
-        .onTrue(new ReleaseClawParallel(ReefHeight.L1, elevator, csArm, csFlywheel));
+        .onTrue(new ReleaseClawParallel(ReefHeight.L1, elevator, csArm, csFlywheel, led));
 
     keyboard
         .getXButton()
-        .whileFalse(new ReleaseClawParallel(ReefHeight.L2, elevator, csArm, csFlywheel));
+        .whileFalse(new ReleaseClawParallel(ReefHeight.L2, elevator, csArm, csFlywheel, led));
     keyboard
         .getZButton()
-        .whileFalse(new ReleaseClawParallel(ReefHeight.L1, elevator, csArm, csFlywheel));
+        .whileFalse(new ReleaseClawParallel(ReefHeight.L1, elevator, csArm, csFlywheel, led));
   }
 
   private void configureButtonBindings() {
@@ -474,23 +474,23 @@ public class RobotContainer {
 
     manipController
         .a()
-        .onTrue(new ReleaseClawParallel(FieldConstants.ReefHeight.L1, elevator, csArm, csFlywheel));
+        .onTrue(new ReleaseClawParallel(FieldConstants.ReefHeight.L1, elevator, csArm, csFlywheel, led));
     manipController
         .b()
-        .onTrue(new ReleaseClawParallel(FieldConstants.ReefHeight.L2, elevator, csArm, csFlywheel));
+        .onTrue(new ReleaseClawParallel(FieldConstants.ReefHeight.L2, elevator, csArm, csFlywheel, led));
 
     driveController
         .a()
-        .onTrue(new ReleaseClawParallel(FieldConstants.ReefHeight.L1, elevator, csArm, csFlywheel));
+        .onTrue(new ReleaseClawParallel(FieldConstants.ReefHeight.L1, elevator, csArm, csFlywheel, led));
     driveController
         .b()
-        .onTrue(new ReleaseClawParallel(FieldConstants.ReefHeight.L2, elevator, csArm, csFlywheel));
+        .onTrue(new ReleaseClawParallel(FieldConstants.ReefHeight.L2, elevator, csArm, csFlywheel, led));
     driveController
         .x()
-        .onTrue(new ReleaseClawParallel(FieldConstants.ReefHeight.L3, elevator, csArm, csFlywheel));
+        .onTrue(new ReleaseClawParallel(FieldConstants.ReefHeight.L3, elevator, csArm, csFlywheel, led));
     driveController
         .y()
-        .onTrue(new ReleaseClawParallel(FieldConstants.ReefHeight.L4, elevator, csArm, csFlywheel));
+        .onTrue(new ReleaseClawParallel(FieldConstants.ReefHeight.L4, elevator, csArm, csFlywheel, led));
 
     controller.y().onTrue(climbCommands);
 
@@ -504,7 +504,7 @@ public class RobotContainer {
                 new InstantCommand(() -> csFlywheel.runVolts(0))));
     controller
         .leftBumper()
-        .onTrue(new ReleaseClawParallel(FieldConstants.ReefHeight.L4, elevator, csArm, csFlywheel));
+        .onTrue(new ReleaseClawParallel(FieldConstants.ReefHeight.L4, elevator, csArm, csFlywheel, led));
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
