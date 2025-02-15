@@ -20,7 +20,6 @@ public class IntakeFromSource extends Command {
   /** Creates a new IntakeFromSource. */
   private final CoralScorerFlywheel coralIntake;
 
-  
   private final CoralScorerArm arm;
   private final Elevator elevator;
   private final LED led;
