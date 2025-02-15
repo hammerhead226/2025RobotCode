@@ -5,6 +5,7 @@ import frc.robot.constants.FieldConstants.ReefHeight;
 import frc.robot.subsystems.coralscorer.CoralScorerArm;
 import frc.robot.subsystems.coralscorer.CoralScorerFlywheel;
 import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.led.LED;
 
 public class ReleaseClawParallel extends ParallelCommandGroup {
   private final Elevator elevator;
@@ -16,7 +17,8 @@ public class ReleaseClawParallel extends ParallelCommandGroup {
       ReefHeight scoringLevel,
       Elevator elevator,
       CoralScorerArm pivot,
-      CoralScorerFlywheel flywheel) {
+      CoralScorerFlywheel flywheel,
+      LED led) {
     this.pivot = pivot;
     this.elevator = elevator;
     this.flywheel = flywheel;

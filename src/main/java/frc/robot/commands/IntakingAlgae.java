@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.FieldConstants.ReefHeight;
 import frc.robot.constants.SubsystemConstants.AlgaeState;
 import frc.robot.constants.SubsystemConstants.CoralScorerConstants.AlgaeScorerFlywheelConstants;
 import frc.robot.constants.SubsystemConstants.CoralScorerConstants.CoralScorerArmConstants;
@@ -20,14 +21,20 @@ public class IntakingAlgae extends Command {
   private final Elevator elevator;
   private final CoralScorerFlywheel algaeIntake;
   private final CoralScorerArm arm;
+  private final ReefHeight reefHeight;
   private final LED led;
 
   /** Creates a new IntakingAlgae. */
   public IntakingAlgae(
-      Elevator elevator, CoralScorerFlywheel algaeIntake, CoralScorerArm arm, LED led) {
+      Elevator elevator,
+      CoralScorerFlywheel algaeIntake,
+      CoralScorerArm arm,
+      ReefHeight reefHeight,
+      LED led) {
     this.elevator = elevator;
     this.algaeIntake = algaeIntake;
     this.arm = arm;
+    this.reefHeight = reefHeight;
     this.led = led;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(elevator, algaeIntake, arm, led);
@@ -36,7 +43,7 @@ public class IntakingAlgae extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    elevator.setElevatorTarget(12, ElevatorConstants.DEFAULT_THRESHOLD);
+    elevator.setElevatorTarget(reefHeight.height, ElevatorConstants.DEFAULT_THRESHOLD);
     arm.setPositionDegs(
         CoralScorerArmConstants.INTAKE_SETPOINT_DEG,
         CoralScorerArmConstants.ARM_VELOCITY_DEGPERSEC);

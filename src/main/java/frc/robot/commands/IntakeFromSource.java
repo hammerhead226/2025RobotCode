@@ -23,6 +23,7 @@ public class IntakeFromSource extends Command {
   private final LED led;
   private final CoralScorerArm arm;
   private final Elevator elevator;
+  private final LED led;
 
   public IntakeFromSource(
       CoralScorerFlywheel coralIntake, CoralScorerArm arm, Elevator elevator, LED led) {
@@ -50,9 +51,10 @@ public class IntakeFromSource extends Command {
     led.setState(LED_STATE.FLASHING_PURPLE);
   }
 
-  // Called once the command ends or is interrupted.
+  // Called once isFinished is run or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    led.setState(LED_STATE.GREEN);
     coralIntake.flywheelStop();
     arm.setPositionDegs(
         CoralScorerArmConstants.STOW_SETPOINT_DEG, CoralScorerArmConstants.ARM_VELOCITY_DEGPERSEC);
