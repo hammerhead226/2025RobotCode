@@ -46,7 +46,10 @@ public class IntakeFromSource extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    led.setState(LED_STATE.FLASHING_PURPLE);
+
+  }
 
   // Called once isFinished is run or is interrupted.
   @Override

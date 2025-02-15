@@ -472,6 +472,13 @@ public class RobotContainer {
     // manipController.y().onTrue(new InstantCommand(() ->
     // elevator.setElevatorTarget(FieldConstants.ReefHeight.L4.height, 1)));
 
+    manipController
+        .a()
+        .onTrue(new ReleaseClawParallel(FieldConstants.ReefHeight.L1, elevator, csArm, csFlywheel));
+    manipController
+        .b()
+        .onTrue(new ReleaseClawParallel(FieldConstants.ReefHeight.L2, elevator, csArm, csFlywheel));
+
     driveController
         .a()
         .onTrue(new ReleaseClawParallel(FieldConstants.ReefHeight.L1, elevator, csArm, csFlywheel));

@@ -93,12 +93,12 @@ public class CoralScorerFlywheel extends SubsystemBase {
 
   public Command runVoltsCommmand(double volts) {
 
-    return new InstantCommand(() -> runVolts(volts), this);
+    return new InstantCommand(() -> runVolts(volts), this).withTimeout(5);
   }
 
   public Command runVelocityCommand(double velocityRPM) {
 
-    return new InstantCommand(() -> runVelocity(velocityRPM), this);
+    return new InstantCommand(() -> runVelocity(velocityRPM), this).withTimeout(5);
   }
 
   public Command flywheelStop() {

@@ -66,7 +66,7 @@ public class AutoPickupCoral extends Command {
 
   @Override
   public void execute() {
-
+    led.setState(LED_STATE.FLASHING_WHITE);
     pathCommand.execute();
   }
 

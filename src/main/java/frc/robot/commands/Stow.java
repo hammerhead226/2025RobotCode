@@ -34,6 +34,8 @@ public class Stow extends Command {
   public void execute() {
     elevatorpos = elevator.getElevatorPosition();
     armangle = arm.getArmPositionDegs();
+    led.setState(LED_STATE.GREEN);
+
   }
 
   // Called once the command ends or is interrupted.

@@ -2,31 +2,26 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.FieldConstants.ReefHeight;
-import frc.robot.constants.SubsystemConstants.LED_STATE;
 import frc.robot.subsystems.coralscorer.CoralScorerArm;
 import frc.robot.subsystems.coralscorer.CoralScorerFlywheel;
 import frc.robot.subsystems.elevator.Elevator;
-import frc.robot.subsystems.led.LED;
 
 public class ReleaseClaw extends Command {
   private final Elevator elevator;
   private final CoralScorerArm pivot;
   private final CoralScorerFlywheel flywheel;
   private final ReefHeight scoringLevel;
-  private final LED led;
 
   public ReleaseClaw(
       ReefHeight scoringLevel,
       Elevator elevator,
       CoralScorerArm pivot,
-      CoralScorerFlywheel flywheel,
-      LED led) {
+      CoralScorerFlywheel flywheel) {
     this.pivot = pivot;
     this.elevator = elevator;
     this.flywheel = flywheel;
     this.scoringLevel = scoringLevel;
-    this.led = led;
-    addRequirements(elevator, pivot, led);
+    addRequirements(elevator, pivot);
   }
 
   @Override
@@ -39,7 +34,8 @@ public class ReleaseClaw extends Command {
 
   @Override
   public void execute() {
-    led.setState(LED_STATE.GREEN);
+    led.setState(LED_STATE.FLASHING_ORANGE);
+
   }
 
   @Override

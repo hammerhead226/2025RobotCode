@@ -74,6 +74,8 @@ public final class SubsystemConstants {
     FLASHING_RED,
     FLASHING_BLUE,
     FLASHING_YELLOW,
+    FLASHING_PURPLE,
+    FLASHING_ORANGE,
     FIRE,
     OFF
   }

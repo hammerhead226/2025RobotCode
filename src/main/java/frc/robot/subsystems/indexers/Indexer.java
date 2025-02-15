@@ -77,10 +77,10 @@ public class Indexer extends SubsystemBase {
     updateTunableNumbers();
   }
 
-  public boolean indexerAtGoal(double thersholdInches) {
+  public boolean indexerAtGoal(double thresholdInches) {
 
     return (Math.abs(indexerCurrentStateRotations.position - indexerGoalStateRotations.position)
-        <= thersholdInches);
+        <= thresholdInches);
   }
 
   @Override
@@ -118,9 +118,9 @@ public class Indexer extends SubsystemBase {
     indexerGoalStateRotations.position += linearDistanceInches / (rollerDiameterInches * Math.PI);
   }
 
-  public Command indexCommand(double linearDistanceInches, double thersholdInches) {
+  public Command indexCommand(double linearDistanceInches, double thresholdInches) {
 
     return new InstantCommand(() -> index(linearDistanceInches), this)
-        .until(() -> indexerAtGoal(thersholdInches));
+        .until(() -> indexerAtGoal(thresholdInches));
   }
 }

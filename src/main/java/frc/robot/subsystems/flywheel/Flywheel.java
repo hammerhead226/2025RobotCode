@@ -94,7 +94,7 @@ public class Flywheel extends SubsystemBase {
 
   public Command runVoltsCommmand(double volts) {
 
-    return new InstantCommand(() -> runVolts(volts), this);
+    return new InstantCommand(() -> runVolts(volts), this).withTimeout(5);
   }
 
   public CoralState getLastCoralState() {

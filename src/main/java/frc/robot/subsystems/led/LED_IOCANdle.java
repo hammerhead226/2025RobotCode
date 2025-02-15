@@ -26,6 +26,8 @@ public class LED_IOCANdle implements LED_IO {
   StrobeAnimation flashYellow = new StrobeAnimation(255, 255, 0, 0, 0.01, 57 + 24);
   StrobeAnimation flashWhite = new StrobeAnimation(255, 255, 255, 255, 0.01, 57 + 24);
   StrobeAnimation halfFlashWhite = new StrobeAnimation(255, 255, 255, 255, 0.01, 28 + 24, 0);
+  StrobeAnimation flashPurple = new StrobeAnimation (119, 0 , 200, 0, 0.01, 57 + 24 )
+  StrobeAnimation flashOrange = new StrobeAnimation (255, 165 ,0, 0.01,57+24);
 
   FireAnimation rainbow = new FireAnimation(0.3, 0.03, 57 + 24, 0.1, 0.1);
   // ColorFlowAnimation rainbow = new ColorFlowAnimation(0, 0, 255, 0, 0.343, 57,
@@ -89,6 +91,10 @@ public class LED_IOCANdle implements LED_IO {
         candle.clearAnimation(0);
         candle.setLEDs(0, 0, 255, 0, 0, 57 + 24);
         break;
+      case FLASHING_PURPLE:
+        candle.clearAnimation(0);
+        candle.setLEDs(119,0,200,0,0,57+24);
+        break;
       case YELLOW:
         candle.clearAnimation(0);
         // led.set(Constants.LEDConstants.COLOR_YELLOW);
@@ -125,6 +131,9 @@ public class LED_IOCANdle implements LED_IO {
         candle.animate(halfFlashWhite);
         // candle.setLEDs(255, 0, 0, 0, 32, 28);
         candle.setLEDs(255, 0, 0, 0, 32, 25);
+        break;
+      case FLASHING_ORANGE:
+        cande.animate(flashOrange, 0);
         break;
       case FLASHING_WHITE:
         // TODO:: SIGNAL TO HUMAN PLAYER | FLASHING WHITE
