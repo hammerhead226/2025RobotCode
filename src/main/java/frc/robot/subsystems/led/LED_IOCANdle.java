@@ -13,13 +13,19 @@ import com.ctre.phoenix.led.FireAnimation;
 import com.ctre.phoenix.led.StrobeAnimation;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.constants.SubsystemConstants;
 import frc.robot.constants.SubsystemConstants.LED_STATE;
+import java.util.Random;
 
 public class LED_IOCANdle implements LED_IO {
   LED_STATE ledState;
 
-  CANdle candle;
+  public CANdle candle;
+  public Color elastColor = new Color();
+  Random rand = new Random();
+        int coinflip = rand.nextInt() % 2;
   StrobeAnimation flashGreen = new StrobeAnimation(0, 204, 0, 0, 0.01, 57 + 24);
   StrobeAnimation flashRed = new StrobeAnimation(204, 0, 0, 0, 0.01, 57 + 24);
   StrobeAnimation flashBlue = new StrobeAnimation(0, 0, 255, 0, 0.01, 57 + 24);
@@ -65,12 +71,12 @@ public class LED_IOCANdle implements LED_IO {
     // inputs.currentAmps = candle.getCurrent();
   }
 
+
   @Override
   public void noBumpersPressed() {
     if (DriverStation.getAlliance().get() == Alliance.Blue) {
       setLEDState(LED_STATE.BLUE);
       // led.set(Constants.LEDConstants.COLOR_BLUE);
-
     } else {
       setLEDState(LED_STATE.RED);
       // led.set(Constants.LEDConstants.COLOR_RED);
@@ -86,45 +92,70 @@ public class LED_IOCANdle implements LED_IO {
         // TODO:: MANUAL INTAKE | RED
         candle.clearAnimation(0);
         candle.setLEDs(255, 0, 0, 0, 0, 57 + 24);
+        elastColor = new Color(255, 0, 0);
+        SmartDashboard.putString("LED Color", elastColor.toHexString());
         break;
       case BLUE:
         // TODO:: DEFAULT COLOR | BLUE
         candle.clearAnimation(0);
         candle.setLEDs(0, 0, 255, 0, 0, 57 + 24);
+        elastColor = new Color(0, 0, 255);
+        SmartDashboard.putString("LED Color", elastColor.toHexString());
         break;
       case FLASHING_PURPLE:
         candle.clearAnimation(0);
         candle.setLEDs(119, 0, 200, 0, 0, 57 + 24);
+        elastColor = new Color(119, 0, 200);
+        SmartDashboard.putString("LED Color", elastColor.toHexString());
+        if (coinflip == 0) {
+          SmartDashboard.putString("LED Color", elastColor.toHexString());
+        } else {
+          SmartDashboard.putString("LED Color", "#FFFFFF");
+        }
         break;
       case YELLOW:
         candle.clearAnimation(0);
         // led.set(Constants.LEDConstants.COLOR_YELLOW);
         // candle.setLEDs(255, 255, 0, 0, 32, 25);
         candle.setLEDs(255, 255, 0, 0, 0, 57 + 24);
+        elastColor = new Color(255, 255, 0);
+        SmartDashboard.putString("LED Color", elastColor.toHexString());
         break;
       case VIOLET:
         // led.set(Constants.LEDConstants.COLOR_VIOLET);
+        elastColor = new Color(200, 0, 200);
+        SmartDashboard.putString("LED Color", elastColor.toHexString());
         break;
       case GREY:
         candle.clearAnimation(0);
         candle.setLEDs(137, 129, 123);
+        elastColor = new Color(137, 129, 123);
+        SmartDashboard.putString("LED Color", elastColor.toHexString());
         break;
       case GREEN:
         candle.clearAnimation(0);
         candle.setLEDs(0, 255, 0, 0, 0, 57 + 24);
+        elastColor = new Color(0, 255, 0);
+        SmartDashboard.putString("LED Color", elastColor.toHexString());
         break;
 
       case PURPLE:
         candle.clearAnimation(0);
         candle.setLEDs(255, 0, 255);
+        elastColor = new Color(255, 0, 255);
+        SmartDashboard.putString("LED Color", elastColor.toHexString());
         break;
       case PAPAYA_ORANGE:
         candle.clearAnimation(0);
         candle.setLEDs(255, 30, 0);
+        elastColor = new Color(255, 30, 0);
+        SmartDashboard.putString("LED Color", elastColor.toHexString());
         break;
       case WILLIAMS_BLUE:
         candle.clearAnimation(0);
         candle.setLEDs(0, 160, 222);
+        elastColor = new Color(0, 160, 222);
+        SmartDashboard.putString("LED Color", elastColor.toHexString());
         break;
       case HALF_FLASH_RED_HALF_FLASH_WHITE:
         // TODO:: INTAKING FROM SOURCE | HALF_FLASH_RED_HALF_FLASH_WHITE
@@ -132,35 +163,78 @@ public class LED_IOCANdle implements LED_IO {
         candle.animate(halfFlashWhite);
         // candle.setLEDs(255, 0, 0, 0, 32, 28);
         candle.setLEDs(255, 0, 0, 0, 32, 25);
+        elastColor = new Color(255, 0, 0);
+        SmartDashboard.putString("LED Color", elastColor.toHexString());
         break;
       case FLASHING_ORANGE:
         candle.animate(flashOrange, 0);
+        elastColor = new Color(255, 30, 0);
+        SmartDashboard.putString("LED Color", elastColor.toHexString());
         break;
       case FLASHING_WHITE:
         // TODO:: SIGNAL TO HUMAN PLAYER | FLASHING WHITE
         candle.animate(flashWhite, 0);
+        elastColor = new Color(0, 0, 0);
+        SmartDashboard.putString("LED Color", elastColor.toHexString());
+        if (coinflip == 0) {
+          SmartDashboard.putString("LED Color", elastColor.toHexString());
+        } else {
+          SmartDashboard.putString("LED Color", "#FFFFFF");
+        }
         break;
       case FLASHING_YELLOW:
         candle.animate(flashYellow, 0);
+        elastColor = new Color(255, 255, 0);
+        SmartDashboard.putString("LED Color", elastColor.toHexString());
+        if (coinflip == 0) {
+          SmartDashboard.putString("LED Color", elastColor.toHexString());
+        } else {
+          SmartDashboard.putString("LED Color", "#FFFFFF");
+        }
         break;
       case FLASHING_GREEN:
         // TODO:: AIMBOT | FLASHING GREEN
         candle.animate(flashGreen, 0);
+        elastColor = new Color(0, 255, 0);
+        SmartDashboard.putString("LED Color", elastColor.toHexString());
+        if (coinflip == 0) {
+          SmartDashboard.putString("LED Color", elastColor.toHexString());
+        } else {
+          SmartDashboard.putString("LED Color", "#FFFFFF");
+        }
         break;
       case FLASHING_RED:
         // TODO:: TRAJECTORY INTAKE | FLASHING RED
         candle.animate(flashRed, 0);
+        elastColor = new Color(255, 0, 0);
+        SmartDashboard.putString("LED Color", elastColor.toHexString());
+        if (coinflip == 0) {
+          SmartDashboard.putString("LED Color", elastColor.toHexString());
+        } else {
+          SmartDashboard.putString("LED Color", "#FFFFFF");
+        }
         break;
       case FLASHING_BLUE:
         candle.animate(flashBlue, 0);
+        elastColor = new Color(0, 0, 255);
+        SmartDashboard.putString("LED Color", elastColor.toHexString());
+        if (coinflip == 0) {
+          SmartDashboard.putString("LED Color", elastColor.toHexString());
+        } else {
+          SmartDashboard.putString("LED Color", "#FFFFFF");
+        }
         break;
       case FIRE:
         // TODO:: DISABLED | FIRE
         candle.animate(rainbow, 0);
+        elastColor = new Color(255, 30, 0);
+        SmartDashboard.putString("LED Color", elastColor.toHexString());
         break;
       case OFF:
         candle.clearAnimation(0);
         candle.setLEDs(0, 0, 0, 0, 0, 57 + 24);
+        elastColor = new Color(0, 0, 0);
+        SmartDashboard.putString("LED Color", elastColor.toHexString());
         break;
       default:
         break;

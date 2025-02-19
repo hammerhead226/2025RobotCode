@@ -15,6 +15,7 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -23,6 +24,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -67,9 +69,7 @@ import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.elevator.ElevatorIOTalonFX;
 import frc.robot.subsystems.led.LED;
-import frc.robot.subsystems.led.LED_IO;
 import frc.robot.subsystems.led.LED_IOCANdle;
-import frc.robot.subsystems.led.LED_IOSim;
 import frc.robot.subsystems.newalgaeintake.AlgaeIntakeArm;
 import frc.robot.subsystems.newalgaeintake.AlgaeIntakeArmIOSim;
 import frc.robot.subsystems.newalgaeintake.AlgaeIntakeArmIOTalonFX;
@@ -162,6 +162,13 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    LED_IOCANdle candle = new LED_IOCANdle(0, "");
+    led = new LED(candle);
+
+    CameraServer.startAutomaticCapture();
+
+    SmartDashboard.putString("LED Color", candle.elastColor.toHexString());
+
     switch (SimConstants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -191,7 +198,7 @@ public class RobotContainer {
                 new CoralIntakeSensorIO() {},
                 CoralState.DEFAULT,
                 AlgaeState.DEFAULT);
-        led = new LED(new LED_IOCANdle(0, ""));
+
         break;
         // coralIntake = new IntakeFromSource(new CoralScorerFlywheel(), new CoralScorerArm(), new
         // Elevator());
@@ -225,7 +232,7 @@ public class RobotContainer {
                 new CoralIntakeSensorIO() {},
                 CoralState.DEFAULT,
                 AlgaeState.DEFAULT);
-        led = new LED(new LED_IOSim());
+        // led = new LED(new LED_IOSim());
 
         // objectDetection = new ObjectDetection(new ObjectDetectionConsumer() {}, new
         // ObjectDetectionIO() {});
@@ -258,7 +265,7 @@ public class RobotContainer {
                 new CoralIntakeSensorIO() {},
                 CoralState.DEFAULT,
                 AlgaeState.DEFAULT);
-        led = new LED(new LED_IO() {});
+        // led = new LED(new LED_IO() {});
 
         // objectDetection = new ObjectDetection(new ObjectDetectionConsumer() {}, new
         // ObjectDetectionIO() {});
