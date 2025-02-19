@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.ctre.phoenix6.hardware.CANrange;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -23,6 +24,7 @@ import frc.robot.constants.SubsystemConstants.AlgaeState;
 import frc.robot.constants.SubsystemConstants.CoralState;
 import frc.robot.constants.SubsystemConstants.LED_STATE;
 import frc.robot.constants.SubsystemConstants.SuperStructureState;
+import frc.robot.statemachines.AlignStateMachine;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.SuperStructure;
 import frc.robot.subsystems.climber.ClimberArm;
@@ -74,10 +76,13 @@ public class RobotContainer {
   private ClimberArm climberArm;
   private Vision vision;
   SuperStructure superStructure;
+  private final CANrange distanceFromTarget;
   // public final Trigger elevatorBrakeTrigger;
   //   private final Trigger stateTrigger;
   private final Trigger slowModeTrigger;
   private CoralScorerFlywheel csFlywheel;
+
+  private final AlignStateMachine alignStateMachine;
 
   // private final SequentialCommandGroup superStructureCommands;
 
@@ -212,6 +217,8 @@ public class RobotContainer {
         superStructure = new SuperStructure(elevator, csArm, csFlywheel, drive, led);
         break;
     }
+    distanceFromTarget = new CANrange(0, "CAN bus 2");
+    alignStateMachine = new AlignStateMachine(distanceFromTarget);
 
     // superStructureCommands = new
     // SelectCommand<>(Map.ofEntries(Map.entry(SuperStructureState.STOW,
@@ -313,7 +320,8 @@ public class RobotContainer {
   private void test() {
     // driveController.b().onTrue(elevator.setElevatorTarget(20, 1));
     // driveController.b().onFalse(elevator.setElevatorTarget(0, 1));
-    driveController.a().onTrue(led.setStateCommand(LED_STATE.BLUE));
+    // driveController.a().onTrue(led.setStateCommand(LED_STATE.BLUE));
+    
     driveController.y().onTrue(led.setStateCommand(LED_STATE.GREEN));
     driveController.x().onTrue(led.setStateCommand(LED_STATE.FIRE));
   }
@@ -357,6 +365,8 @@ public class RobotContainer {
                 new ApproachReefPerpendicular(drive, superStructure).withTimeout(2),
                 new InstantCommand(),
                 () -> (!drive.isNearReef() && drive.isAtReefSide())));
+
+    Trigger isAligned = new Trigger(alignStateMachine.withinThreshold());
     // driveController
     //     .a()
     //     .onTrue(
