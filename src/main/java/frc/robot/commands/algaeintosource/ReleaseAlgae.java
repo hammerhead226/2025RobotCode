@@ -22,6 +22,6 @@ public class ReleaseAlgae extends Command {
   @Override
   public boolean isFinished() {
     // TODO: Make this detect the algae has been released via volt threshold
-    return false;
+    return coralScorerFlywheel.getFlywheelVoltage() < 5;
   }
 }
