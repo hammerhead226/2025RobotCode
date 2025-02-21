@@ -164,6 +164,10 @@ public class CoralScorerFlywheel extends SubsystemBase {
     }
   }
 
+  public double getFlywheelVoltage() {
+    return inputs.appliedVolts;
+  }
+
   public CoralState getLastCoralState() {
     return lastCoralState;
   }
