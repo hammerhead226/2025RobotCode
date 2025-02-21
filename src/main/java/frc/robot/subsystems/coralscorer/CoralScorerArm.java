@@ -54,12 +54,12 @@ public class CoralScorerArm extends SubsystemBase {
     this.coralScorerArm = arm;
     switch (SimConstants.currentMode) {
       case REAL:
-        kG.initDefault(0.29);
-        kV.initDefault(1);
-        kP.initDefault(1.123);
-        kA.initDefault(1);
-        kS.initDefault(1);
-        kI.initDefault(1);
+        kG.initDefault(0);
+        kV.initDefault(0.02);
+        kP.initDefault(0);
+        kA.initDefault(0);
+        kS.initDefault(0);
+        kI.initDefault(0);
         break;
       case REPLAY:
         kG.initDefault(0.29);
@@ -132,6 +132,10 @@ public class CoralScorerArm extends SubsystemBase {
     // positionDegs = MathUtil.clamp(positionDegs, 33, 120);
     coralScorerArm.setPositionSetpointDegs(
         positionDegs, armFFModel.calculate(positionDegs, velocityDegsPerSec));
+  }
+
+  public void setVolts(double volts) {
+    coralScorerArm.setVoltage(0.1);
   }
 
   public void armStop() {

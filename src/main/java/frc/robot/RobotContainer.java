@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.ApproachReefPerpendicular;
@@ -21,17 +20,15 @@ import frc.robot.constants.SubsystemConstants.CoralState;
 import frc.robot.constants.SubsystemConstants.SuperStructureState;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.SuperStructure;
-import frc.robot.subsystems.arms.Arm;
-import frc.robot.subsystems.arms.ArmIOTalonFX;
 import frc.robot.subsystems.climber.ClimberArm;
 import frc.robot.subsystems.climber.ClimberArmIO;
 import frc.robot.subsystems.climber.ClimberArmIOSim;
 import frc.robot.subsystems.climber.Winch;
 import frc.robot.subsystems.climber.WinchIO;
 import frc.robot.subsystems.climber.WinchIOSim;
-import frc.robot.subsystems.commoniolayers.ArmIO;
 import frc.robot.subsystems.coralscorer.CoralScorerArm;
 import frc.robot.subsystems.coralscorer.CoralScorerArmIOSim;
+import frc.robot.subsystems.coralscorer.CoralScorerArmIOTalonFX;
 import frc.robot.subsystems.coralscorer.CoralScorerFlywheel;
 import frc.robot.subsystems.coralscorer.CoralScorerFlywheelIOSim;
 import frc.robot.subsystems.coralscorer.CoralSensorIO;
@@ -49,9 +46,7 @@ import frc.robot.subsystems.led.LED_IOSim;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
-import java.util.Map;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -80,18 +75,15 @@ public class RobotContainer {
   private Vision vision;
   SuperStructure superStructure;
   private final Winch winch;
-  private Arm arm;
 
   // public final Trigger elevatorBrakeTrigger;
   //   private final Trigger stateTrigger;
   // private final Trigger slowModeTrigger;
   private CoralScorerFlywheel csFlywheel;
 
-  private final Command superStructureCommands;
-
-  private SuperStructureState stateSelect() {
-    return superStructure.getWantedState();
-  }
+  //   private SuperStructureState stateSelect() {
+  //     return superStructure.getWantedState();
+  //   }
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -140,7 +132,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
 
-        csArm = new CoralScorerArm(new CoralScorerArmIOSim());
+        csArm = new CoralScorerArm(new CoralScorerArmIOTalonFX(10, 0));
 
         vision =
             new Vision(
@@ -152,7 +144,6 @@ public class RobotContainer {
 
         // climberArm = new ClimberArm(new ClimberArmIOTalonFX(14, 5));
         climberArm = new ClimberArm(new ClimberArmIO() {});
-        coralScorerArm = new CoralScorerArm(new ArmIOTalonFX(0, 0, 0));
 
         csFlywheel =
             new CoralScorerFlywheel(
@@ -161,7 +152,7 @@ public class RobotContainer {
                 CoralState.DEFAULT,
                 AlgaeState.DEFAULT);
         led = new LED(new LED_IOCANdle(0, "CAN Bus 2"));
-        superStructure = new SuperStructure(elevator, csArm, csFlywheel, drive, led);
+        // superStructure = new SuperStructure(elevator, csArm, csFlywheel, drive, led);
         break;
 
       case SIM:
@@ -227,23 +218,25 @@ public class RobotContainer {
         break;
     }
 
-    superStructureCommands =
-        new SelectCommand<>(
-            Map.ofEntries(
-                Map.entry(SuperStructureState.STOW, superStructure.getSuperStructureCommand()),
-                Map.entry(SuperStructureState.L1, superStructure.getSuperStructureCommand()),
-                Map.entry(SuperStructureState.L2, superStructure.getSuperStructureCommand()),
-                Map.entry(SuperStructureState.L3, superStructure.getSuperStructureCommand()),
-                Map.entry(SuperStructureState.L4, superStructure.getSuperStructureCommand()),
-                Map.entry(SuperStructureState.SOURCE, superStructure.getSuperStructureCommand()),
-                Map.entry(
-                    SuperStructureState.SCORING_CORAL, superStructure.getSuperStructureCommand()),
-                Map.entry(
-                    SuperStructureState.CLIMB_STAGE_ONE, superStructure.getSuperStructureCommand()),
-                Map.entry(
-                    SuperStructureState.CLIMB_STAGE_TWO,
-                    superStructure.getSuperStructureCommand())),
-            () -> superStructure.getWantedState());
+    // superStructureCommands =
+    //     new SelectCommand<>(
+    //         Map.ofEntries(
+    //             Map.entry(SuperStructureState.STOW, superStructure.getSuperStructureCommand()),
+    //             Map.entry(SuperStructureState.L1, superStructure.getSuperStructureCommand()),
+    //             Map.entry(SuperStructureState.L2, superStructure.getSuperStructureCommand()),
+    //             Map.entry(SuperStructureState.L3, superStructure.getSuperStructureCommand()),
+    //             Map.entry(SuperStructureState.L4, superStructure.getSuperStructureCommand()),
+    //             Map.entry(SuperStructureState.SOURCE, superStructure.getSuperStructureCommand()),
+    //             Map.entry(
+    //                 SuperStructureState.SCORING_CORAL,
+    // superStructure.getSuperStructureCommand()),
+    //             Map.entry(
+    //                 SuperStructureState.CLIMB_STAGE_ONE,
+    // superStructure.getSuperStructureCommand()),
+    //             Map.entry(
+    //                 SuperStructureState.CLIMB_STAGE_TWO,
+    //                 superStructure.getSuperStructureCommand())),
+    //         () -> superStructure.getWantedState());
     // Set up auto routines
     // NamedCommands.registerCommand("AlignToReefAuto", new AlignToReefAuto(drive, led));
 
@@ -352,9 +345,9 @@ public class RobotContainer {
     // driveController.a().onTrue(climberArm.setArmTarget(90, 1));
     // driveController.b().onTrue(climberArm.setArmTarget(0, 1));
     // driveController.y().onTrue(climberArm.zero());
-
-    driveController.a().onTrue(coralScorerArm.setArmTarget(90, 1));
-    driveController.b().onTrue(coralScorerArm.setArmTarget(0, 1));
+    driveController.a().onTrue(new InstantCommand(() -> csArm.setVolts(0.2)));
+    // driveController.a().onTrue(csArm.setArmTarget(20, 1));
+    driveController.b().onTrue(csArm.setArmTarget(0, 1));
     // driveController.y().onTrue(coralScorerArm.zero());
 
     // driveController.b().onTrue(new InstantCommand(() -> climberArm.armStop(), climberArm));
@@ -451,7 +444,7 @@ public class RobotContainer {
     driveController
         .x()
         .onTrue(new InstantCommand(() -> superStructure.setWantedState(SuperStructureState.L2)));
-    driveController.b().onTrue(superStructureCommands);
+    // driveController.b().onTrue(superStructureCommands);
     // driveController
     //     .a()
     //     .onFalse(

@@ -173,7 +173,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void teleopPeriodic() {
 
-    Logger.recordOutput("Wanted State", robotContainer.superStructure.getWantedState());
+    // Logger.recordOutput("Wanted State", robotContainer.superStructure.getWantedState());
   }
 
   /** This function is called once when test mode is enabled. */

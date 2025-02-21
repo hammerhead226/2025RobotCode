@@ -5,7 +5,6 @@ import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -79,14 +78,12 @@ public class ArmIOTalonFX implements ArmIO {
 
   @Override
   public void updateInputs(ArmIOInputs inputs) {
-    BaseStatusSignal.refreshAll(
-        positionDegs, velocityDegsPerSec, appliedVolts, currentAmps, pitch);
+    BaseStatusSignal.refreshAll(positionDegs, velocityDegsPerSec, appliedVolts, currentAmps, pitch);
     inputs.gyroConnected = BaseStatusSignal.refreshAll(pitch).equals(StatusCode.OK);
     inputs.pitch = pitch.getValueAsDouble() + SubsystemConstants.ArmConstants.ARM_ZERO_ANGLE;
     inputs.positionDegs =
         Conversions.falconToDegrees(
-                (positionDegs.getValueAsDouble()),
-                SubsystemConstants.ArmConstants.ARM_GEAR_RATIO)
+                (positionDegs.getValueAsDouble()), SubsystemConstants.ArmConstants.ARM_GEAR_RATIO)
             + SubsystemConstants.ArmConstants.ARM_ZERO_ANGLE;
 
     inputs.velocityDegsPerSec = velocityDegsPerSec.getValueAsDouble();

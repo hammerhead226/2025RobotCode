@@ -53,8 +53,8 @@ public class CoralScorerArmIOTalonFX implements ArmIO {
     config.Feedback.RotorToSensorRatio =
         SubsystemConstants.CoralScorerConstants.CoralScorerArmConstants.ARM_GEAR_RATIO;
 
-    leader = new TalonFX(leadID, SubsystemConstants.CANBUS);
-    scoralCoder = new CANcoder(canCoderID, SubsystemConstants.CANBUS);
+    leader = new TalonFX(leadID);
+    scoralCoder = new CANcoder(canCoderID);
 
     leader.getConfigurator().apply(config);
     scoralCoder.getConfigurator().apply(coderConfig);
@@ -117,10 +117,15 @@ public class CoralScorerArmIOTalonFX implements ArmIO {
     this.positionSetpointDegs = positionDegs;
     leader.setControl(
         new PositionVoltage(
-            Conversions.degreesToFalcon(
-                positionDegs,
-                SubsystemConstants.CoralScorerConstants.CoralScorerArmConstants
-                    .ARM_GEAR_RATIO))); // CHECK FOR STOW ANGLE (positionDegs - 59)
+                Conversions.degreesToFalcon(
+                    positionDegs,
+                    SubsystemConstants.CoralScorerConstants.CoralScorerArmConstants.ARM_GEAR_RATIO))
+            .withFeedForward(0.1)); // CHECK FOR STOW ANGLE (positionDegs - 59)
+  }
+
+  @Override
+  public void setVoltage(double volts) {
+    leader.setVoltage(volts);
   }
 
   @Override
