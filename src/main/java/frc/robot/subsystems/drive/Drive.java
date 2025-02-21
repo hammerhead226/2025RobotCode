@@ -94,6 +94,14 @@ public class Drive extends SubsystemBase {
               TunerConstants.FrontLeft.SlipCurrent,
               1),
           getModuleTranslations());
+  private final Alert encoderFLdisconnected =
+      new Alert("Front Left Cancoder disconected", AlertType.kError);
+  private final Alert encoderFRdisconnected =
+      new Alert("Front Right Cancoder disconected", AlertType.kError);
+  private final Alert encoderBLdisconnected =
+      new Alert("Back Left Cancoder disconected", AlertType.kError);
+  private final Alert encoderBRdisconnected =
+      new Alert("Back Right Cancoder disconected", AlertType.kError);
 
   static final Lock odometryLock = new ReentrantLock();
   private final GyroIO gyroIO;
@@ -199,6 +207,17 @@ public class Drive extends SubsystemBase {
       Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[] {});
       Logger.recordOutput("SwerveStates/SetpointsOptimized", new SwerveModuleState[] {});
     }
+    double FL_Degrees = modules[0].getAngle().getDegrees();
+    encoderFLdisconnected.set(FL_Degrees == 0.0);
+
+    double FR_Degrees = modules[1].getAngle().getDegrees();
+    encoderFRdisconnected.set(FR_Degrees == 0.0);
+
+    double BL_Degrees = modules[2].getAngle().getDegrees();
+    encoderBLdisconnected.set(BL_Degrees == 0.0);
+
+    double BR_Degrees = modules[3].getAngle().getDegrees();
+    encoderBRdisconnected.set(BR_Degrees == 0.0);
 
     // Update odometry
     double[] sampleTimestamps =
@@ -235,7 +254,6 @@ public class Drive extends SubsystemBase {
     // Update gyro alert
     gyroDisconnectedAlert.set(!gyroInputs.connected && SimConstants.currentMode != Mode.SIM);
   }
-
   /**
    * Runs the drive at the desired velocity.
    *
