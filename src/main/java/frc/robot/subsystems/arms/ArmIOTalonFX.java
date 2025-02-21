@@ -22,8 +22,7 @@ import frc.robot.util.Conversions;
 import org.littletonrobotics.junction.Logger;
 
 public class ArmIOTalonFX implements ArmIO {
-  private final TalonFX leader;
-  private final TalonFX follower;
+  private final TalonFX motor;
 
   private final Pigeon2 pigeon;
 
@@ -31,7 +30,7 @@ public class ArmIOTalonFX implements ArmIO {
 
   private double startAngleDegs;
 
-  private final StatusSignal<Angle> leaderPositionDegs;
+  private final StatusSignal<Angle> positionDegs;
   private final StatusSignal<AngularVelocity> velocityDegsPerSec;
   private final StatusSignal<Voltage> appliedVolts;
   private final StatusSignal<Current> currentAmps;
@@ -45,32 +44,23 @@ public class ArmIOTalonFX implements ArmIO {
     config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-    leader = new TalonFX(leadID, SubsystemConstants.CANBUS);
-    follower = new TalonFX(followID, SubsystemConstants.CANBUS);
+    motor = new TalonFX(leadID, SubsystemConstants.CANBUS);
     pigeon = new Pigeon2(gyroID, SubsystemConstants.CANBUS); // use encoder here
     pigeon.reset();
-
-    leader.getConfigurator().apply(config);
-
-    follower.setControl(new Follower(leadID, true));
 
     pitch = pigeon.getRoll(); // rename and get abs encoder (replace)
     // turnAbsolutePosition = cancoder.getAbsolutePosition();
 
     // startAngleDegs = turnAbsolutePosition.getValueAsDouble();
 
-    leader.setPosition(
+    motor.setPosition(
         Conversions.degreesToFalcon(
             startAngleDegs, SubsystemConstants.ArmConstants.ARM_GEAR_RATIO));
 
-    follower.setPosition(
-        Conversions.degreesToFalcon(
-            startAngleDegs, SubsystemConstants.ArmConstants.ARM_GEAR_RATIO));
-
-    leaderPositionDegs = leader.getPosition();
-    velocityDegsPerSec = leader.getVelocity();
-    appliedVolts = leader.getMotorVoltage();
-    currentAmps = leader.getStatorCurrent();
+    positionDegs = motor.getPosition();
+    velocityDegsPerSec = motor.getVelocity();
+    appliedVolts = motor.getMotorVoltage();
+    currentAmps = motor.getStatorCurrent();
 
     // leader.get
 
@@ -79,11 +69,10 @@ public class ArmIOTalonFX implements ArmIO {
     Logger.recordOutput("start angle", startAngleDegs);
 
     pigeon.optimizeBusUtilization();
-    leader.optimizeBusUtilization();
-    follower.optimizeBusUtilization();
+    motor.optimizeBusUtilization();
 
     BaseStatusSignal.setUpdateFrequencyForAll(
-        100, leaderPositionDegs, velocityDegsPerSec, appliedVolts, currentAmps, pitch);
+        100, positionDegs, velocityDegsPerSec, appliedVolts, currentAmps, pitch);
 
     // setBrakeMode(false);
   }
@@ -91,12 +80,12 @@ public class ArmIOTalonFX implements ArmIO {
   @Override
   public void updateInputs(ArmIOInputs inputs) {
     BaseStatusSignal.refreshAll(
-        leaderPositionDegs, velocityDegsPerSec, appliedVolts, currentAmps, pitch);
+        positionDegs, velocityDegsPerSec, appliedVolts, currentAmps, pitch);
     inputs.gyroConnected = BaseStatusSignal.refreshAll(pitch).equals(StatusCode.OK);
     inputs.pitch = pitch.getValueAsDouble() + SubsystemConstants.ArmConstants.ARM_ZERO_ANGLE;
     inputs.positionDegs =
         Conversions.falconToDegrees(
-                (leaderPositionDegs.getValueAsDouble()),
+                (positionDegs.getValueAsDouble()),
                 SubsystemConstants.ArmConstants.ARM_GEAR_RATIO)
             + SubsystemConstants.ArmConstants.ARM_ZERO_ANGLE;
 
@@ -115,14 +104,13 @@ public class ArmIOTalonFX implements ArmIO {
       config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     }
 
-    leader.getConfigurator().apply(config);
-    follower.getConfigurator().apply(config);
+    motor.getConfigurator().apply(config);
   }
 
   @Override
   public void setPositionSetpointDegs(double positionDegs, double ffVolts) {
     this.positionSetpointDegs = positionDegs;
-    leader.setControl(
+    motor.setControl(
         new PositionVoltage(
             Conversions.degreesToFalcon(
                 positionDegs,
@@ -132,8 +120,8 @@ public class ArmIOTalonFX implements ArmIO {
 
   @Override
   public void stop() {
-    this.positionSetpointDegs = leaderPositionDegs.getValueAsDouble();
-    leader.stopMotor();
+    this.positionSetpointDegs = motor.getPosition().getValueAsDouble();
+    motor.stopMotor();
   }
 
   @Override
@@ -144,6 +132,6 @@ public class ArmIOTalonFX implements ArmIO {
     config.kI = kI;
     config.kD = kD;
 
-    leader.getConfigurator().apply(config);
+    motor.getConfigurator().apply(config);
   }
 }

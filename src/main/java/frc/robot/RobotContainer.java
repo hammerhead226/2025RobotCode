@@ -21,12 +21,15 @@ import frc.robot.constants.SubsystemConstants.CoralState;
 import frc.robot.constants.SubsystemConstants.SuperStructureState;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.SuperStructure;
+import frc.robot.subsystems.arms.Arm;
+import frc.robot.subsystems.arms.ArmIOTalonFX;
 import frc.robot.subsystems.climber.ClimberArm;
+import frc.robot.subsystems.climber.ClimberArmIO;
 import frc.robot.subsystems.climber.ClimberArmIOSim;
-import frc.robot.subsystems.climber.ClimberArmIOTalonFX;
 import frc.robot.subsystems.climber.Winch;
 import frc.robot.subsystems.climber.WinchIO;
 import frc.robot.subsystems.climber.WinchIOSim;
+import frc.robot.subsystems.commoniolayers.ArmIO;
 import frc.robot.subsystems.coralscorer.CoralScorerArm;
 import frc.robot.subsystems.coralscorer.CoralScorerArmIOSim;
 import frc.robot.subsystems.coralscorer.CoralScorerFlywheel;
@@ -48,6 +51,7 @@ import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import java.util.Map;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -72,9 +76,11 @@ public class RobotContainer {
 
   public static Elevator elevator;
   public ClimberArm climberArm;
+  public CoralScorerArm coralScorerArm;
   private Vision vision;
   SuperStructure superStructure;
   private final Winch winch;
+  private Arm arm;
 
   // public final Trigger elevatorBrakeTrigger;
   //   private final Trigger stateTrigger;
@@ -114,9 +120,9 @@ public class RobotContainer {
         //         new VisionIOPhotonVision("photon", new Transform3d()));
         // TODO change lead, follower, gyro IDs, etc.
         // elevator = new Elevator(new ElevatorIOTalonFX(8, 9, 0));
-        elevator = new Elevator(new ElevatorIOSim());
+        elevator = new Elevator(new ElevatorIO() {});
         // winch = new Winch(new WinchIOTalonFX(12, 13));
-        winch = new Winch(new WinchIOSim());
+        winch = new Winch(new WinchIO() {});
         // climberArm = new ClimberArm(new ClimberArmIOTalonFX(0, 0, 0));
         // csFlywheel =
         //     new CoralScorerFlywheel(
@@ -129,10 +135,10 @@ public class RobotContainer {
         drive =
             new Drive(
                 new GyroIO() {},
-                new ModuleIOSim(TunerConstants.FrontLeft),
-                new ModuleIOSim(TunerConstants.FrontRight),
-                new ModuleIOSim(TunerConstants.BackLeft),
-                new ModuleIOSim(TunerConstants.BackRight));
+                new ModuleIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {});
 
         csArm = new CoralScorerArm(new CoralScorerArmIOSim());
 
@@ -144,7 +150,9 @@ public class RobotContainer {
                 new VisionIOLimelight("limelight 3", drive.getRawGyroRotationSupplier()),
                 new VisionIOPhotonVision("photon", new Transform3d()));
 
-        climberArm = new ClimberArm(new ClimberArmIOTalonFX(14, 5));
+        // climberArm = new ClimberArm(new ClimberArmIOTalonFX(14, 5));
+        climberArm = new ClimberArm(new ClimberArmIO() {});
+        coralScorerArm = new CoralScorerArm(new ArmIOTalonFX(0, 0, 0));
 
         csFlywheel =
             new CoralScorerFlywheel(
@@ -341,9 +349,14 @@ public class RobotContainer {
     // driveController.b().onTrue(climberArm.setArmTarget(20, 1));
     // driveController.b().onTrue(climberArm.setArmTarget(0, 1));
 
-    driveController.a().onTrue(climberArm.setArmTarget(90, 1));
-    driveController.b().onTrue(climberArm.setArmTarget(0, 1));
-    driveController.y().onTrue(climberArm.zero());
+    // driveController.a().onTrue(climberArm.setArmTarget(90, 1));
+    // driveController.b().onTrue(climberArm.setArmTarget(0, 1));
+    // driveController.y().onTrue(climberArm.zero());
+
+    driveController.a().onTrue(coralScorerArm.setArmTarget(90, 1));
+    driveController.b().onTrue(coralScorerArm.setArmTarget(0, 1));
+    // driveController.y().onTrue(coralScorerArm.zero());
+
     // driveController.b().onTrue(new InstantCommand(() -> climberArm.armStop(), climberArm));
     // driveController
     //     .b()
