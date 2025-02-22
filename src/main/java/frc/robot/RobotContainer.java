@@ -369,14 +369,14 @@ public class RobotContainer {
     autos.addOption(
         "AutoTestBottom", AutoBuilder.buildAuto("Bottom-R3b(L4)-F1-R2a(L4)-F1-R2b(L4)"));
 
-    // autoChooser.addOption(
-    //  "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
-    // autoChooser.addOption(
-    //     "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
-    // autoChooser.addOption(
-    //     "Drive SysId (Quasistatic Forward)",
-    //     drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    // autoChooser.addOption(
+    autoChooser.addOption(
+      "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
+     autoChooser.addOption(
+         "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
+    //  autoChooser.addOption(
+    //      "Drive SysId (Quasistatic Forward)",
+    //      drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    //  autoChooser.addOption(
     //     "Drive SysId (Quasistatic Reverse)",
     //     drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
     // autoChooser.addOption(
