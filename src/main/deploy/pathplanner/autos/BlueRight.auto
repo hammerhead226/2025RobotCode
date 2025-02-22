@@ -13,19 +13,19 @@
         {
           "type": "named",
           "data": {
-            "name": "L4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "SCORE"
+            "name": "ReleaseClawL4"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.15
+            "waitTime": 1.7
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeFromSource"
           }
         },
         {
@@ -37,13 +37,13 @@
         {
           "type": "named",
           "data": {
-            "name": "INTAKE"
+            "name": "ReleaseClawL4"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.15
+            "waitTime": 0.2
           }
         },
         {
@@ -55,19 +55,7 @@
         {
           "type": "named",
           "data": {
-            "name": "L4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "SCORE"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.15
+            "name": "IntakeFromSource"
           }
         },
         {
@@ -79,37 +67,13 @@
         {
           "type": "named",
           "data": {
-            "name": "INTAKE"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.15
+            "name": "ReleaseClawL4"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "BlueRightFifth"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "SCORE"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.15
           }
         }
       ]
