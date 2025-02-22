@@ -10,21 +10,25 @@ import frc.robot.constants.SubsystemConstants.CoralScorerConstants;
 import frc.robot.constants.SubsystemConstants.CoralScorerConstants.AlgaeScorerFlywheelConstants;
 import frc.robot.constants.SubsystemConstants.CoralScorerConstants.CoralScorerDefinedPositions;
 import frc.robot.constants.SubsystemConstants.ElevatorConstants;
+import frc.robot.constants.SubsystemConstants.LED_STATE;
 import frc.robot.subsystems.coralscorer.CoralScorerArm;
 import frc.robot.subsystems.coralscorer.CoralScorerFlywheel;
 import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.led.LED;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class IntakingAlgae extends Command {
   private final Elevator elevator;
   private final CoralScorerFlywheel algaeIntake;
   private final CoralScorerArm arm;
+  private final LED led;
 
   /** Creates a new IntakingAlgae. */
-  public IntakingAlgae(Elevator elevator, CoralScorerFlywheel algaeIntake, CoralScorerArm arm) {
+  public IntakingAlgae(Elevator elevator, CoralScorerFlywheel algaeIntake, CoralScorerArm arm, LED led) {
     this.elevator = elevator;
     this.algaeIntake = algaeIntake;
     this.arm = arm;
+    this.led = led;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(elevator, algaeIntake, arm);
   }
@@ -41,7 +45,9 @@ public class IntakingAlgae extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    led.setState(LED_STATE.FLASHING_GREEN);
+  }
 
   // Called once the command ends or is interrupted.
   @Override

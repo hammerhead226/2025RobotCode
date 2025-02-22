@@ -108,7 +108,6 @@ public class AlignToReefAuto extends Command {
 
   @Override
   public boolean isFinished() {
-  led.setState(LED_STATE.GREEN);   
- return false;
+    return false;
   }
 }

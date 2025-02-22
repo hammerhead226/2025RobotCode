@@ -18,11 +18,14 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.AlignToReefAuto;
 import frc.robot.commands.DriveCommands;
@@ -37,6 +40,7 @@ import frc.robot.constants.FieldConstants.ReefHeight;
 import frc.robot.constants.SimConstants;
 import frc.robot.constants.SubsystemConstants.AlgaeState;
 import frc.robot.constants.SubsystemConstants.CoralState;
+import frc.robot.constants.SubsystemConstants.LED_STATE;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.coralIntake.flywheels.CoralIntakeSensorIO;
 import frc.robot.subsystems.coralscorer.CoralScorerArm;
@@ -93,6 +97,8 @@ public class RobotContainer {
   private final Vision vision;
 
   private final CoralScorerFlywheel csFlywheel;
+
+  private final RobotController robotController;
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -190,6 +196,8 @@ public class RobotContainer {
         led = new LED(new LED_IO() {});
         break;
     }
+
+    
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
@@ -225,6 +233,14 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
+    Trigger trigger = new Trigger(() -> robotController.getBatteryVoltage() < 5);
+    trigger.onTrue(new InstantCommand(() -> led.setState(LED_STATE.FLASHING_RED)));
+
+    
+
+    
+
+
     keyboard
         .getXButton()
         .onTrue(new IntakingAlgaeParallel(elevator, csArm, csFlywheel, ReefHeight.L2));
@@ -241,17 +257,24 @@ public class RobotContainer {
             () -> -driveController.getRightX(),
             () -> driveController.leftBumper().getAsBoolean(),
             () -> driveController.rightBumper().getAsBoolean(),
-            () -> driveController.b().getAsBoolean()));
+            () -> driveController.b().getAsBoolean(), 
+            () -> driveController.a().getAsBoolean()));
+            
 
     // driveController.x().onTrue(new Stow(elevator, csArm));
+    driveController.leftBumper().whileTrue(new InstantCommand(() -> led.setState(LED_STATE.FLASHING_YELLOW))); // align to reef
+    driveController.rightBumper().whileTrue(new InstantCommand(() -> led.setState(LED_STATE.FLASHING_PURPLE))); // align to source
+    driveController.b().whileTrue(new InstantCommand(() -> led.setState(LED_STATE.FLASHING_ORANGE))); // align to processor
+    driveController.a().whileTrue(new InstantCommand(() -> led.setState(LED_STATE.FLASHING_BLUE)));
 
-    driveController.a().onTrue(new SetClawLevel(ReefHeight.L1, elevator, csArm));
-    driveController.a().onFalse(/*csFlywheel
-                    .runVelocityCommand(2000)
-                    .until(() -> csFlywheel.getLastCoralState() != CoralState.NO_CORAL).andThen*/ (new Stow(elevator, csArm)));
+    driveController.a().onTrue(new ClimbCommands());
+    driveController.a().whileTrue(new InstantCommand(() -> led.setState(LED_STATE.FLASHING_GREY)));
+
 
     driveController.y().onTrue(new AlgaeIntoProcesser(elevator, csArm, csFlywheel));
+    driveController.y().whileTrue(new InstantCommand(() -> led.setState(LED_STATE.ORANGE))); // Is this release algae?
     driveController.y().onFalse(new Stow(elevator, csArm));
+    driveController.y().whileFalse(new InstantCommand(() -> led.setState(LED_STATE.FLASHING_BLACK)));
 
     // why is this like this?
     driveController.leftBumper().onTrue(new InstantCommand(() -> drive.setNearestReefSide()));
@@ -309,21 +332,33 @@ public class RobotContainer {
     // elevator.setElevatorTarget(FieldConstants.ReefHeight.L4.height, 1)));
 
     manipController.a().onTrue(new SetClawLevel(FieldConstants.ReefHeight.L1, elevator, csArm));
+    manipController.a().whileTrue(new InstantComand(() -> led.setState(FLASHING_CYAN)));
     manipController.b().onTrue(new SetClawLevel(FieldConstants.ReefHeight.L2, elevator, csArm));
+    manipController.b().whileTrue(new InstantComand(() -> led.setState(FLASHING_CYAN)));
     manipController.x().onTrue(new SetClawLevel(FieldConstants.ReefHeight.L3, elevator, csArm));
+    manipController.x().whileTrue(new InstantComand(() -> led.setState(FLASHING_CYAN)));
     manipController.y().onTrue(new SetClawLevel(FieldConstants.ReefHeight.L4, elevator, csArm));
+    manipController.y().whileTrue(new InstantComand(() -> led.setState(FLASHING_CYAN)));
     manipController.a().onFalse(new Stow(elevator, csArm));
+    manipController.a().whileFalse(new InstantComand(() -> led.setState(FLASHING_BLACK)));
     manipController.b().onFalse(new Stow(elevator, csArm));
+    manipController.b().whileFalse(new InstantComand(() -> led.setState(FLASHING_BLACK)));
     manipController.x().onFalse(new Stow(elevator, csArm));
+    manipController.x().whileFalse(new InstantComand(() -> led.setState(FLASHING_BLACK)));
     manipController.y().onFalse(new Stow(elevator, csArm));
+    manipController.y().whileFalse(new InstantComand(() -> led.setState(FLASHING_BLACK)));
 
     // manipController.leftBumper().whileTrue(new AutoAlignToSource(drive, led));
     manipController.leftBumper().onTrue(new IntakeFromSourceParallel(csFlywheel, csArm, elevator));
+    manipController.leftBumper().whileTrue(new InstantComand(() -> led.setState(FLASHING_PINK)));
     manipController.leftBumper().onFalse(new Stow(elevator, csArm));
+    manipController.leftBumper().whileFalse(new InstantComand(() -> led.setState(FLASHING_BLACK)));
     manipController
         .rightBumper()
         .onTrue(new IntakingAlgaeParallel(elevator, csArm, csFlywheel, ReefHeight.L1));
+        manipController.RightBumper().whileTrue(new InstantComand(() -> led.setState(FLASHING_GREEN)));
     manipController.rightBumper().onFalse(new Stow(elevator, csArm));
+    manipController.rightBumper().whileFalse(new InstantComand(() -> led.setState(FLASHING_BLACK)));
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

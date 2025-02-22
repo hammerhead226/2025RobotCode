@@ -21,6 +21,10 @@ import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.Waypoint;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
@@ -56,6 +60,7 @@ import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.vision.ObjectDetection;
 import frc.robot.subsystems.vision.Vision.VisionConsumer;
 import frc.robot.util.LocalADStarAK;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
@@ -81,6 +86,7 @@ public class Drive extends SubsystemBase {
   private static final double ROBOT_MASS_KG = 1;
   private static final double ROBOT_MOI = 1;
   private static final double WHEEL_COF = 1;
+  private Pose2d balls;
   private static final RobotConfig PP_CONFIG =
       new RobotConfig(
           ROBOT_MASS_KG,
@@ -106,10 +112,14 @@ public class Drive extends SubsystemBase {
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
   private Rotation2d rawGyroRotation = new Rotation2d();
 
+  public static double speedX;
+  public static double speedY;
+  public static double rotationDegs;
+
   private final TimeInterpolatableBuffer<Pose2d> gamePieceBuffer =
       TimeInterpolatableBuffer.createBuffer(OBJECT_BUFFER_SIZE_SECONDS);
 
-  private Pose2d nearestSide = new Pose2d();
+  // private Pose2d nearestSide = new Pose2d();
 
   private SwerveModulePosition[] lastModulePositions = // For delta tracking
       new SwerveModulePosition[] {
@@ -162,6 +172,8 @@ public class Drive extends SubsystemBase {
         });
 
     // Configure SysId
+    speedX = 0;
+    speedY = 0;
     sysId =
         new SysIdRoutine(
             new SysIdRoutine.Config(
@@ -174,6 +186,7 @@ public class Drive extends SubsystemBase {
   }
 
   public Pose2d getPoseAtTimeStamp(double seconds) {
+
     return poseEstimator.sampleAt(seconds).orElse(new Pose2d());
   }
 
@@ -182,6 +195,7 @@ public class Drive extends SubsystemBase {
     odometryLock.lock(); // Prevents odometry updates while reading data
     gyroIO.updateInputs(gyroInputs);
     Logger.processInputs("Drive/Gyro", gyroInputs);
+
     for (var module : modules) {
       module.periodic();
     }
@@ -230,10 +244,15 @@ public class Drive extends SubsystemBase {
 
       // Apply update
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
+      speedX = getChassisSpeeds().vxMetersPerSecond;
+      speedY = getChassisSpeeds().vyMetersPerSecond;
+      rotationDegs = Math.toDegrees(getChassisSpeeds().omegaRadiansPerSecond);
     }
 
     // Update gyro alert
     gyroDisconnectedAlert.set(!gyroInputs.connected && SimConstants.currentMode != Mode.SIM);
+    // setNearestReefSide();
+    balls = getPose();
   }
 
   /**
@@ -256,6 +275,8 @@ public class Drive extends SubsystemBase {
       modules[i].runSetpoint(setpointStates[i]);
     }
 
+    // this.speedX = speeds.vxMetersPerSecond;
+    // this.speedY = speeds.vyMetersPerSecond;
     // Log optimized setpoints (runSetpoint mutates each state)
     Logger.recordOutput("SwerveStates/SetpointsOptimized", setpointStates);
   }
@@ -318,7 +339,7 @@ public class Drive extends SubsystemBase {
 
   /** Returns the measured chassis speeds of the robot. */
   @AutoLogOutput(key = "SwerveChassisSpeeds/Measured")
-  private ChassisSpeeds getChassisSpeeds() {
+  public ChassisSpeeds getChassisSpeeds() {
     return kinematics.toChassisSpeeds(getModuleStates());
   }
 
@@ -425,11 +446,67 @@ public class Drive extends SubsystemBase {
     return new rawGyroRotationSupplier();
   }
 
-  public Pose2d getNearestSide() {
-    return nearestSide;
+  // public Pose2d getNearestSide() {
+  //   return nearestSide;
+  // }
+
+  public Pose2d getNearestCenter() {
+    int index = getNearestParition(6);
+    Logger.recordOutput("align to reef center target index", index);
+    return FieldConstants.Reef.centerFaces[index];
   }
 
-  public void setNearestReefSide() {
+  public Pose2d getNearestCenterLeft() {
+    int index = getNearestParition(6);
+    Logger.recordOutput("align to reef center left target index", index);
+    return FieldConstants.Reef.branchPositions
+        .get(index * 2 + 1)
+        .get(FieldConstants.ReefHeight.L1)
+        .toPose2d();
+  }
+
+  public Pose2d getNearestCenterRight() {
+    int index = getNearestParition(6);
+    Logger.recordOutput("align to reef center left target index", index);
+    return FieldConstants.Reef.branchPositions
+        .get(index * 2)
+        .get(FieldConstants.ReefHeight.L1)
+        .toPose2d();
+  }
+
+  public Pose2d getNearestSide() {
+    int index = getNearestParition(12);
+    Logger.recordOutput("align to reef target index", index);
+    return FieldConstants.Reef.branchPositions
+        .get(index)
+        .get(FieldConstants.ReefHeight.L1)
+        .toPose2d();
+  }
+
+  public Command driveToReefAuto() {
+
+    Pose2d targetPose = getNearestSide();
+
+    // FieldConstants.Sources.Lower.Position : FieldConstants.Sources.Higher.Position;
+    List<Waypoint> waypoints =
+        PathPlannerPath.waypointsFromPoses(
+            new Pose2d(100, 1, Rotation2d.fromDegrees(50)), targetPose);
+
+    PathPlannerPath path =
+        new PathPlannerPath(
+            waypoints,
+            new PathConstraints(3.5, 2.7, 100, 180), // these numbers from last year's code
+            null, // The ideal starting state, this is only relevant for pre-planned paths, so can
+            // be null for on-the-fly paths.
+            new GoalEndState(0.5, targetPose.getRotation()));
+    path.preventFlipping = true;
+
+    Command pathCommand = AutoBuilder.followPath(path);
+
+    return pathCommand;
+  }
+
+  private int getNearestParition(int partitions) {
     Translation2d start = FieldConstants.Reef.center;
     Translation2d end = getPose().getTranslation();
     Translation2d v = end.minus(start);
@@ -443,30 +520,27 @@ public class Drive extends SubsystemBase {
     double adjustedRotations = -rawRotations + (7.0 / 12.0);
 
     // % 1 to just get the fractional part of the rotation
-    // multiply by 12 before flooring so [0,1) maps to 0,1,2...10,11 evenly
+    // multiply by 12 before flooring so [0,1) maps to 0,1,2...partitions-2,partitions-1 evenly
     double fractionalRotation = adjustedRotations % 1;
     if (fractionalRotation < 0) {
       fractionalRotation++;
     }
-    int index = (int) Math.floor(fractionalRotation * 12);
+    int index = (int) Math.floor(fractionalRotation * partitions);
 
-    Logger.recordOutput("align to reef target index", index);
+    return index;
+  }
 
-    Pose2d result =
-        FieldConstants.Reef.branchPositions.get(index).get(FieldConstants.ReefHeight.L1).toPose2d();
+  public Pose2d getNearestSource() {
+    if (getPose()
+            .getTranslation()
+            .getDistance(FieldConstants.CoralStation.leftCenterFace.getTranslation())
+        < getPose()
+            .getTranslation()
+            .getDistance(FieldConstants.CoralStation.rightCenterFace.getTranslation())) {
+      return FieldConstants.CoralStation.leftCenterFace;
 
-    // flip rotation
-    Rotation2d rotation2d = result.getRotation().rotateBy(new Rotation2d(Math.PI));
-
-    // back up target position (so it doesn't clip)
-    // x is nearer/farther, y is sideways
-    Translation2d offsetFromBranch = new Translation2d(-0.7, 0);
-    offsetFromBranch = offsetFromBranch.rotateBy(rotation2d);
-    Translation2d translation2d = result.getTranslation().plus(offsetFromBranch);
-
-    result = new Pose2d(translation2d, rotation2d);
-
-    Logger.recordOutput("align to reef target Pose2d", result);
-    nearestSide = result;
+    } else {
+      return FieldConstants.CoralStation.rightCenterFace;
+    }
   }
 }

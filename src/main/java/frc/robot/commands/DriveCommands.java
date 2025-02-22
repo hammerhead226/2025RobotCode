@@ -14,7 +14,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -30,9 +29,12 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.constants.*;
+import frc.robot.constants.FieldConstants.Barge;
 import frc.robot.subsystems.drive.Drive;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BooleanSupplier;
@@ -67,17 +69,15 @@ public class DriveCommands {
 
   // profiled controllers
 
-  private static ProfiledPIDController profileSideways;
-  private static ProfiledPIDController profileForward;
-  private static ProfiledPIDController profileRotation;
-
-  // regular controller
-  private static PIDController sidewaysPID =
-      new PIDController(1.5, 0, 0, SubsystemConstants.LOOP_PERIOD_SECONDS);
-  private static PIDController forwardsPID =
-      new PIDController(1.5, 0, 0, SubsystemConstants.LOOP_PERIOD_SECONDS);
-  private static PIDController rotationPID =
-      new PIDController(2.54, 0, 0, SubsystemConstants.LOOP_PERIOD_SECONDS);
+  static ProfiledPIDController sidewaysPID =
+      new ProfiledPIDController(7, 1, 0.5, new TrapezoidProfile.Constraints(3, 4.5));
+  static ProfiledPIDController forwardsPID =
+      new ProfiledPIDController(7, 1, 0.5, new TrapezoidProfile.Constraints(3, 4.5));
+  static ProfiledPIDController rotationPID =
+      new ProfiledPIDController(2.9, 0., 0.2, new TrapezoidProfile.Constraints(120, 150));
+  // new ProfiledPIDController(0, 0., 0, new TrapezoidProfile.Constraints(70, 120));
+  static int count = 0;
+  static Pose2d previousTargetPose = null;
 
   private DriveCommands() {}
 
@@ -104,8 +104,11 @@ public class DriveCommands {
       DoubleSupplier ySupplier,
       DoubleSupplier omegaSupplier,
       BooleanSupplier reefAlignAssistSupplier,
+      BooleanSupplier reefLeftSupplier,
+      BooleanSupplier reefRightSupplier,
       BooleanSupplier sourceAlignSupplier,
-      BooleanSupplier processorAlignSupplier) {
+      BooleanSupplier processorAlignSupplier,
+      BooleanSupplier anchorAlignSupplier) {
     return Commands.run(
         () -> {
           rotationPID.setTolerance(1);
@@ -113,30 +116,6 @@ public class DriveCommands {
           sidewaysPID.setTolerance(0.1);
           forwardsPID.setTolerance(0.1);
 
-          profileSideways =
-              new ProfiledPIDController(
-                  5,
-                  0,
-                  0,
-                  new TrapezoidProfile.Constraints(drive.getMaxLinearSpeedMetersPerSec(), 15));
-          profileForward =
-              new ProfiledPIDController(
-                  5,
-                  0,
-                  0,
-                  new TrapezoidProfile.Constraints(drive.getMaxLinearSpeedMetersPerSec(), 15));
-          profileRotation =
-              new ProfiledPIDController(
-                  2.54,
-                  0,
-                  0,
-                  new TrapezoidProfile.Constraints(
-                      Math.toDegrees(drive.getMaxAngularSpeedRadPerSec()), 1500));
-
-          profileForward.setTolerance(0.1);
-          profileSideways.setTolerance(0.1);
-          profileRotation.setTolerance(1);
-          profileRotation.enableContinuousInput(-180, 180);
           // Get linear velocity
           Translation2d linearVelocity =
               getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
@@ -160,73 +139,107 @@ public class DriveCommands {
 
           double rotationSpeed = speeds.omegaRadiansPerSecond;
 
-          double speedDebuf = 0.9;
+          double speedDebuff = 0.5;
 
+          Pose2d targetPose = null;
           if (reefAlignAssistSupplier.getAsBoolean()) {
-            nearestReefSide = drive.getNearestSide();
-
-            sidewaysError = drive.getPose().getY() - drive.getNearestSide().getY();
-            Logger.recordOutput("Sideways Error", sidewaysError);
-            wantedSidewaysVelocity = profileSideways.calculate(sidewaysError);
-            sidewaysAssistEffort = (wantedSidewaysVelocity - sidewaysSpeed) * speedDebuf;
-            // sidewaysAssistEffort = (wantedSpeeds.vyMetersPerSecond - sidewaysSpeed) * speedDebuf;
-
-            forwardsError = drive.getPose().getX() - nearestReefSide.getX();
-            Logger.recordOutput("Forwards Error", forwardsError);
-            wantedForwardsVelocity = profileForward.calculate(forwardsError);
-            forwardsAssistEffort = (wantedForwardsVelocity - forwardSpeed) * speedDebuf;
-            // forwardsAssistEffort = (wantedSpeeds.vxMetersPerSecond - forwardSpeed) * speedDebuf;
-            rotationError =
-                drive.getRotation().getDegrees() - nearestReefSide.getRotation().getDegrees() + 0;
-            Logger.recordOutput("Rotation Error", rotationError);
-            wantedRotationVelocity = Math.toRadians(profileRotation.calculate(rotationError));
-            rotationAssistEffort = (wantedRotationVelocity - rotationSpeed);
-            // rotationAssistEffort =
-            //  (wantedSpeeds.omegaRadiansPerSecond - rotationSpeed) * speedDebuf;
+            if (reefLeftSupplier.getAsBoolean()) {
+              targetPose = drive.getNearestCenterLeft();
+              targetPose =
+                  rotateAndNudge(targetPose, new Translation2d(-0.5, 0), new Rotation2d(Math.PI));
+            } else if (reefRightSupplier.getAsBoolean()) {
+              targetPose = drive.getNearestCenterRight();
+              targetPose =
+                  rotateAndNudge(targetPose, new Translation2d(-0.5, 0), new Rotation2d(Math.PI));
+            } else {
+              targetPose = drive.getNearestCenter();
+              targetPose =
+                  rotateAndNudge(targetPose, new Translation2d(-0.5, 0), new Rotation2d(Math.PI));
+            }
+            Logger.recordOutput("drive targetPose name", "reef");
 
           } else if (sourceAlignSupplier.getAsBoolean()) {
-            forwardsError = drive.getPose().getX() - (getClosestSource(drive).getX() + 0.4);
-            wantedForwardsVelocity = profileForward.calculate(forwardsError);
-            forwardsAssistEffort = (wantedForwardsVelocity - forwardSpeed) * speedDebuf;
+            targetPose = drive.getNearestSource();
+            targetPose = rotateAndNudge(targetPose, new Translation2d(0.5, 0), new Rotation2d(0));
 
-            sidewaysError = drive.getPose().getY() - (getClosestSource(drive).getY() + 0.4);
-            wantedSidewaysVelocity = profileSideways.calculate(sidewaysError);
-            sidewaysAssistEffort = (wantedSidewaysVelocity - sidewaysSpeed) * speedDebuf;
+            Logger.recordOutput("drive targetPose name", "source");
 
-            Rotation2d targeRotation2d;
-
-            targeRotation2d = getClosestSource(drive).getRotation();
-            Logger.recordOutput(
-                " turn to left source target",
-                new Pose2d(
-                    FieldConstants.CoralStation.leftCenterFace.getTranslation(), targeRotation2d));
-            rotationError = drive.getRotation().getDegrees() - targeRotation2d.getDegrees();
-            // rotationPID.setSetpoint(targeRotation2d.getDegrees());
-
-            wantedRotationVelocity = Math.toRadians(profileRotation.calculate(rotationError));
-            rotationAssistEffort = (wantedRotationVelocity);
           } else if (processorAlignSupplier.getAsBoolean()) {
+            targetPose = FieldConstants.Processor.centerFace;
+            targetPose =
+                rotateAndNudge(targetPose, new Translation2d(-0.5, 0), new Rotation2d(Math.PI));
+            speedDebuff *= 0.5;
 
-            forwardsError =
-                drive.getPose().getX() - (FieldConstants.Processor.centerFace.getX() + 0.2);
-            wantedForwardsVelocity = profileForward.calculate(forwardsError);
-            forwardsAssistEffort = (wantedForwardsVelocity - forwardSpeed) * speedDebuf * 0.5;
+            Logger.recordOutput("drive targetPose name", "processor");
+          } else if (anchorAlignSupplier.getAsBoolean()) {
+            targetPose =
+                drive
+                    .getPose()
+                    .nearest(
+                        new ArrayList<>(
+                            Arrays.asList(Barge.closeCage, Barge.middleCage, Barge.farCage)));
+            targetPose =
+                rotateAndNudge(
+                    new Pose2d(targetPose.getTranslation(), targetPose.getRotation()),
+                    new Translation2d(-0.5, 0),
+                    new Rotation2d(0));
 
-            sidewaysError =
-                drive.getPose().getY() - (FieldConstants.Processor.centerFace.getY() + 0.4);
-            wantedSidewaysVelocity = profileSideways.calculate(sidewaysError);
-            sidewaysAssistEffort = (wantedSidewaysVelocity - sidewaysSpeed) * speedDebuf * 0.5;
-
-            Rotation2d targeRotation2d;
-
-            targeRotation2d = FieldConstants.Processor.centerFace.getRotation();
-
-            rotationError = drive.getRotation().getDegrees() - targeRotation2d.getDegrees();
-            // rotationPID.setSetpoint(targeRotation2d.getDegrees());
-
-            wantedRotationVelocity = Math.toRadians(profileRotation.calculate(rotationError + 180));
-            rotationAssistEffort = (wantedRotationVelocity);
+            Logger.recordOutput("drive targetPose name", "anchor");
           } else {
+            Logger.recordOutput("drive targetPose name", "none");
+          }
+
+          if (targetPose != null && !targetPose.equals(previousTargetPose)) {
+            previousTargetPose = targetPose;
+            sidewaysPID.reset(drive.getPose().getY());
+            forwardsPID.reset(drive.getPose().getX());
+            rotationPID.reset(drive.getRotation().getDegrees());
+          }
+
+          Logger.recordOutput("drive targetPose", targetPose);
+
+          if (targetPose != null) {
+            forwardsError = drive.getPose().getX() - targetPose.getX();
+            sidewaysError = drive.getPose().getY() - targetPose.getY();
+
+            // hacky code so that it always rotates the shorter direction
+            double driveDegrees = drive.getPose().getRotation().getDegrees() % 360;
+            if (driveDegrees < 0) {
+              driveDegrees += 360;
+            }
+            double targetDegrees = targetPose.getRotation().getDegrees() % 360;
+            if (targetDegrees < 0) {
+              targetDegrees += 360;
+            }
+            if (driveDegrees - targetDegrees > 180) {
+              driveDegrees -= 360;
+            } else if (targetDegrees - driveDegrees > 180) {
+              targetDegrees -= 360;
+            }
+
+            rotationError = driveDegrees - targetDegrees;
+
+            wantedForwardsVelocity =
+                MathUtil.clamp(
+                    forwardsPID.calculate(drive.getPose().getX(), targetPose.getX()), -3, 3);
+            wantedSidewaysVelocity =
+                MathUtil.clamp(
+                    sidewaysPID.calculate(drive.getPose().getY(), targetPose.getY()), -3, 3);
+            wantedRotationVelocity =
+                MathUtil.clamp(
+                    Math.toRadians(
+                        rotationPID.calculate(
+                            drive.getRotation().getDegrees(),
+                            targetPose.getRotation().getDegrees())),
+                    -drive.getMaxAngularSpeedRadPerSec(),
+                    drive.getMaxAngularSpeedRadPerSec());
+
+            forwardsAssistEffort = (wantedForwardsVelocity - forwardSpeed) * speedDebuff;
+            sidewaysAssistEffort = (wantedSidewaysVelocity - sidewaysSpeed) * speedDebuff;
+            rotationAssistEffort = (wantedRotationVelocity - rotationSpeed) * speedDebuff;
+
+          } else {
+            count = 0;
             wantedForwardsVelocity = forwardSpeed;
             forwardsAssistEffort = 0;
 
@@ -235,6 +248,18 @@ public class DriveCommands {
             wantedRotationVelocity = rotationSpeed;
             rotationAssistEffort = 0;
           }
+
+          Logger.recordOutput("Forwards Profile Position", forwardsPID.getSetpoint().position);
+          Logger.recordOutput("Sideways Profile Position", sidewaysPID.getSetpoint().position);
+          Logger.recordOutput("Rotation Profile Position", rotationPID.getSetpoint().position);
+
+          Logger.recordOutput("Forwards Profile Velocity", forwardsPID.getSetpoint().velocity);
+          Logger.recordOutput("Sideways Profile Velocity", sidewaysPID.getSetpoint().velocity);
+          Logger.recordOutput("Rotation Profile Velocity", rotationPID.getSetpoint().velocity);
+
+          Logger.recordOutput("Forwards Error", forwardsError);
+          Logger.recordOutput("Sideways Error", sidewaysError);
+          Logger.recordOutput("Rotation Error", rotationError);
 
           Logger.recordOutput("Wanted Sideways Velocity", wantedSidewaysVelocity);
           Logger.recordOutput("Wanted Forwards Velocity", wantedForwardsVelocity);
@@ -262,6 +287,17 @@ public class DriveCommands {
                   drive.getRotation()));
         },
         drive);
+  }
+
+  /*
+   * translation:
+   * +x is forward relative to the robot's new rotation
+   * +y is left relative to the robot's new rotation
+   */
+  public static Pose2d rotateAndNudge(Pose2d pose, Translation2d translation, Rotation2d rotation) {
+    Rotation2d rotation2d = pose.getRotation().rotateBy(rotation);
+    Translation2d translation2d = pose.getTranslation().plus(translation.rotateBy(rotation2d));
+    return new Pose2d(translation2d, rotation2d);
   }
 
   /**
@@ -455,23 +491,6 @@ public class DriveCommands {
     double[] positions = new double[4];
     Rotation2d lastAngle = new Rotation2d();
     double gyroDelta = 0.0;
-  }
-
-  public static Pose2d getClosestSource(Drive drive) {
-
-    if (drive
-            .getPose()
-            .getTranslation()
-            .getDistance(FieldConstants.CoralStation.leftCenterFace.getTranslation())
-        < drive
-            .getPose()
-            .getTranslation()
-            .getDistance(FieldConstants.CoralStation.rightCenterFace.getTranslation())) {
-      return FieldConstants.CoralStation.leftCenterFace;
-
-    } else {
-      return FieldConstants.CoralStation.rightCenterFace;
-    }
   }
 
   /*
