@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 // import frc.robot.ClimbStateMachine.java.ClimbStateMachine;
@@ -367,10 +368,10 @@ public class RobotContainer {
     autos.addOption(
         "AutoTestBottom", AutoBuilder.buildAuto("Bottom-R3b(L4)-F1-R2a(L4)-F1-R2b(L4)"));
 
-    // autoChooser.addOption(
-    //  "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
-    // autoChooser.addOption(
-    //  "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
+    autoChooser.addOption(
+      "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
+     autoChooser.addOption(
+         "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
     //  autoChooser.addOption(
     //      "Drive SysId (Quasistatic Forward)",
     //      drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
@@ -491,28 +492,24 @@ public class RobotContainer {
             new InstantCommand(
                 () -> superStructure.setWantedState(SuperStructureState.CLIMB_STAGE_ONE)));
 
-    driveController
-        .x()
-        .onTrue(new InstantCommand(() -> superStructure.setWantedState(SuperStructureState.L3)));
-    driveController
-        .y()
-        .onTrue(new InstantCommand(() -> superStructure.setWantedState(SuperStructureState.L4)));
-    driveController
-        .povUp()
-        .onTrue(new InstantCommand(() -> superStructure.setWantedState(SuperStructureState.L2)));
-    driveController
-        .b()
-        .onTrue(new InstantCommand(() -> superStructure.setWantedState(SuperStructureState.L1)));
+    // Aren't these manip controlls?
+    // driveController
+    //     .x()
+    //     .onTrue(new InstantCommand(() -> superStructure.setWantedState(SuperStructureState.L3)));
+    // driveController
+    //     .y()
+    //     .onTrue(new InstantCommand(() -> superStructure.setWantedState(SuperStructureState.L4)));
+    // driveController
+    //     .povUp()
+    //     .onTrue(new InstantCommand(() -> superStructure.setWantedState(SuperStructureState.L2)));
+    // driveController
+    //     .b()
+    //     .onTrue(new InstantCommand(() -> superStructure.setWantedState(SuperStructureState.L1)));
 
     driveController
         .povUp()
         .onTrue(
             new InstantCommand(() -> superStructure.setWantedState(SuperStructureState.SOURCE)));
-
-    driveController
-        .povLeft()
-        .onTrue(
-            new InstantCommand(() -> superStructure.setWantedState(SuperStructureState.PROCESSOR)));
 
     driveController
         .povDown()
@@ -530,20 +527,20 @@ public class RobotContainer {
 
   private void manipControls() {
     manipController
-        .x()
-        .onTrue(new InstantCommand(() -> superStructure.setWantedState(SuperStructureState.L3)));
-    manipController
         .y()
         .onTrue(new InstantCommand(() -> superStructure.setWantedState(SuperStructureState.L4)));
     manipController
-        .a()
+        .b()
+        .onTrue(new InstantCommand(() -> superStructure.setWantedState(SuperStructureState.L3)));
+    manipController
+        .x()
         .onTrue(new InstantCommand(() -> superStructure.setWantedState(SuperStructureState.L2)));
     manipController
-        .b()
+        .a()
         .onTrue(new InstantCommand(() -> superStructure.setWantedState(SuperStructureState.L1)));
 
     manipController
-        .povDown()
+        .povUp()
         .onTrue(
             new InstantCommand(() -> superStructure.setWantedState(SuperStructureState.STOW))
                 .andThen(
@@ -554,7 +551,21 @@ public class RobotContainer {
                         scoralRollers,
                         drive,
                         led)));
+
+    manipController
+        .povDown()
+        .onTrue(
+            new InstantCommand(() -> superStructure.setWantedState(SuperStructureState.PROCESSOR)));
+
+    manipController
+        .povLeft()
+        .onTrue(new InstantCommand(() -> superStructure.setWantedState(SuperStructureState.SCORING_CORAL_LEFT))
+        .until(
+            () ->
+                scoralRollers.seesCoral() == CoralState.NO_CORAL)
+        .withTimeout(5));
   }
+
 
   //   private void testControls() {
   //     slowModeTrigger.onTrue(new InstantCommand(() -> drive.enableSlowMode(true)));
