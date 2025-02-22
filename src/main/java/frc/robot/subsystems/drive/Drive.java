@@ -44,6 +44,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -521,14 +522,20 @@ public class Drive extends SubsystemBase {
   }
 
   public int getNearestParition(int partitions) {
-    Translation2d start = FieldConstants.Reef.center;
-    if (DriverStation.getAlliance().isPresent()
-        && (DriverStation.getAlliance().get() == DriverStation.Alliance.Red)) {
-      start =
-          new Translation2d(
-              FieldConstants.fieldLength - FieldConstants.Reef.center.getX(),
-              FieldConstants.fieldWidth - FieldConstants.Reef.center.getY());
+    if(DriverStation.getAlliance().get() == Alliance.Red) {
+    FieldConstants.Reef.center =
+        new Translation2d(Units.inchesToMeters(476.746), Units.inchesToMeters(158.501));
     }
+    Translation2d start = FieldConstants.Reef.center;
+    // if (DriverStation.getAlliance().isPresent()
+    //     && (DriverStation.getAlliance().get() == DriverStation.Alliance.Red)) {
+    //   start =
+    //       new Translation2d(
+    //           FieldConstants.fieldLength -
+    // FieldConstants.Reef.getCenter(DriverStation.getAlliance().get()).getX(),
+    //           FieldConstants.fieldWidth -
+    // FieldConstants.Reef.getCenter(DriverStation.getAlliance().get()).getY());
+    // }
 
     Translation2d end = getPose().getTranslation();
     Translation2d v = end.minus(start);

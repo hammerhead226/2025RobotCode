@@ -57,8 +57,18 @@ public class FieldConstants {
   }
 
   public static class Reef {
-    public static final Translation2d center =
+    // public static Translation2d getCenter(Alliance color) {
+    //   if (color == Alliance.Blue) {
+    //     return center;
+    //   } else {
+    //     return centerR;
+    //   }
+    // }
+
+    public static Translation2d center =
         new Translation2d(Units.inchesToMeters(176.746), Units.inchesToMeters(158.501));
+    public static final Translation2d centerR =
+        new Translation2d(Units.inchesToMeters(476.746), Units.inchesToMeters(158.501));
     public static final double faceToZoneLine =
         Units.inchesToMeters(12); // Side of the reef to the inside of the reef zone line
 
