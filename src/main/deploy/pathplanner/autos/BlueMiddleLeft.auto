@@ -5,27 +5,27 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "ReleaseClawL4"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "BlueMiddleLeftStart"
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "L4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "SCORE"
-          }
-        },
-        {
           "type": "wait",
           "data": {
-            "waitTime": 0.15
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeFromSource"
           }
         },
         {
@@ -35,15 +35,15 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "INTAKE"
+            "waitTime": 0.5
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.15
+            "name": "ReleaseClawL4"
           }
         },
         {
@@ -53,21 +53,15 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "L4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "SCORE"
-          }
-        },
-        {
           "type": "wait",
           "data": {
-            "waitTime": 0.15
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeFromSource"
           }
         },
         {
@@ -77,15 +71,15 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "INTAKE"
+            "waitTime": 0.5
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.15
+            "name": "ReleaseClawL4"
           }
         },
         {
@@ -95,15 +89,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "L4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "SCORE"
+            "waitTime": 0.5
           }
         }
       ]

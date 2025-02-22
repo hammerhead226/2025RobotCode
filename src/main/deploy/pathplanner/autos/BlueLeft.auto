@@ -5,21 +5,27 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "BlueLeftStart"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "ReleaseClawL4"
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "BlueLeftStart"
+          }
+        },
+        {
           "type": "wait",
           "data": {
             "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeFromSource"
           }
         },
         {
@@ -29,15 +35,15 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "IntakeFromSource"
-          }
-        },
-        {
           "type": "wait",
           "data": {
             "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ReleaseClawL4"
           }
         },
         {
@@ -47,21 +53,9 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "ReleaseClawL4"
-          }
-        },
-        {
           "type": "wait",
           "data": {
-            "waitTime": 0.25
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "BlueLeftFourth"
+            "waitTime": 0.5
           }
         },
         {
@@ -71,21 +65,27 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "BlueLeftFourth"
+          }
+        },
+        {
           "type": "wait",
           "data": {
             "waitTime": 0.5
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "BlueLeftFifth"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "ReleaseClawL4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BlueLeftFifth"
           }
         },
         {
