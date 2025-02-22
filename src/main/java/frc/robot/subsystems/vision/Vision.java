@@ -22,8 +22,10 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.vision.VisionIO.PoseObservationType;
 import java.util.LinkedList;
@@ -68,6 +70,15 @@ public class Vision extends SubsystemBase {
 
   @Override
   public void periodic() {
+    double[] defaultArray = new double[4];
+    defaultArray =
+        NetworkTableInstance.getDefault()
+            .getTable("limelight 1")
+            .getEntry("hw")
+            .getDoubleArray(defaultArray);
+    double result = defaultArray[3];
+    SmartDashboard.putNumber("Limelight 1 Temp", result);
+
     for (int i = 0; i < io.length; i++) {
       io[i].updateInputs(inputs[i]);
       Logger.processInputs("Vision/Camera" + Integer.toString(i), inputs[i]);

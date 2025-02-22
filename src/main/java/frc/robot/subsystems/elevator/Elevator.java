@@ -3,6 +3,7 @@ package frc.robot.subsystems.elevator;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -62,16 +63,20 @@ public class Elevator extends SubsystemBase {
 
   public Elevator(ElevatorIO elevator) {
     this.elevator = elevator;
-
+    SmartDashboard.putNumber("Elevator kS Gains", 0.17);
+    SmartDashboard.putNumber("Elevator kG Gains", 0.2);
+    SmartDashboard.putNumber("Elevator kV Gains", 0.1706);
+    SmartDashboard.putNumber("Elevator kA Gains", 0);
+    SmartDashboard.putNumber("Elevator kP Gains", 0.5);
+    SmartDashboard.putNumber("Elevator kI Gains", 0);
     switch (SimConstants.currentMode) {
       case REAL:
-        kS.initDefault(0.17);
-        kG.initDefault(0.2);
-        kV.initDefault(0.1706);
-        kA.initDefault(0);
-
-        kP.initDefault(0.5);
-        kI.initDefault(0);
+        kS.initDefault(SmartDashboard.getNumber("Elevator kS Gains", 0.17));
+        kG.initDefault(SmartDashboard.getNumber("Elevator kG Gains", 0.2));
+        kV.initDefault(SmartDashboard.getNumber("Elevator kV Gains", 0.1706));
+        kA.initDefault(SmartDashboard.getNumber("Elevator kA Gains", 0));
+        kP.initDefault(SmartDashboard.getNumber("Elevator kP Gains", 0.5));
+        kI.initDefault(SmartDashboard.getNumber("Elevator kI Gains", 0));
         break;
       case REPLAY:
         kS.initDefault(0);

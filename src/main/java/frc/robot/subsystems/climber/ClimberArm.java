@@ -6,6 +6,7 @@ package frc.robot.subsystems.climber;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -45,11 +46,14 @@ public class ClimberArm extends SubsystemBase {
   /** Creates a new Arm. */
   public ClimberArm(ClimberArmIO arm) {
     this.arm = arm;
+    SmartDashboard.putNumber("ClimberArm kG Gains", 0);
+    SmartDashboard.putNumber("ClimberArm kV Gains", 0.1);
+    SmartDashboard.putNumber("ClimberArm kP Gains", 0);
     switch (SimConstants.currentMode) {
       case REAL:
-        kG.initDefault(0.0);
-        kV.initDefault(0.1);
-        kP.initDefault(0);
+        kG.initDefault(SmartDashboard.getNumber("ClimberArm kG Gains", 0));
+        kV.initDefault(SmartDashboard.getNumber("ClimberArm kV Gains", 0.1));
+        kP.initDefault(SmartDashboard.getNumber("ClimberArm kP Gains", 0));
         break;
       case REPLAY:
         kG.initDefault(0.29);
