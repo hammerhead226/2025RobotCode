@@ -1,11 +1,13 @@
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -88,6 +90,7 @@ public class RobotContainer {
   private Vision vision;
   SuperStructure superStructure;
   private final Winch winch;
+  private final SendableChooser<Command> autos;
 
   // public final Trigger elevatorBrakeTrigger;
   //   private final Trigger stateTrigger;
@@ -351,25 +354,23 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("AutoPickupCoral", new AutoPickupCoral(null, drive, led));
 
-    // autos = new SendableChooser<>();
+    autos = new SendableChooser<>();
 
-    // autos.addOption("AutoTest",
-    // AutoBuilder.buildAuto("Bottom-R5a(L4)-S3c-R6a(L4)-F2-R6b(L4)-S2c"));
-    // autos.addOption("AutoTestTwo",
-    // AutoBuilder.buildAuto("Bottom-R5a(L4)-F2-R6b(L4)-F2-R6a(L4)"));
-    // autos.addOption(
-    //     "AutoSourceBottom", AutoBuilder.buildAuto("Bottom-R5a(L4)-F2-R6b(L4)-F2-R6a(L4)"));
-    // autos.addOption(
-    //     "AutoSourceMiddle", AutoBuilder.buildAuto("Middle-R5a(L4)-F2-R6b(L4)-F2-R6a(L4)"));
-    // autos.addOption("AutoSourceTop", AutoBuilder.buildAuto("Top-R5a(L4)-F2-R6b(L4)-F2-R6a(L4)"));
-    // autos.addOption("AutoTestTop", AutoBuilder.buildAuto("Top-R3b(L4)-F1-R2a(L4)-F1-R2b(L4)"));
-    // autos.addOption(
-    //     "AutoTestMiddle", AutoBuilder.buildAuto("Middle-R3b(L4)-F1-R2a(L4)-F1-R2b(L4)"));
-    // autos.addOption(
-    //     "AutoTestBottom", AutoBuilder.buildAuto("Bottom-R3b(L4)-F1-R2a(L4)-F1-R2b(L4)"));
+    autos.addOption("MiddleLeft", AutoBuilder.buildAuto("BlueMiddleLeft"));
+    autos.addOption("MiddleRight", AutoBuilder.buildAuto("BlueMiddleRight"));
+    autos.addOption(
+        "Right", AutoBuilder.buildAuto("BlueRight"));
+    autos.addOption(
+        "Left", AutoBuilder.buildAuto("BlueLeft"));
+    autos.addOption("AutoSourceTop", AutoBuilder.buildAuto("Top-R5a(L4)-F2-R6b(L4)-F2-R6a(L4)"));
+    autos.addOption("AutoTestTop", AutoBuilder.buildAuto("Top-R3b(L4)-F1-R2a(L4)-F1-R2b(L4)"));
+    autos.addOption(
+        "AutoTestMiddle", AutoBuilder.buildAuto("Middle-R3b(L4)-F1-R2a(L4)-F1-R2b(L4)"));
+    autos.addOption(
+        "AutoTestBottom", AutoBuilder.buildAuto("Bottom-R3b(L4)-F1-R2a(L4)-F1-R2b(L4)"));
 
-    //     autoChooser.addOption(
-    //     "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
+    // autoChooser.addOption(
+    //  "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
     // autoChooser.addOption(
     //     "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
     // autoChooser.addOption(
@@ -385,7 +386,7 @@ public class RobotContainer {
     // autoChooser.addDefaultOption("square", AutoBuilder.buildAuto("Square"));
     // autoChooser.addOption("toReefTest", AutoBuilder.buildAuto("toReefTest"));
 
-    // autoChooser = new LoggedDashboardChooser<>("Auto Choices", autos);
+    autoChooser = new LoggedDashboardChooser<>("Auto Choices", autos);
     // Configure the button bindings
     // configureButtonBindings();
     // stateTrigger = new Trigger(() -> superStructure.changedStated());
