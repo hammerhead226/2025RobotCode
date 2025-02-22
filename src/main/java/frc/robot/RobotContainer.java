@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -224,6 +225,9 @@ public class RobotContainer {
         // objectDetection = new ObjectDetection(new ObjectDetectionConsumer() {}, new
         // ObjectDetectionIO() {});
         superStructure = new SuperStructure(drive, elevator, csArm, csFlywheel, led);
+        SmartDashboard.putString("Target State", "" + superStructure.getWantedState());
+    SmartDashboard.putString("Current State", "" + superStructure.getCurrentState());
+
         climberArm = new ClimberArm(new ClimberArmIOSim());
         winch = new Winch(new WinchIOSim());
 
