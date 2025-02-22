@@ -265,7 +265,7 @@ public class RobotContainer {
     //     "L1",
     //     new SequentialCommandGroup(
     //         new InstantCommand(() -> superStructure.setWantedState(SuperStructureState.L1)),
-    //         new WaitUntilCommand(() -> superStructure.hasStructureReachedGoal())));
+    //         new WaitUntilCommand(() -> superStructure.hasStructureReachedGoal)));
     // NamedCommands.registerCommand(
     //     "L2",
     //     new SequentialCommandGroup(
@@ -358,10 +358,8 @@ public class RobotContainer {
 
     autos.addOption("MiddleLeft", AutoBuilder.buildAuto("BlueMiddleLeft"));
     autos.addOption("MiddleRight", AutoBuilder.buildAuto("BlueMiddleRight"));
-    autos.addOption(
-        "Right", AutoBuilder.buildAuto("BlueRight"));
-    autos.addOption(
-        "Left", AutoBuilder.buildAuto("BlueLeft"));
+    autos.addOption("Right", AutoBuilder.buildAuto("BlueRight"));
+    autos.addOption("Left", AutoBuilder.buildAuto("BlueLeft"));
     autos.addOption("AutoSourceTop", AutoBuilder.buildAuto("Top-R5a(L4)-F2-R6b(L4)-F2-R6a(L4)"));
     autos.addOption("AutoTestTop", AutoBuilder.buildAuto("Top-R3b(L4)-F1-R2a(L4)-F1-R2b(L4)"));
     autos.addOption(
