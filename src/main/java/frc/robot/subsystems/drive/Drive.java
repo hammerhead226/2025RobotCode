@@ -522,6 +522,14 @@ public class Drive extends SubsystemBase {
 
   public int getNearestParition(int partitions) {
     Translation2d start = FieldConstants.Reef.center;
+    if (DriverStation.getAlliance().isPresent()
+        && (DriverStation.getAlliance().get() == DriverStation.Alliance.Red)) {
+      start =
+          new Translation2d(
+              FieldConstants.fieldLength - FieldConstants.Reef.center.getX(),
+              FieldConstants.fieldWidth - FieldConstants.Reef.center.getY());
+    }
+
     Translation2d end = getPose().getTranslation();
     Translation2d v = end.minus(start);
     Rotation2d angle = new Rotation2d(v.getX(), v.getY());

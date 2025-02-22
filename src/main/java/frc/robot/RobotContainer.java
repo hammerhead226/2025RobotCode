@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-// import frc.robot.ClimbStateMachine.java.ClimbStateMachine;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AlignToReefAuto;
 import frc.robot.commands.ApproachReefPerpendicular;
@@ -25,10 +24,7 @@ import frc.robot.commands.IntakeFromSourceParallel;
 import frc.robot.commands.IntakingAlgaeParallel;
 import frc.robot.commands.ReinitializingCommand;
 import frc.robot.commands.ReleaseClawParallel;
-// import frc.robot.commands.algaeintosource.ReleaseAlgae;
-// import frc.robot.commands.algaeintoprocesser.AlgaeIntoProcesser;
 import frc.robot.constants.FieldConstants;
-// import frc.robot.commands.IntakeFromSource;
 import frc.robot.constants.SimConstants;
 import frc.robot.constants.SubsystemConstants.AlgaeState;
 import frc.robot.constants.SubsystemConstants.CoralState;
@@ -358,10 +354,8 @@ public class RobotContainer {
 
     autos.addOption("MiddleLeft", AutoBuilder.buildAuto("BlueMiddleLeft"));
     autos.addOption("MiddleRight", AutoBuilder.buildAuto("BlueMiddleRight"));
-    autos.addOption(
-        "Right", AutoBuilder.buildAuto("BlueRight"));
-    autos.addOption(
-        "Left", AutoBuilder.buildAuto("BlueLeft"));
+    autos.addOption("Right", AutoBuilder.buildAuto("BlueRight"));
+    autos.addOption("Left", AutoBuilder.buildAuto("BlueLeft"));
     autos.addOption("AutoSourceTop", AutoBuilder.buildAuto("Top-R5a(L4)-F2-R6b(L4)-F2-R6a(L4)"));
     autos.addOption("AutoTestTop", AutoBuilder.buildAuto("Top-R3b(L4)-F1-R2a(L4)-F1-R2b(L4)"));
     autos.addOption(
@@ -395,8 +389,8 @@ public class RobotContainer {
     reefAlignTrigger =
         new Trigger(
             () ->
-                driveController.leftTrigger().getAsBoolean()
-                    || driveController.rightTrigger().getAsBoolean());
+                (driveController.leftTrigger().getAsBoolean()
+                    || driveController.rightTrigger().getAsBoolean()));
     // speedModeTrigger = new Trigger(() -> superStructure.elevatorExtended());
     configureButtonBindings();
     // test();
