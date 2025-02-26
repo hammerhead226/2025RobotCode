@@ -34,6 +34,7 @@ import frc.robot.constants.SubsystemConstants.LED_STATE;
 import frc.robot.constants.SubsystemConstants.SuperStructureState;
 import frc.robot.subsystems.SuperStructure;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.led.LED;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -70,6 +71,12 @@ public class DriveCommands {
 
   private static Pose2d previousTargetPose;
   private static Pose2d targetPose;
+
+  private static Elevator elevator;
+
+  public static void setElevator(Elevator elevator) {
+    DriveCommands.elevator = elevator;
+  }
 
   public static Pose2d getTargetPose() {
     return targetPose;
@@ -139,8 +146,8 @@ public class DriveCommands {
           // Convert to field relative speeds & send command
           ChassisSpeeds speeds =
               new ChassisSpeeds(
-                  linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-                  linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+                  linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(elevator),
+                  linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(elevator),
                   omega * drive.getMaxAngularSpeedRadPerSec());
 
           double forwardSpeed = speeds.vxMetersPerSecond;
@@ -287,11 +294,44 @@ public class DriveCommands {
           Logger.recordOutput("Wanted Forwards Velocity", wantedForwardsVelocity);
           Logger.recordOutput("Wanted Rotation Velocity", wantedRotationVelocity);
 
-          Logger.recordOutput("Forwards Assist Effort", forwardsAssistEffort);
-          Logger.recordOutput("Sideways Assist Effort", sidewaysAssistEffort);
-          Logger.recordOutput("Rotation Assist Effort", rotationAssistEffort);
+          Logger.recordOutput(
+              "Debug Driver Alignment/Forwards Assist Effort", forwardsAssistEffort);
+          Logger.recordOutput(
+              "Debug Driver Alignment/Sideways Assist Effort", sidewaysAssistEffort);
+          Logger.recordOutput(
+              "Debug Driver Alignment/Rotation Assist Effort", rotationAssistEffort);
+          Logger.recordOutput("Debug Driver Alignment/Is Slow Mode?", drive.isSlowMode());
+          if (!drive.isSlowMode()) {
+            forwardSlewRateLimiter.changeRateLimit(Integer.MAX_VALUE);
+            sidewaysSlewRateLimiter.changeRateLimit(Integer.MAX_VALUE);
+            rotationSlewRateLimiter.changeRateLimit(Integer.MAX_VALUE);
+          } else {
+            forwardSlewRateLimiter.changeRateLimit(2);
+            sidewaysSlewRateLimiter.changeRateLimit(2);
+            rotationSlewRateLimiter.changeRateLimit(5);
+          }
 
-          drive.runVelocity(
+          // double rateLimitedForwardInputMetersPerSec =
+          //     forwardSlewRateLimiter.calculate(forwardSpeed);
+          // double rateLimitedSidewaysInputMetersPerSec =
+          //     sidewaysSlewRateLimiter.calculate(sidewaysSpeed);
+          // double rateLimitedRotationInputRadsPerSec =
+          //     rotationSlewRateLimiter.calculate(rotationSpeed);
+
+          double totalInputSpeed = Math.hypot(forwardSpeed, sidewaysSpeed);
+          double scale =
+              totalInputSpeed > drive.getMaxLinearSpeedMetersPerSec(elevator)
+                  ? drive.getMaxLinearSpeedMetersPerSec(elevator) / totalInputSpeed
+                  : 1;
+
+          ChassisSpeeds inputSpeeds =
+              ChassisSpeeds.fromFieldRelativeSpeeds(
+                  forwardSpeed,
+                  sidewaysSpeed,
+                  rotationSpeed,
+                  isFlipped ? drive.getRotation().plus(Rotation2d.kPi) : drive.getRotation());
+
+          ChassisSpeeds assistSpeeds =
               ChassisSpeeds.fromFieldRelativeSpeeds(
                   new ChassisSpeeds(
                       MathUtil.clamp(
@@ -357,8 +397,8 @@ public class DriveCommands {
               // Convert to field relative speeds & send command
               ChassisSpeeds speeds =
                   new ChassisSpeeds(
-                      linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-                      linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+                      linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(elevator),
+                      linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(elevator),
                       omega);
               boolean isFlipped =
                   DriverStation.getAlliance().isPresent()

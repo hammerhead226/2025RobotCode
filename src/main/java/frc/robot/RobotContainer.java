@@ -188,9 +188,11 @@ public class RobotContainer {
                 new ScoralSensorIO() {},
                 CoralState.DEFAULT,
                 AlgaeState.DEFAULT);
-        led = new LED(new LED_IOCANdle(0, "CAN Bus 2"));
-
-        superStructure = new SuperStructure(drive, elevator, scoralArm, scoralRollers, led);
+        led = new LED(new LED_IOCANdle(RobotMap.ledIDs.CANdleID, "CAN Bus 2"));
+        superStructure =
+            new SuperStructure(drive, elevator, scoralArm, scoralRollers, led, climberArm, winch);
+        
+        DriveCommands.setElevator(elevator);
 
         break;
       case SIM:
@@ -222,6 +224,10 @@ public class RobotContainer {
         led = new LED(new LED_IOSim());
         superStructure = new SuperStructure(drive, elevator, scoralArm, scoralRollers, led);
         climberArm = new ClimberArm(new ClimberArmIOSim());
+
+        superStructure =
+            new SuperStructure(drive, elevator, scoralArm, scoralRollers, led, climberArm, winch);
+        DriveCommands.setElevator(elevator);
         break;
 
       default:
@@ -253,7 +259,10 @@ public class RobotContainer {
 
         winch = new Winch(new WinchIO() {});
 
-        superStructure = new SuperStructure(drive, elevator, scoralArm, scoralRollers, led);
+        superStructure =
+            new SuperStructure(drive, elevator, scoralArm, scoralRollers, led, climberArm, winch);
+        
+        DriveCommands.setElevator(elevator);
         break;
     }
 

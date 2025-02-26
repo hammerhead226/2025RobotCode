@@ -409,7 +409,25 @@ public class Drive extends SubsystemBase {
 
   /** Returns the maximum linear speed in meters per sec. */
   public double getMaxLinearSpeedMetersPerSec() {
-    return TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) * linearSpeedMultiplier;
+    return TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) * 0.6;
+  }
+
+  public double getMaxLinearSpeedMetersPerSec(Elevator elevator) {
+    double baseSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) * 1;
+
+    double var1 = elevator.getElevatorPosition();
+    double var2 = SubsystemConstants.ElevatorConstants.L3_SETPOINT_INCHES - 0.5;
+    boolean goSlow = elevator.getElevatorPosition()
+      >= SubsystemConstants.ElevatorConstants.L3_SETPOINT_INCHES - 0.5;
+    
+    Logger.recordOutput("go slow", goSlow);
+
+    // should be based off of constant setpoint, but adjust as needed
+    if (goSlow) {
+      return baseSpeed * 0.5;
+    } else {
+      return baseSpeed;
+    }
   }
 
   /** Returns the maximum angular speed in radians per sec. */
