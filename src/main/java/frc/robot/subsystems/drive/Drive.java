@@ -504,7 +504,7 @@ public class Drive extends SubsystemBase {
   public Pose2d getNearestCenter() {
     int index = getNearestParition(6);
     Logger.recordOutput("Debug Driver Alignment/align to reef center target index", index);
-    lastReefFieldPose = transformPerAlliance(FieldConstants.Reef.centerFaces[index]);
+    lastReefFieldPose = AllianceFlipUtil.apply(FieldConstants.Reef.centerFaces[index]);
     return lastReefFieldPose;
   }
 
@@ -536,7 +536,7 @@ public class Drive extends SubsystemBase {
 
   private Pose2d passBranchFieldPose(int index) {
     lastReefFieldPose =
-        transformPerAlliance(
+        AllianceFlipUtil.apply(
             FieldConstants.Reef.branchPositions
                 .get(index)
                 .get(FieldConstants.ReefHeight.L1)
@@ -549,7 +549,7 @@ public class Drive extends SubsystemBase {
   }
 
   public int getNearestParition(int partitions) {
-    Translation2d start = transformPerAlliance(FieldConstants.Reef.center);
+    Translation2d start = AllianceFlipUtil.apply(FieldConstants.Reef.center);
     Translation2d end = getPose().getTranslation();
     Translation2d v = end.minus(start);
     Rotation2d angle = new Rotation2d(v.getX(), v.getY());
@@ -561,11 +561,10 @@ public class Drive extends SubsystemBase {
     double rawRotations = angle.getRotations();
     double adjustedRotations = -rawRotations;
 
-    if (DriverStation.getAlliance().isPresent()
-        && DriverStation.getAlliance().get() == Alliance.Blue) {
-      adjustedRotations += (7.0 / 12.0);
-    } else {
+    if (AllianceFlipUtil.shouldFlip()) {
       adjustedRotations += (1.0 / 12.0);
+    } else {
+      adjustedRotations += (7.0 / 12.0);
     }
 
     // % 1 to just get the fractional part of the rotation
@@ -584,16 +583,16 @@ public class Drive extends SubsystemBase {
     if (getPose()
             .getTranslation()
             .getDistance(
-                transformPerAlliance(FieldConstants.CoralStation.leftCenterFace.getTranslation()))
+                AllianceFlipUtil.apply(FieldConstants.CoralStation.leftCenterFace.getTranslation()))
         < getPose()
             .getTranslation()
             .getDistance(
-                transformPerAlliance(
+                AllianceFlipUtil.apply(
                     FieldConstants.CoralStation.rightCenterFace.getTranslation()))) {
-      return transformPerAlliance(FieldConstants.CoralStation.leftCenterFace);
+      return AllianceFlipUtil.apply(FieldConstants.CoralStation.leftCenterFace);
 
     } else {
-      return transformPerAlliance(FieldConstants.CoralStation.rightCenterFace);
+      return AllianceFlipUtil.apply(FieldConstants.CoralStation.rightCenterFace);
     }
   }
 
@@ -619,32 +618,35 @@ public class Drive extends SubsystemBase {
 
   // takes in a Pose2d from blue alliance's perspective and flips it if we are on
   // red allience
-  public static Pose2d transformPerAlliance(Pose2d pose) {
-    if (DriverStation.getAlliance().isPresent()
-        && DriverStation.getAlliance().get() == Alliance.Blue) {
-      return pose;
-    }
-    return new Pose2d(
-        transformPerAlliance(pose.getTranslation()), transformPerAlliance(pose.getRotation()));
-  }
+  // @Deprecated
+  // public static Pose2d transformPerAlliance(Pose2d pose) {
+  //   if (DriverStation.getAlliance().isPresent()
+  //       && DriverStation.getAlliance().get() == Alliance.Blue) {
+  //     return pose;
+  //   }
+  //   return new Pose2d(
+  //       transformPerAlliance(pose.getTranslation()), transformPerAlliance(pose.getRotation()));
+  // }
 
   // takes in a Pose2d from blue alliance's perspective and flips it if we are on
   // red allience
-  public static Translation2d transformPerAlliance(Translation2d translation) {
-    if (DriverStation.getAlliance().isPresent()
-        && DriverStation.getAlliance().get() == Alliance.Blue) {
-      return translation;
-    }
-    return translation.rotateAround(
-        new Translation2d(FieldConstants.fieldLength / 2, FieldConstants.fieldWidth / 2),
-        Rotation2d.kPi);
-  }
+  // @Deprecated
+  // public static Translation2d transformPerAlliance(Translation2d translation) {
+  //   if (DriverStation.getAlliance().isPresent()
+  //       && DriverStation.getAlliance().get() == Alliance.Blue) {
+  //     return translation;
+  //   }
+  //   return translation.rotateAround(
+  //       new Translation2d(FieldConstants.fieldLength / 2, FieldConstants.fieldWidth / 2),
+  //       Rotation2d.kPi);
+  // }
 
-  public static Rotation2d transformPerAlliance(Rotation2d rotation) {
-    if (DriverStation.getAlliance().isPresent()
-        && DriverStation.getAlliance().get() == Alliance.Blue) {
-      return rotation;
-    }
-    return rotation.rotateBy(Rotation2d.kPi);
-  }
+  // @Deprecated
+  // public static Rotation2d transformPerAlliance(Rotation2d rotation) {
+  //   if (DriverStation.getAlliance().isPresent()
+  //       && DriverStation.getAlliance().get() == Alliance.Blue) {
+  //     return rotation;
+  //   }
+  //   return rotation.rotateBy(Rotation2d.kPi);
+  // }
 }

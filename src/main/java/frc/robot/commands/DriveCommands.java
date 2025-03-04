@@ -34,6 +34,7 @@ import frc.robot.constants.SubsystemConstants.SuperStructureState;
 import frc.robot.subsystems.SuperStructure;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.led.LED;
+import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.SlewRateLimiter;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -137,10 +138,6 @@ public class DriveCommands {
           sidewaysPID.setTolerance(0.01);
           forwardsPID.setTolerance(0.01);
 
-          boolean isFlipped =
-              DriverStation.getAlliance().isPresent()
-                  && DriverStation.getAlliance().get() == Alliance.Red;
-
           // Get linear velocity
           Translation2d linearVelocity =
               getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
@@ -205,7 +202,7 @@ public class DriveCommands {
                       targetPose.getRotation().plus(Rotation2d.fromDegrees(-90)));
               Logger.recordOutput("Debug Driver Alignment/drive targetPose name", "source");
             } else if (superStructure.getWantedState() == SuperStructureState.PROCESSOR) {
-              targetPose = Drive.transformPerAlliance(FieldConstants.Processor.centerFace);
+              targetPose = AllianceFlipUtil.apply(FieldConstants.Processor.centerFace);
               targetPose =
                   rotateAndNudge(targetPose, new Translation2d(-0.5, 0), new Rotation2d(Math.PI));
               targetPose =
@@ -221,7 +218,7 @@ public class DriveCommands {
                           new ArrayList<>(
                               Arrays.asList(Barge.closeCage, Barge.middleCage, Barge.farCage)
                                   .stream()
-                                  .map(pose -> Drive.transformPerAlliance(pose))
+                                  .map(pose -> AllianceFlipUtil.apply(pose))
                                   .collect(Collectors.toList())));
               targetPose =
                   rotateAndNudge(
@@ -372,7 +369,7 @@ public class DriveCommands {
                   forwardSpeed,
                   sidewaysSpeed,
                   rotationSpeed,
-                  isFlipped ? drive.getRotation().plus(Rotation2d.kPi) : drive.getRotation());
+                  AllianceFlipUtil.shouldFlip() ? drive.getRotation().plus(Rotation2d.kPi) : drive.getRotation());
 
           ChassisSpeeds assistSpeeds =
               ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -456,13 +453,11 @@ public class DriveCommands {
                       linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
                       linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
                       omega);
-              boolean isFlipped =
-                  DriverStation.getAlliance().isPresent()
-                      && DriverStation.getAlliance().get() == Alliance.Red;
+              
               drive.runVelocity(
                   ChassisSpeeds.fromFieldRelativeSpeeds(
                       speeds,
-                      isFlipped
+                      AllianceFlipUtil.shouldFlip()
                           ? drive.getRotation().plus(new Rotation2d(Math.PI))
                           : drive.getRotation()));
               double rotationSpeed;
