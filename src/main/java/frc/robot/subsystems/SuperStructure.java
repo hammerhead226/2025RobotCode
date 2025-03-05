@@ -246,8 +246,7 @@ public class SuperStructure {
                 new InstantCommand(() -> led.setState(LED_STATE.BLUE))
                     .andThen(
                         new InstantCommand(() -> this.setCurrentState(SuperStructureState.STOW))
-                            .andThen(
-                                new InstantCommand(() -> this.nextState()))));
+                            .andThen(new InstantCommand(() -> this.nextState()))));
 
       case PROCESSOR:
         led.setState(LED_STATE.FLASHING_GREEN);

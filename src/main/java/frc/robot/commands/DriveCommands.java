@@ -13,6 +13,19 @@
 
 package frc.robot.commands;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -27,25 +40,15 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.constants.*;
+import frc.robot.constants.FieldConstants;
 import frc.robot.constants.FieldConstants.Barge;
+import frc.robot.constants.SubsystemConstants;
 import frc.robot.constants.SubsystemConstants.LED_STATE;
 import frc.robot.constants.SubsystemConstants.SuperStructureState;
 import frc.robot.subsystems.SuperStructure;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.led.LED;
 import frc.robot.util.SlewRateLimiter;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import org.littletonrobotics.junction.Logger;
 
 public class DriveCommands {
   private static final double DEADBAND = 0.05;
@@ -165,6 +168,11 @@ public class DriveCommands {
 
           double speedDebuff = 0.75;
           targetPose = null;
+
+          if (superStructure.getWantedState() != SuperStructureState.SOURCE) {
+            rotationPID.setP(2.9);
+          }
+
           if ((reefLeftSupplier.getAsBoolean() || reefRightSupplier.getAsBoolean())) {
             led.setState(LED_STATE.FLASHING_RED);
             Translation2d reefTranslation =
@@ -203,6 +211,8 @@ public class DriveCommands {
                   new Pose2d(
                       targetPose.getTranslation(),
                       targetPose.getRotation().plus(Rotation2d.fromDegrees(-90)));
+
+              rotationPID.setP(3.9);
               Logger.recordOutput("Debug Driver Alignment/drive targetPose name", "source");
             } else if (superStructure.getWantedState() == SuperStructureState.PROCESSOR) {
               targetPose = Drive.transformPerAlliance(FieldConstants.Processor.centerFace);
@@ -386,6 +396,7 @@ public class DriveCommands {
                   forwardSlewRateLimiter.calculate(finalInputSpeed.vxMetersPerSecond),
                   sidewaysSlewRateLimiter.calculate(finalInputSpeed.vyMetersPerSecond),
                   rotationSlewRateLimiter.calculate(finalInputSpeed.omegaRadiansPerSecond)));
+
           // drive.runVelocity(
           //     ChassisSpeeds.fromFieldRelativeSpeeds(
           //         new ChassisSpeeds(
