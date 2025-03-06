@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -111,6 +112,7 @@ public class RobotContainer {
   private Trigger reefAlignTrigger;
   private Trigger approachPerpendicularTrigger;
   private Trigger keepClimbingTrigger;
+  private Trigger seesCoralTrigger;
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -440,6 +442,12 @@ public class RobotContainer {
                 reefAlignTrigger.getAsBoolean()
                     && (!drive.isNearReef() && drive.isAtReefSide() && drive.isAtReefRotation()));
 
+    seesCoralTrigger =
+        new Trigger(
+            () ->
+                scoralRollers.seesCoral() == CoralState.CURRENT
+                    || scoralRollers.seesCoral() == CoralState.SENSOR);
+
     // keepClimbingTrigger =
     //     new Trigger(
     //         () ->
@@ -557,11 +565,20 @@ public class RobotContainer {
     elevatorBrakeTrigger.onFalse(
         new InstantCommand(() -> elevator.setBrake(true)).ignoringDisable(true));
 
+    seesCoralTrigger =
+        new Trigger(
+            () ->
+                scoralRollers.seesCoral() == CoralState.SENSOR
+                    || scoralRollers.seesCoral() == CoralState.CURRENT);
+
     driverControls();
     manipControls();
   }
 
   private void driverControls() {
+    seesCoralTrigger.onTrue(
+        new InstantCommand(() -> driveController.setRumble(RumbleType.kBothRumble, 1)));
+
     driveController
         .start()
         .onTrue(
@@ -639,11 +656,12 @@ public class RobotContainer {
             new InstantCommand(() -> superStructure.setWantedState(SuperStructureState.STOW))
                 .andThen(
                     new ReinitializingCommand(
-                        () -> superStructure.getSuperStructureCommand(),
-                        elevator,
-                        scoralArm,
-                        scoralRollers,
-                        led).andThen(new InstantCommand(() -> superStructure.nextState()))));
+                            () -> superStructure.getSuperStructureCommand(),
+                            elevator,
+                            scoralArm,
+                            scoralRollers,
+                            led)
+                        .andThen(new InstantCommand(() -> superStructure.nextState()))));
   }
 
   private void manipControls() {
@@ -670,7 +688,8 @@ public class RobotContainer {
                         elevator,
                         scoralArm,
                         scoralRollers,
-                        led)).andThen(new InstantCommand(() -> superStructure.nextState())));
+                        led))
+                .andThen(new InstantCommand(() -> superStructure.nextState())));
 
     manipController
         .rightBumper()
