@@ -152,6 +152,9 @@ public class Elevator extends SubsystemBase {
   public void setVoltage(double volts) {
     elevator.setVoltage(volts);
   }
+  public double getCurrentDrawn(){
+    return eInputs.currentAmps;
+  }
 
   public void zeroElevator() {
     elevator.zeroElevator();

@@ -111,6 +111,7 @@ public class RobotContainer {
   private Trigger slowModeTrigger;
   private Trigger reefAlignTrigger;
   private Trigger approachPerpendicularTrigger;
+  private Trigger elevatorFailSafe;
   private Trigger keepClimbingTrigger;
 
   // Dashboard inputs
@@ -436,6 +437,7 @@ public class RobotContainer {
     // stateTrigger = new Trigger(() -> superStructure.changedStated());
 
     slowModeTrigger = new Trigger(() -> superStructure.elevatorExtended());
+    elevatorFailSafe = new Trigger(() -> elevator.getCurrentDrawn() > 60 );
 
     reefAlignTrigger =
         new Trigger(
@@ -570,6 +572,7 @@ public class RobotContainer {
         new InstantCommand(() -> elevator.setBrake(false)).ignoringDisable(true));
     elevatorBrakeTrigger.onFalse(
         new InstantCommand(() -> elevator.setBrake(true)).ignoringDisable(true));
+    elevatorFailSafe.onTrue(new InstantCommand(()-> superStructure.setWantedState(SuperStructureState.L2)));
 
     driverControls();
     manipControls();
@@ -601,8 +604,9 @@ public class RobotContainer {
         .leftTrigger()
         .and(() -> !driveController.rightTrigger().getAsBoolean() && !drive.isNearReef())
         .onTrue(
-            new ApproachReef(
-                drive, superStructure, false, () -> driveController.rightTrigger().getAsBoolean()));
+                new ApproachProcessor(
+                        drive, superStructure, () -> driveController.leftTrigger().getAsBoolean()));
+        
     driveController
         .rightTrigger()
         .and(() -> !driveController.leftTrigger().getAsBoolean() && !drive.isNearReef())
@@ -613,6 +617,7 @@ public class RobotContainer {
     // approachPerpendicularTrigger.onTrue(
     //     new ApproachReefPerpendicular(
     //         drive, superStructure, () -> reefAlignTrigger.getAsBoolean()));
+    
 
     driveController
         .rightBumper()
