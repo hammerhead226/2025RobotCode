@@ -67,7 +67,7 @@ public class ApproachReef extends Command {
             Rotation2d.kZero);
 
     // Terminates the align command if robot is rotated 135 degrees or more from the reef side
-    if (Math.abs(MathUtil.angleModulus((drive.getRotation().minus(awayPose.getRotation()).getRadians()))) > 135) {
+    if (Math.abs(MathUtil.angleModulus((drive.getRotation().minus(awayPose.getRotation()).getRadians()))) > 135 * Math.PI / 180) {
       end(true);
     }
 
