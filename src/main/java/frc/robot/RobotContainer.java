@@ -585,13 +585,13 @@ public class RobotContainer {
 
     driveController
         .leftTrigger()
-        .and(() -> !driveController.rightTrigger().getAsBoolean() && !drive.isNearReef())
+        .and(() -> !driveController.rightTrigger().getAsBoolean())
         .onTrue(
             new ApproachReef(
-                drive, superStructure, false, () -> driveController.rightTrigger().getAsBoolean()));
+                drive, superStructure, false, () -> driveController.leftTrigger().getAsBoolean()));
     driveController
         .rightTrigger()
-        .and(() -> !driveController.leftTrigger().getAsBoolean() && !drive.isNearReef())
+        .and(() -> !driveController.leftTrigger().getAsBoolean())
         .onTrue(
             new ApproachReef(
                 drive, superStructure, true, () -> driveController.rightTrigger().getAsBoolean()));

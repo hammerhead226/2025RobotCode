@@ -89,7 +89,8 @@ public class ApproachReef extends Command {
                   fieldRelChassisSpeeds.vxMetersPerSecond,
                   fieldRelChassisSpeeds.vyMetersPerSecond));
     } else {
-      Translation2d v = awayPose.getTranslation().minus(drive.getPose().getTranslation());
+      Pose2d nextPose = drive.isNearReef() ? atPose : awayPose;
+      Translation2d v = nextPose.getTranslation().minus(drive.getPose().getTranslation());
       currentPoseFacingVelocity =
           new Pose2d(drive.getPose().getTranslation(), new Rotation2d(v.getX(), v.getY()));
     }
@@ -103,8 +104,12 @@ public class ApproachReef extends Command {
     //     drive.getNearestSide().getRotation());
     // new Pose2d(nearestSide.getTranslation().minus(offset), nearestSide.getRotation())
 
-    List<Waypoint> waypoints =
-        PathPlannerPath.waypointsFromPoses(currentPoseFacingVelocity, awayPose, atPose);
+    List<Waypoint> waypoints;
+    if (drive.isNearReef()) {
+      waypoints = PathPlannerPath.waypointsFromPoses(currentPoseFacingVelocity, atPose);
+    } else {
+      waypoints = PathPlannerPath.waypointsFromPoses(currentPoseFacingVelocity, awayPose, atPose);
+    }
 
     List<RotationTarget> holomorphicRotations =
         Arrays.asList(
