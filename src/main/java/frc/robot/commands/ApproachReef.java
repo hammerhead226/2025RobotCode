@@ -113,7 +113,7 @@ public class ApproachReef extends Command {
 
     List<RotationTarget> holomorphicRotations =
         Arrays.asList(
-            new RotationTarget(1.0, awayPose.getRotation().plus(Rotation2d.kCW_90deg)),
+            new RotationTarget(0.9, awayPose.getRotation().plus(Rotation2d.kCW_90deg)),
             new RotationTarget(1.9, atPose.getRotation().plus(Rotation2d.kCW_90deg)));
 
     List<EventMarker> eventMarkers = new ArrayList<>();
