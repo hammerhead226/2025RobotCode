@@ -4,11 +4,6 @@
 
 package frc.robot.commands;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.BooleanSupplier;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.EventMarker;
 import com.pathplanner.lib.path.GoalEndState;
@@ -16,16 +11,20 @@ import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.RotationTarget;
 import com.pathplanner.lib.path.Waypoint;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.SubsystemConstants;
 import frc.robot.subsystems.SuperStructure;
 import frc.robot.subsystems.drive.Drive;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.BooleanSupplier;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ApproachReef extends Command {
@@ -66,8 +65,12 @@ public class ApproachReef extends Command {
                 SubsystemConstants.LEFT_RIGHT_BRANCH_OFFSET),
             Rotation2d.kZero);
 
-    // Terminates the align command if robot is rotated 135 degrees or more from the reef side
-    if (Math.abs(MathUtil.angleModulus((drive.getRotation().minus(awayPose.getRotation()).getRadians()))) > 135 * Math.PI / 180) {
+    // Terminates the align command if robot is rotated 120 degrees or more from the destination
+    // pose
+    double angleToTargetPoseDegrees =
+        Units.radiansToDegrees(
+            MathUtil.angleModulus(drive.getRotation().minus(awayPose.getRotation()).getRadians()));
+    if (angleToTargetPoseDegrees > 60 && angleToTargetPoseDegrees < 120) {
       end(true);
     }
 
@@ -138,9 +141,10 @@ public class ApproachReef extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    pathCommand.cancel();
-    if (!interrupted)
+    if (!interrupted) {
       superStructure.nextState();
+      pathCommand.cancel();
+    }
   }
 
   // Returns true when the command should end.
