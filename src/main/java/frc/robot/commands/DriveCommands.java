@@ -192,12 +192,14 @@ public class DriveCommands {
           if (angleAssistSupplier.getAsBoolean()) {
             if (superStructure.getWantedState() == SuperStructureState.SOURCE) {
               targetPose = drive.getNearestSource();
-              targetPose = rotateAndNudge(targetPose, new Translation2d(0.5, 0), new Rotation2d(0));
-              targetPose =
-                  new Pose2d(
-                      targetPose.getTranslation(),
-                      targetPose.getRotation().plus(Rotation2d.fromDegrees(-90)));
+              // targetPose = rotateAndNudge(targetPose, new Translation2d(0.5, 0), new
+              // Rotation2d(0));
+              // targetPose =
+              //     new Pose2d(
+              //         targetPose.getTranslation(),
+              //         targetPose.getRotation().plus(drive.getNearestSource().getRotation()));
               Logger.recordOutput("Debug Driver Alignment/drive targetPose name", "source");
+              // Logger.recordOutput("source rotation goal",
             } else if (superStructure.getWantedState() == SuperStructureState.PROCESSOR) {
               targetPose = Drive.transformPerAlliance(FieldConstants.Processor.centerFace);
               targetPose =

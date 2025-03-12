@@ -24,6 +24,7 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.commands.GoToStow;
 import frc.robot.commands.IntakingCoral;
 import frc.robot.commands.ReinitializingCommand;
+import frc.robot.commands.Rumble;
 import frc.robot.commands.ScoreCoral;
 import frc.robot.commands.SetScoralArmTarget;
 import frc.robot.commands.ToReefHeight;
@@ -390,6 +391,7 @@ public class RobotContainer {
   }
 
   private void driverControls() {
+    new Trigger(superStructure::atGoals).onTrue(new Rumble(new XboxController(0)));
     driveController
         .start()
         .onTrue(
