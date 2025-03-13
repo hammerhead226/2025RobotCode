@@ -306,7 +306,7 @@ public class RobotContainer {
         new SequentialCommandGroup(
             new WaitUntilCommand(() -> elevator.atGoal(2) && scoralArm.atGoal(2)),
             scoralRollers.runVoltsCommmand(2.6),
-            new WaitCommand(0.35)));
+            new WaitCommand(0.15)));
 
     NamedCommands.registerCommand(
         "INTAKE_ALGAE_FROM_REEF",
@@ -331,13 +331,13 @@ public class RobotContainer {
     autos.addOption("BlueMiddleRight", AutoBuilder.buildAuto("BlueMiddleRight"));
     autos.addOption("BlueRight", AutoBuilder.buildAuto("BlueRight"));
 
-    autos.addOption("Wait6BlueLeftL2", AutoBuilder.buildAuto("Wait6BlueLeftL2"));
-    autos.addOption("Wait2BlueLeftL2", AutoBuilder.buildAuto("Wait2BlueLeftL2"));
-    autos.addOption("Wait6BlueRightL2", AutoBuilder.buildAuto("Wait6BlueRightL2"));
-    autos.addOption("Wait2BlueRightL2", AutoBuilder.buildAuto("Wait2BlueRightL2"));
-    autos.addOption("BlueLeftL2", AutoBuilder.buildAuto("BlueLeftL2"));
-    autos.addOption("BlueLeftPushL2", AutoBuilder.buildAuto("BlueLeftPushL2"));
-    autos.addOption("BlueRightL2", AutoBuilder.buildAuto("BlueRightL2"));
+    // autos.addOption("Wait6BlueLeftL2", AutoBuilder.buildAuto("Wait6BlueLeftL2"));
+    // autos.addOption("Wait2BlueLeftL2", AutoBuilder.buildAuto("Wait2BlueLeftL2"));
+    // autos.addOption("Wait6BlueRightL2", AutoBuilder.buildAuto("Wait6BlueRightL2"));
+    // autos.addOption("Wait2BlueRightL2", AutoBuilder.buildAuto("Wait2BlueRightL2"));
+    // autos.addOption("BlueLeftL2", AutoBuilder.buildAuto("BlueLeftL2"));
+    // autos.addOption("BlueLeftPushL2", AutoBuilder.buildAuto("BlueLeftPushL2"));
+    // autos.addOption("BlueRightL2", AutoBuilder.buildAuto("BlueRightL2"));
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", autos);
 

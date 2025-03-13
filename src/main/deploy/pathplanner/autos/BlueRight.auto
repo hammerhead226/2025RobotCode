@@ -29,12 +29,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.15
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "BlueRightThird"
@@ -56,12 +50,6 @@
           "type": "named",
           "data": {
             "name": "SOURCE_INTAKE"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.15
           }
         },
         {
