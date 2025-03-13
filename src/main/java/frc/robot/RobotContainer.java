@@ -23,6 +23,7 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.commands.GoToStow;
 import frc.robot.commands.IntakeAlgaeFromReef;
 import frc.robot.commands.IntakingCoral;
+import frc.robot.commands.MoveToReefCenter;
 import frc.robot.commands.ReinitializingCommand;
 import frc.robot.commands.ScoreCoral;
 import frc.robot.commands.SetScoralArmTarget;
@@ -374,6 +375,9 @@ public class RobotContainer {
     //         () -> -driveController.getLeftX(),
     //         () -> -driveController.getRightX(),
     //         () -> driveController.leftBumper().getAsBoolean()));
+
+    driveController.y().onTrue(new MoveToReefCenter(drive));
+
     driveController
         .a()
         .onTrue(
