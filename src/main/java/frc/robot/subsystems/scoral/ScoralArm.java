@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.constants.SimConstants;
 import frc.robot.constants.SubsystemConstants;
+import frc.robot.constants.SubsystemConstants.ScoralArmConstants;
 import frc.robot.subsystems.commoniolayers.ArmIO;
 import frc.robot.subsystems.commoniolayers.ArmIOInputsAutoLogged;
 import frc.robot.util.LoggedTunableNumber;
@@ -97,8 +98,8 @@ public class ScoralArm extends SubsystemBase {
 
     measuredVisualizer = new PivotVis("measured", Color.kRed);
     // CHANGE PER ARM
-    maxVelocityDegPerSec = 150; // was at 90
-    maxAccelerationDegPerSecSquared = 300; // was at 190
+    maxVelocityDegPerSec = ScoralArmConstants.DEFAULT_MAX_VELOCITY_DEG_PER_SEC;
+    maxAccelerationDegPerSecSquared = ScoralArmConstants.DEFAULT_MAX_ACCELERATION_DEG_PER_SEC_SQUARED;
     // maxAccelerationDegPerSecSquared = 180;
 
     armConstraints =
@@ -153,6 +154,14 @@ public class ScoralArm extends SubsystemBase {
 
   public void armStop() {
     scoralArm.stop();
+  }
+
+  public void setConstraints(
+      double maxVelocityMetersPerSec, double maxAccelerationMetersPerSecSquared) {
+    armConstraints =
+        new TrapezoidProfile.Constraints(
+            maxVelocityMetersPerSec, maxAccelerationMetersPerSecSquared);
+    armProfile = new TrapezoidProfile(armConstraints);
   }
 
   public void setArmGoal(double goalDegrees) {

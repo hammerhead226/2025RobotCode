@@ -77,6 +77,10 @@ public final class SubsystemConstants {
     public static final double L4_CORAL_SCORING_SETPOINT_DEG = 64;
     public static final double BARGE_SETPOINT_DEG = 85;
     public static final double PROCESSOR_SETPOINT_DEG = 20;
+
+    
+    public static final double DEFAULT_MAX_VELOCITY_DEG_PER_SEC = 150; // was at 90
+    public static final double DEFAULT_MAX_ACCELERATION_DEG_PER_SEC_SQUARED = 300; // was at 190
   }
 
   public static class LEDConstants {

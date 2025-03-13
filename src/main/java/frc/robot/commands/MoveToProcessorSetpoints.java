@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.constants.SubsystemConstants.ElevatorConstants;
 import frc.robot.constants.SubsystemConstants.ScoralArmConstants;
@@ -22,7 +23,17 @@ public class MoveToProcessorSetpoints extends SequentialCommandGroup {
     this.scoralArm = scoralArm;
 
     addCommands(
+        new InstantCommand(
+          () -> scoralArm.setConstraints(
+            ScoralArmConstants.DEFAULT_MAX_VELOCITY_DEG_PER_SEC,
+            200.0)
+            ),
         elevator.setElevatorTarget(ElevatorConstants.PROCESSOR_SETPOINT_INCHES, 2),
-        scoralArm.setArmTarget(ScoralArmConstants.PROCESSOR_SETPOINT_DEG, 2));
+        scoralArm.setArmTarget(ScoralArmConstants.PROCESSOR_SETPOINT_DEG, 2),
+        new InstantCommand(
+          () -> scoralArm.setConstraints(
+            ScoralArmConstants.DEFAULT_MAX_VELOCITY_DEG_PER_SEC, 
+            ScoralArmConstants.DEFAULT_MAX_ACCELERATION_DEG_PER_SEC_SQUARED)
+            ));
   }
 }
