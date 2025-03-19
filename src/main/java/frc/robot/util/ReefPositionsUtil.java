@@ -9,23 +9,27 @@ import frc.robot.constants.SubsystemConstants;
 
 public class ReefPositionsUtil {
   public static final String ASCII_ART_BLUE_REEF =
-      """
-      K  J
-    L      I
-  A          H
-  B          G
-    C      F
-      D  E
+  """
+      K   ^   J
+    L   /   \\   I
+      /       \\ 
+  A |           | H
+  B |           | G
+      \\       / 
+    C   \\   /   F
+      D   v   E
   """;
 
   public static final String ASCII_ART_RED_REEF =
-      """
-      E  D
-    F      C
-  G          B
-  H          A
-    I      L
-      J  K
+  """
+      E   ^   D
+    F   /   \\   C
+      /       \\ 
+  G |           | B
+  H |           | A
+      \\       / 
+    I   \\   /   L
+      J   v   K
   """;
 
   /*
@@ -62,6 +66,9 @@ public class ReefPositionsUtil {
   public static final String ROUND_FORM = "%." + DIGITS + "f";
 
   public static void printOffsetPoses() {
+    System.out.println("----- blue reef -----");
+    System.out.println("blue side <-> red side");
+    System.out.println();
     System.out.println(ASCII_ART_BLUE_REEF);
     System.out.println("x, y, angle");
     for (int i = 0; i < 12; i++) {
