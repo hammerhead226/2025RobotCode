@@ -41,7 +41,7 @@ public class ReefPositionsUtil {
     Pose2d[] result = new Pose2d[12];
     for (int i = 0; i < 12; i++) {
       // account for FieldConstants ordering
-      int index = -i + (isRed ? 1 : 7);
+      int index = -i + (isRed ? 7 : 1);
 
       // take postive mod to stay in range
       index = index % 12;
@@ -58,8 +58,9 @@ public class ReefPositionsUtil {
     return result;
   }
 
-  public static final int DIGITS = 4; 
-  public static final String ROUND_FORM = "%."+DIGITS+"f";
+  public static final int DIGITS = 4;
+  public static final String ROUND_FORM = "%." + DIGITS + "f";
+
   public static void printOffsetPoses() {
     System.out.println(ASCII_ART_BLUE_REEF);
     System.out.println("x, y, angle");
@@ -74,9 +75,9 @@ public class ReefPositionsUtil {
               Rotation2d.kZero);
 
       System.out.println((char) ('A' + i) + " -");
-      System.out.println(String.format(ROUND_FORM,offsetPose.getX()));
-      System.out.println(String.format(ROUND_FORM,offsetPose.getY()));
-      System.out.println(String.format(ROUND_FORM,offsetPose.getRotation().getDegrees()));
+      System.out.println(String.format(ROUND_FORM, offsetPose.getX()));
+      System.out.println(String.format(ROUND_FORM, offsetPose.getY()));
+      System.out.println(String.format(ROUND_FORM, offsetPose.getRotation().getDegrees()));
     }
   }
 }
