@@ -168,7 +168,7 @@ public class ClimberArm extends SubsystemBase {
             SubsystemConstants.LOOP_PERIOD_SECONDS, armCurrentStateDegrees, armGoalStateDegrees);
 
     // if (closedLoop) {
-      setPositionDegs(armCurrentStateDegrees.position, armCurrentStateDegrees.velocity);
+    setPositionDegs(armCurrentStateDegrees.position, armCurrentStateDegrees.velocity);
     // }
 
     Logger.processInputs("Climber Arm", pInputs);

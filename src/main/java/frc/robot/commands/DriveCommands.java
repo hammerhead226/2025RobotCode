@@ -44,6 +44,8 @@ import org.littletonrobotics.junction.Logger;
 
 public class DriveCommands {
   private static final double DEADBAND = 0.05;
+  private static final double TRANS_X_KP = 5.0;
+  
   private static final double ANGLE_KP = 5.0;
   private static final double ANGLE_KD = 0.4;
   private static final double ANGLE_MAX_VELOCITY = 8.0;
@@ -54,10 +56,13 @@ public class DriveCommands {
   private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
 
   private static double rotationErrorDegrees = 0;
+  private static double translationErrorMeters = 0;
 
   private static double wantedRotationVelocityRadsPerSec = 0;
+  private static double wantedForwardVelocityMetersPerSec = 0;
 
   private static double rotationAssistEffort = 0;
+  private static double forwardAssistEffort = 0;
 
   private static Pose2d previousTargetPose;
   private static Pose2d targetPose;
@@ -76,6 +81,8 @@ public class DriveCommands {
 
   static ProfiledPIDController rotationPID =
       new ProfiledPIDController(2.9, 0., 0.2, new TrapezoidProfile.Constraints(200, 300));
+  static ProfiledPIDController forwardPID = 
+      new ProfiledPIDController(1, 0, 0.2, new TrapezoidProfile.Constraints(2, 2));
   // new ProfiledPIDController(0, 0., 0, new TrapezoidProfile.Constraints(70,
   // 120));
 
@@ -115,6 +122,8 @@ public class DriveCommands {
         () -> {
           rotationPID.setTolerance(0.1);
           rotationPID.enableContinuousInput(-180, 180);
+          forwardPID.setTolerance(0.1);
+        //  forwardPID.enableContinuousInput(-2, 2);
 
           boolean isFlipped =
               DriverStation.getAlliance().isPresent()
@@ -162,6 +171,14 @@ public class DriveCommands {
                       targetPose.getTranslation(),
                       targetPose.getRotation().plus(Rotation2d.fromDegrees(-90)));
               // Logger.recordOutput("Debug Driver Alignment/drive targetPose name", "processor");
+            } else if (superStructure.getWantedState() == SuperStructureState.BARGE_EXTEND) {
+              targetPose = new Pose2d(8.2, 0, new Rotation2d(Math.PI));
+              targetPose =
+                  rotateAndNudge(targetPose, new Translation2d(-0.5, 0), new Rotation2d(Math.PI));
+              targetPose =
+                  new Pose2d(
+                      targetPose.getTranslation(),
+                      targetPose.getRotation().plus(Rotation2d.fromDegrees(-180)));
             }
           } else {
             // Logger.recordOutput("Debug Driver Alignment/drive targetPose name", "none");
@@ -171,6 +188,7 @@ public class DriveCommands {
             previousTargetPose = targetPose;
 
             rotationPID.reset(drive.getRotation().getDegrees());
+            forwardPID.reset(drive.getPose().getX());
           }
 
           Logger.recordOutput("Debug Driver Alignment/drive targetPose", targetPose);
@@ -193,6 +211,7 @@ public class DriveCommands {
             }
 
             rotationErrorDegrees = driveDegrees - targetDegrees;
+            
 
             Logger.recordOutput("drive commands drive rotation", drive.getRotation().getDegrees());
             Logger.recordOutput(
@@ -202,22 +221,30 @@ public class DriveCommands {
                 Math.toRadians(
                     rotationPID.calculate(
                         drive.getRotation().getDegrees(), targetPose.getRotation().getDegrees()));
+            double forwardPIDResult = forwardPID.calculate(drive.getPose().getX(), targetPose.getX());
+
             Logger.recordOutput("rotationPIDResult", rotationPIDResult);
+            Logger.recordOutput("forwardPIDResult", forwardPIDResult);
             wantedRotationVelocityRadsPerSec =
                 MathUtil.clamp(
                     rotationPIDResult,
                     -drive.getMaxAngularSpeedRadPerSec(),
                     drive.getMaxAngularSpeedRadPerSec());
 
+            wantedForwardVelocityMetersPerSec = MathUtil.clamp(forwardPIDResult, -drive.getMaxLinearSpeedMetersPerSec(), drive.getMaxLinearSpeedMetersPerSec());
+            
             rotationAssistEffort =
                 superStructure.getWantedState() == SuperStructureState.SOURCE
-                        || superStructure.getWantedState() == SuperStructureState.PROCESSOR
+                        || superStructure.getWantedState() == SuperStructureState.PROCESSOR || superStructure.getWantedState() == SuperStructureState.BARGE_EXTEND
                     ? (wantedRotationVelocityRadsPerSec - rotationSpeed) * speedDebuff
                     : 0;
+            forwardAssistEffort = superStructure.getWantedState() == SuperStructureState.BARGE_EXTEND ? (wantedForwardVelocityMetersPerSec - forwardSpeed) *speedDebuff : 0;
 
           } else {
             wantedRotationVelocityRadsPerSec = rotationSpeed;
+            wantedForwardVelocityMetersPerSec = forwardSpeed;
             rotationAssistEffort = 0;
+            forwardAssistEffort = 0;
           }
 
           Logger.recordOutput("Debug Driver Alignment/target pose", targetPose);
@@ -225,6 +252,7 @@ public class DriveCommands {
           Logger.recordOutput(
               "Debug Driver Alignment/Rotation Profile Position deg",
               rotationPID.getSetpoint().position);
+          Logger.recordOutput("Debug forward pid setpoint", forwardPID.getSetpoint().position);
 
           Logger.recordOutput(
               "Debug Driver Alignment/Rotation Profile Velocity rad/s",
@@ -263,7 +291,7 @@ public class DriveCommands {
 
           ChassisSpeeds assistSpeeds =
               ChassisSpeeds.fromFieldRelativeSpeeds(
-                  new ChassisSpeeds(0, 0, rotationAssistEffort), drive.getRotation());
+                  new ChassisSpeeds(forwardAssistEffort, 0, rotationAssistEffort), drive.getRotation());
 
           ChassisSpeeds finalInputSpeed = inputSpeeds.plus(assistSpeeds).times(scale);
 

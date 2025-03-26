@@ -11,8 +11,10 @@ import frc.robot.subsystems.climber.ClimberArm;
 public class SetClimberArmTarget extends Command {
   /** Creates a new SetClimberArmTarget. */
   ClimberArm climberArm;
+
   double goal;
   double thresholdDegs;
+
   public SetClimberArmTarget(ClimberArm climberArm, double goal, double thresholdDegs) {
     this.climberArm = climberArm;
     this.goal = goal;

@@ -427,8 +427,8 @@ public class RobotContainer {
     resetLimelight = new Trigger(() -> SmartDashboard.getBoolean("Reset", false));
     turnLimelightON = new Trigger(() -> SmartDashboard.getBoolean("Enable", false));
 
-    configureButtonBindings();
-    // test();
+    // configureButtonBindings();
+    test();
   }
 
   private void test() {
@@ -463,6 +463,37 @@ public class RobotContainer {
                 superStructure,
                 false,
                 () -> driveController.leftTrigger().getAsBoolean()));
+    driveController
+        .a()
+        .onTrue(
+            new InstantCommand(
+                () -> superStructure.setWantedState(SuperStructureState.BARGE_EXTEND)));
+                driveController
+                .povDown()
+                .onTrue(
+                    new InstantCommand(() -> superStructure.setWantedState(SuperStructureState.STOW))
+                        .andThen(
+                            new ReinitializingCommand(
+                                    () -> superStructure.getSuperStructureCommand(),
+                                    elevator,
+                                    scoralArm,
+                                    scoralRollers,
+                                    led)
+                                .andThen(new InstantCommand(() -> superStructure.nextState()))));
+                                driveController
+                                .rightBumper()
+                                .onTrue(
+                                    new WaitUntilCommand(() -> superStructure.atGoals())
+                                        .andThen(
+                                            new ReinitializingCommand(
+                                                () -> superStructure.getSuperStructureCommand(),
+                                                elevator,
+                                                climberArm,
+                                                scoralArm,
+                                                scoralRollers,
+                                                led))
+                                        .andThen(new WaitUntilCommand(() -> superStructure.atGoals()))
+                                        .andThen(new InstantCommand(() -> superStructure.nextState())));
     // driveController.b().onTrue(new SetScoralArmTarget(scoralArm, 20, 2));
   }
 
@@ -570,10 +601,10 @@ public class RobotContainer {
             new ParallelCommandGroup(
                 new SetScoralArmTarget(scoralArm, 29, 2),
                 new SetClimberArmTarget(climberArm, 90, 2)));
-                // new SequentialCommandGroup(
-                    // new InstantCommand(() -> climberArm.setVoltage(-1.5)),
-                    // new WaitUntilCommand(() -> climberArm.hasReachedGoal(80)),
-                    // new InstantCommand(() -> climberArm.armStop()))));
+    // new SequentialCommandGroup(
+    // new InstantCommand(() -> climberArm.setVoltage(-1.5)),
+    // new WaitUntilCommand(() -> climberArm.hasReachedGoal(80)),
+    // new InstantCommand(() -> climberArm.armStop()))));
 
     // driveController.a().onFalse(new InstantCommand(() -> climberArm.armStop()));
 
