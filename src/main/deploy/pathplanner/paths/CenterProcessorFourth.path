@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.8240778688524584,
-        "y": 2.7842725409836064
+        "x": 5.1067622950819676,
+        "y": 2.8921618852459017
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.192404917690223,
-        "y": 2.0090375554663167
+        "x": 5.658542075027604,
+        "y": 1.2734925208460723
       },
       "isLocked": false,
       "linkedName": null
@@ -20,8 +20,8 @@
         "y": 0.91
       },
       "prevControl": {
-        "x": 4.97,
-        "y": 0.9100000000000001
+        "x": 5.90785172073684,
+        "y": 1.437354275730316
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,8 +30,8 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.3373807458803159,
-      "rotationDegrees": -29.999999999999996
+      "waypointRelativePos": 0.052346570397111505,
+      "rotationDegrees": 29.999999999999996
     }
   ],
   "constraintZones": [],
@@ -65,7 +65,7 @@
   "folder": "Center Processor",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -29.999999999999996
+    "rotation": 29.999999999999996
   },
   "useDefaultConstraints": true
 }

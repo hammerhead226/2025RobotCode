@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.005840163934426,
-        "y": 1.153944672131147
+        "x": 5.968309687627984,
+        "y": 1.1318237093442336
       },
       "isLocked": false,
       "linkedName": "CenterProcessorScoreExit"
@@ -20,24 +20,24 @@
         "y": 1.2498463114754088
       },
       "prevControl": {
-        "x": 5.993852459016393,
-        "y": 0.8302766393442611
+        "x": 5.97169584102766,
+        "y": 0.7431135960210531
       },
       "nextControl": {
-        "x": 5.946147540983606,
-        "y": 1.6694159836065565
+        "x": 5.969028966715917,
+        "y": 1.5399998841359224
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.8360655737704916,
-        "y": 2.8801741803278684
+        "x": 5.11875,
+        "y": 2.84421106557377
       },
       "prevControl": {
-        "x": 4.801198770491803,
-        "y": 2.220850409836065
+        "x": 5.75433674710287,
+        "y": 1.8214565692742968
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,7 +46,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 1.0830324909747167,
       "rotationDegrees": 180.0
     }
   ],
@@ -75,7 +75,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -29.999999999999996
+    "rotation": 29.999999999999996
   },
   "reversed": false,
   "folder": "Center Processor",
