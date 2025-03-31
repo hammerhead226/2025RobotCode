@@ -7,19 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BlueLeftPush"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "BlueLeftAfterPush"
+            "pathName": "Hammertime1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "SCORE_CORAL"
+            "name": "SCORE_CORAL_NEW"
           }
         },
         {
@@ -31,25 +25,7 @@
         {
           "type": "named",
           "data": {
-            "name": "SOURCE_INTAKE"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.15
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": null
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "SCORE_CORAL"
+            "name": "SCORE_CORAL_NEW"
           }
         },
         {
@@ -61,25 +37,19 @@
         {
           "type": "named",
           "data": {
-            "name": "SOURCE_INTAKE"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.15
+            "name": "SCORE_CORAL_NEW"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "Hammertime4"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "SCORE_CORAL"
+            "name": "SCORE_CORAL_NEW"
           }
         }
       ]

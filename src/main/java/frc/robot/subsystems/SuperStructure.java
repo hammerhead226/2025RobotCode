@@ -17,7 +17,6 @@ import frc.robot.commands.SetElevatorTarget;
 import frc.robot.commands.SetScoralArmTarget;
 import frc.robot.commands.ToReefHeight;
 import frc.robot.constants.SubsystemConstants;
-import frc.robot.constants.SubsystemConstants.ElevatorConstants;
 import frc.robot.constants.SubsystemConstants.LED_STATE;
 import frc.robot.constants.SubsystemConstants.ScoralArmConstants;
 import frc.robot.constants.SubsystemConstants.SuperStructureState;

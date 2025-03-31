@@ -33,7 +33,6 @@ import frc.robot.commands.MoveToProcessorSetpoints;
 import frc.robot.commands.ReinitializingCommand;
 import frc.robot.commands.Rumble;
 import frc.robot.commands.ScoreAlgaeIntoBargeAuto;
-import frc.robot.commands.ScoreAlgaeIntoBargeTele;
 import frc.robot.commands.ScoreCoral;
 import frc.robot.commands.SetClimberArmTarget;
 import frc.robot.commands.SetElevatorTarget;
@@ -352,8 +351,8 @@ public class RobotContainer {
         "STOW",
         new SequentialCommandGroup(
             new InstantCommand(() -> led.setState(LED_STATE.BLUE)),
-            new GoToStowAuto(elevator, scoralArm, scoralRollers),
-            new WaitCommand(0.1)));
+            new GoToStowAuto(elevator, scoralArm, scoralRollers)));
+            // new WaitCommand(0.1)));
     NamedCommands.registerCommand(
         "SCORE_CORAL",
         new SequentialCommandGroup(
@@ -366,7 +365,7 @@ public class RobotContainer {
         new SequentialCommandGroup(
             new WaitUntilCommand(() -> elevator.atGoal(2) && scoralArm.atGoal(2)),
             scoralRollers.runVoltsCommmand(5),
-            new WaitCommand(0.14)));
+            new WaitCommand(0.05)));
 
     NamedCommands.registerCommand(
         "PROCESSOR_SETPOINTS", new MoveToProcessorSetpoints(scoralArm, elevator));
@@ -381,17 +380,17 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "INTAKE_ALGAE_FROM_REEF",
         new SequentialCommandGroup(
-        new WaitUntilCommand(() -> elevator.atGoal(2) && scoralArm.atGoal(2)),
-        new ReinitializingCommand(
-            () -> {
-              double height1 =
-                  drive.getNearestParition(6) % 2 == 0
-                      ? 6.5
-                      : SubsystemConstants.ElevatorConstants.STOW_SETPOINT_INCH;
-              double height2 = drive.getNearestParition(6) % 2 == 0 ? 9 : 2;
-              return new IntakeAlgaeFromReef(
-                  drive, scoralArm, scoralRollers, elevator, led, height1, height2);
-            })));
+            new WaitUntilCommand(() -> elevator.atGoal(2) && scoralArm.atGoal(2)),
+            new ReinitializingCommand(
+                () -> {
+                  double height1 =
+                      drive.getNearestParition(6) % 2 == 0
+                          ? 6.5
+                          : SubsystemConstants.ElevatorConstants.STOW_SETPOINT_INCH;
+                  double height2 = drive.getNearestParition(6) % 2 == 0 ? 9 : 2;
+                  return new IntakeAlgaeFromReef(
+                      drive, scoralArm, scoralRollers, elevator, led, height1, height2);
+                })));
 
     climbStateMachine = new ClimbStateMachine();
 
@@ -414,6 +413,7 @@ public class RobotContainer {
 
     autos = new SendableChooser<>();
 
+    autos.addOption("Hammertime", AutoBuilder.buildAuto("Hammertime"));
     autos.addOption("BlueLeft", AutoBuilder.buildAuto("BlueLeft"));
     // autos.addOption("BlueLeftPush", AutoBuilder.buildAuto("BlueLeftPush"));
     autos.addOption("CenterBarge", AutoBuilder.buildAuto("CenterBarge"));
