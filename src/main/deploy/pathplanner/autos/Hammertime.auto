@@ -17,9 +17,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Hammertime2"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "SEE_CORAL"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Hammertime2"
+                }
+              }
+            ]
           }
         },
         {
@@ -29,9 +42,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Hammertime3"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "SEE_CORAL"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Hammertime3"
+                }
+              }
+            ]
           }
         },
         {
@@ -41,9 +67,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Hammertime4"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "SEE_CORAL"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Hammertime4"
+                }
+              }
+            ]
           }
         },
         {
