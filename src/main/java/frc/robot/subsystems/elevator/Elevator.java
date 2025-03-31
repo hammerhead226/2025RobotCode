@@ -55,7 +55,7 @@ public class Elevator extends SubsystemBase {
         kV.initDefault(0.1706);
         kA.initDefault(0);
 
-        kP.initDefault(0.5);
+        kP.initDefault(0.6);
         kI.initDefault(0);
         break;
       case REPLAY:

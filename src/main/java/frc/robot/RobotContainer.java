@@ -352,7 +352,7 @@ public class RobotContainer {
         new SequentialCommandGroup(
             new InstantCommand(() -> led.setState(LED_STATE.BLUE)),
             new GoToStowAuto(elevator, scoralArm, scoralRollers)));
-            // new WaitCommand(0.1)));
+    // new WaitCommand(0.1)));
     NamedCommands.registerCommand(
         "SCORE_CORAL",
         new SequentialCommandGroup(
@@ -364,8 +364,8 @@ public class RobotContainer {
         "SCORE_CORAL_NEW",
         new SequentialCommandGroup(
             new WaitUntilCommand(() -> elevator.atGoal(2) && scoralArm.atGoal(2)),
-            scoralRollers.runVoltsCommmand(5),
-            new WaitCommand(0.05)));
+            scoralRollers.runVoltsCommmand(8),
+            new WaitCommand(0.15)));
 
     NamedCommands.registerCommand(
         "PROCESSOR_SETPOINTS", new MoveToProcessorSetpoints(scoralArm, elevator));
