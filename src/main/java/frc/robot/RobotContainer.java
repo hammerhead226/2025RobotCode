@@ -598,7 +598,8 @@ public class RobotContainer {
         .onTrue(
             new ParallelCommandGroup(
                 new SetScoralArmTarget(scoralArm, 29, 2),
-                new SetClimberArmTarget(climberArm, 78, 2)));
+                new SetClimberArmTarget(
+                    climberArm, SubsystemConstants.ClimberConstants.DEPLOY_SETPOINT_DEG, 2)));
 
     driveController.x().onTrue(new InstantCommand(() -> winch.runVolts(-5)));
     driveController.x().onFalse(new InstantCommand(() -> winch.stop()));
