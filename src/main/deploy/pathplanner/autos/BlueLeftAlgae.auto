@@ -1,0 +1,55 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BlueLeftAlgaeStart"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BlueLeftAlgaeSecond"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BlueLeftAlgaeThird"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BlueLeftAlgaeFourth"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BlueLeftAlageFifth"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BlueLeftAlgaeSixth"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BlueLeftAlgaeSeventh"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
