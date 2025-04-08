@@ -76,7 +76,8 @@ public final class SubsystemConstants {
     public static final double ARM_GEAR_RATIO = 1;
 
     public static final double STOW_SETPOINT_DEG = 108;
-    public static final LoggedTunableNumber DEPLOY_SETPOINT_DEG = new LoggedTunableNumber("DEPLOY_SETPOINT_DEG", 100); // 78;
+    public static final LoggedTunableNumber DEPLOY_SETPOINT_DEG =
+        new LoggedTunableNumber("DEPLOY_SETPOINT_DEG", 60); // 78;
   }
 
   public static final class WinchConstants {
