@@ -1,0 +1,129 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BlueRightStart"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SCORE_CORAL_NEW"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BlueRightSecond "
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SOURCE_INTAKE"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.15
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "BlueRightThird"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SEE_CORAL"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SCORE_CORAL_NEW"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BlueRightFourth"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SOURCE_INTAKE"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.15
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "BlueRightFifth"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SEE_CORAL"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SCORE_CORAL_NEW"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Copy of BlueRightSixth"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "INTAKE_ALGAE_FROM_REEF"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Copy of BlueRightSeventh"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
