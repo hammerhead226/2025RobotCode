@@ -4,24 +4,24 @@
     {
       "anchor": {
         "x": 3.82,
-        "y": 2.786
+        "y": 2.909
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.627234708917574,
-        "y": 2.6268097284570833
+        "x": 3.556048555026965,
+        "y": 2.7383128331459026
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.82,
-        "y": 2.9088815789473688
+        "x": 3.4445723684210527,
+        "y": 2.350822368421053
       },
       "prevControl": {
-        "x": 4.037893884281138,
-        "y": 3.0314468888555077
+        "x": 3.6696840316240764,
+        "y": 2.45956398460349
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,19 +45,7 @@
     }
   ],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "INTAKE_ALGAE_FROM_REEF",
-      "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": 1.0,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "INTAKE_ALGAE_FROM_REEF"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.3,
@@ -68,7 +56,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -36.13321038015365
+    "rotation": -27.030860259843003
   },
   "reversed": false,
   "folder": null,

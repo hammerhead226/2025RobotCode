@@ -11,9 +11,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "SCORE_CORAL_NEW"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "BlueLeftAlgaeSecond"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SOURCE_INTAKE"
           }
         },
         {
@@ -23,15 +35,33 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "SCORE_CORAL_NEW"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "BlueLeftAlgaeFourth"
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "SOURCE_INTAKE"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "BlueLeftAlageFifth"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SCORE_CORAL_NEW"
           }
         },
         {
@@ -44,6 +74,18 @@
           "type": "path",
           "data": {
             "pathName": "BlueLeftAlgaeSeventh"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BlueLeftAlgaeEigth"
           }
         }
       ]
