@@ -27,6 +27,8 @@ public class MoveToReefCenter extends Command {
   Drive drive;
 
   Command pathCommand;
+  boolean pointsTooClose;
+  boolean isPathFinished;
 
   public MoveToReefCenter(Drive drive) {
     this.drive = drive;
@@ -37,6 +39,7 @@ public class MoveToReefCenter extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    isPathFinished = false;
     Pose2d atPose =
         DriveCommands.rotateAndNudge(
             new Pose2d(
@@ -51,43 +54,50 @@ public class MoveToReefCenter extends Command {
     List<RotationTarget> holomorphicRotations =
         Arrays.asList(new RotationTarget(0.5, atPose.getRotation().plus(Rotation2d.kCW_90deg)));
 
-    PathPlannerPath path =
-        new PathPlannerPath(
-            waypoints,
-            holomorphicRotations,
-            new ArrayList<>(),
-            new ArrayList<>(),
-            new ArrayList<>(),
-            new PathConstraints(
-                2.5,
-                2.5,
-                Math.toRadians(100),
-                Math.toRadians(180)), // these numbers from last year's code
-            null, // The ideal starting state, this is only relevant for pre-planned paths, so can
-            // be null for on-the-fly paths.
-            new GoalEndState(0, atPose.getRotation().rotateBy(Rotation2d.fromDegrees(-90))),
-            false);
-    path.preventFlipping = true;
-
-    pathCommand = AutoBuilder.followPath(path);
-    pathCommand.initialize();
+    pointsTooClose = drive.getPose().getTranslation().getDistance(atPose.getTranslation()) <= 0.01;
+    if (!pointsTooClose) {
+      PathPlannerPath path =
+          new PathPlannerPath(
+              waypoints,
+              holomorphicRotations,
+              new ArrayList<>(),
+              new ArrayList<>(),
+              new ArrayList<>(),
+              new PathConstraints(
+                  2.5,
+                  2.5,
+                  Math.toRadians(100),
+                  Math.toRadians(180)), // these numbers from last year's code
+              null, // The ideal starting state, this is only relevant for pre-planned paths, so can
+              // be null for on-the-fly paths.
+              new GoalEndState(0, atPose.getRotation().rotateBy(Rotation2d.fromDegrees(-90))),
+              false);
+      path.preventFlipping = true;
+      pathCommand = AutoBuilder.followPath(path);
+      pathCommand.initialize();
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    pathCommand.execute();
+    if (!pointsTooClose) {
+      pathCommand.execute();
+      isPathFinished = pathCommand.isFinished();
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    pathCommand.cancel();
+    if (!pointsTooClose) {
+      pathCommand.cancel();
+    }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return pathCommand.isFinished();
+    return isPathFinished || pointsTooClose;
   }
 }

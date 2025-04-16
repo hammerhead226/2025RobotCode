@@ -322,9 +322,9 @@ public class SuperStructure {
               scoralRollers.stopCommand(),
               new InstantCommand(() -> this.setCurrentState(SuperStructureState.REEF_INTAKE_ALGAE)),
               new InstantCommand(() -> this.setWantedState(SuperStructureState.EJECT_ALGAE)),
+              new InstantCommand(() -> this.enableAlgaeMode(false)),
               new IntakeAlgaeFromReef(
-                  drive, scoralArm, scoralRollers, elevator, led, height1, height2),
-              new InstantCommand(() -> this.enableAlgaeMode(false)));
+                  drive, scoralArm, scoralRollers, elevator, led, height1, height2));
         }
 
       case REEF_INTAKE_ALGAE:
