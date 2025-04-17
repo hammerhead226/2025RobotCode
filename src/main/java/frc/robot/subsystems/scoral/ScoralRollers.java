@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -32,6 +33,9 @@ public class ScoralRollers extends SubsystemBase {
   private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheel/kA", 1);
 
   private CoralState lastCoralState;
+
+  private double coralLastSeenTime;
+  private boolean coralSeenInLastTwoSeconds;
 
   /** Creates a new Flywheel. */
   public ScoralRollers(
@@ -71,16 +75,32 @@ public class ScoralRollers extends SubsystemBase {
             new SysIdRoutine.Mechanism((voltage) -> runVolts(voltage.in(Volts)), null, this));
 
     updateTunableNumbers();
+
+    coralLastSeenTime = -1;
+    coralSeenInLastTwoSeconds = false;
   }
 
   @Override
   public void periodic() {
+    if (sInputs.distanceInches < SubsystemConstants.CORAL_DIST) {
+      coralLastSeenTime = Timer.getFPGATimestamp();
+    }
+
+    if (coralLastSeenTime != -1 && Math.abs(coralLastSeenTime - Timer.getFPGATimestamp()) < 2) {
+      coralSeenInLastTwoSeconds = true;
+    } else {
+      coralSeenInLastTwoSeconds = false;
+    }
     rollers.updateInputs(inputs);
     sensor.updateInputs(sInputs);
     Logger.processInputs("Scoral Rollers", inputs);
     Logger.processInputs("Scoral Rollers/CANrange", sInputs);
 
     updateTunableNumbers();
+  }
+
+  public boolean hasCoralSeenInLastTwoSeconds() {
+    return coralSeenInLastTwoSeconds;
   }
 
   /** Run open loop at the specified voltage. */

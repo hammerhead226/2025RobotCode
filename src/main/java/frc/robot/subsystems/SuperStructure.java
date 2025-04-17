@@ -18,6 +18,7 @@ import frc.robot.commands.SetElevatorTarget;
 import frc.robot.commands.SetScoralArmTarget;
 import frc.robot.commands.ToReefHeight;
 import frc.robot.constants.SubsystemConstants;
+import frc.robot.constants.SubsystemConstants.CoralState;
 import frc.robot.constants.SubsystemConstants.LED_STATE;
 import frc.robot.constants.SubsystemConstants.ScoralArmConstants;
 import frc.robot.constants.SubsystemConstants.SuperStructureState;
@@ -258,14 +259,18 @@ public class SuperStructure {
 
       case SOURCE:
         currentState = SuperStructureState.SOURCE;
-        return new SetScoralArmTarget(
-                scoralArm, SubsystemConstants.ScoralArmConstants.STOW_SETPOINT_DEG, 2)
-            .andThen(new IntakingCoral(scoralRollers))
-            .andThen(
-                new InstantCommand(() -> led.setState(LED_STATE.BLUE))
-                    .andThen(
-                        new InstantCommand(() -> this.setCurrentState(SuperStructureState.STOW))
-                            .andThen(new InstantCommand(() -> this.nextState()))));
+        if (scoralRollers.seesCoral() == CoralState.SENSOR) {
+          return new SequentialCommandGroup();
+        } else {
+          return new SetScoralArmTarget(
+                  scoralArm, SubsystemConstants.ScoralArmConstants.STOW_SETPOINT_DEG, 2)
+              .andThen(new IntakingCoral(scoralRollers))
+              .andThen(
+                  new InstantCommand(() -> led.setState(LED_STATE.BLUE))
+                      .andThen(
+                          new InstantCommand(() -> this.setCurrentState(SuperStructureState.STOW))
+                              .andThen(new InstantCommand(() -> this.nextState()))));
+        }
 
       case PROCESSOR:
         currentState = SuperStructureState.PROCESSOR;

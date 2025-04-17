@@ -551,10 +551,10 @@ public class RobotContainer {
         .and(() -> !driveController.rightTrigger().getAsBoolean())
         .whileTrue(
             new ParallelCommandGroup(
+                // new IntakingCoral(scoralRollers),
                 new ConditionalCommand(
-                    new IntakingCoral(scoralRollers)
-                        .andThen(new InstantCommand(() -> scoralRollers.stop())),
-                    new InstantCommand(),
+                    new IntakingCoral(scoralRollers),
+                    new InstantCommand(() -> scoralRollers.stop()),
                     () -> scoralRollers.seesCoral() != CoralState.SENSOR),
                 new SequentialCommandGroup(
                     new ApproachReef(
@@ -578,7 +578,8 @@ public class RobotContainer {
             new ParallelCommandGroup(
                 new ConditionalCommand(
                     new IntakingCoral(scoralRollers),
-                    new InstantCommand(),
+                    new InstantCommand(() -> scoralRollers.stop()),
+                    // new InstantCommand(),
                     () -> scoralRollers.seesCoral() != CoralState.SENSOR),
                 new SequentialCommandGroup(
                     new ApproachReef(
