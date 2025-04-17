@@ -63,7 +63,8 @@ public final class SubsystemConstants {
     public static final double L2_SETPOINT_INCHES = 7.5;
     // public static final double L2_SETPOINT_INCHES = 6.8;
     // public static final double L3_SETPOINT_INCHES = 14.5;
-    public static final double L3_SETPOINT_INCHES = 14.2;
+    // public static final double L3_SETPOINT_INCHES = 14.2;
+    public static final double L3_SETPOINT_INCHES = 14;
     public static final double L4_SETPOINT_INCHES = 27.4;
     // public static final double L4_SETPOINT_INCHES = 27;
     public static final double BARGE_SETPOINT = 27.5;
