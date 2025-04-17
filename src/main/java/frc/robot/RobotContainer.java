@@ -552,7 +552,8 @@ public class RobotContainer {
         .whileTrue(
             new ParallelCommandGroup(
                 new ConditionalCommand(
-                    new IntakingCoral(scoralRollers),
+                    new IntakingCoral(scoralRollers)
+                        .andThen(new InstantCommand(() -> scoralRollers.stop())),
                     new InstantCommand(),
                     () -> scoralRollers.seesCoral() != CoralState.SENSOR),
                 new SequentialCommandGroup(

@@ -27,6 +27,6 @@ public class ScoreCoral extends SequentialCommandGroup {
     this.scoralRollers = scoralRollers;
     this.elevator = elevator;
     this.scoralArm = scoralArm;
-    addCommands(scoralRollers.runVoltsCommmand(2.9), new WaitCommand(0.5));
+    addCommands(scoralRollers.runVoltsCommmand(2.6), new WaitCommand(0.5));
   }
 }
