@@ -65,8 +65,8 @@ public final class SubsystemConstants {
     // public static final double L3_SETPOINT_INCHES = 14.5;
     // public static final double L3_SETPOINT_INCHES = 14.2;
     public static final double L3_SETPOINT_INCHES = 14;
-    public static final double L4_SETPOINT_INCHES = 27.4;
-    // public static final double L4_SETPOINT_INCHES = 27;
+    // public static final double L4_SETPOINT_INCHES = 27.4;
+    public static final double L4_SETPOINT_INCHES = 27.22;
     public static final double BARGE_SETPOINT = 27.5;
     public static final double GROUND_CORAL_ALGAE_SETPOINT_INCHES = 0.5;
   }
@@ -98,6 +98,7 @@ public final class SubsystemConstants {
     public static final double L3_CORAL_SCORING_SETPOINT_DEG = 76.5;
     public static final double L2_CORAL_SCORING_SETPOINT_DEG = 76.5;
     public static final double L4_CORAL_SCORING_SETPOINT_DEG = 56;
+    // public static final double L4_CORAL_SCORING_SETPOINT_DEG = 55.1;
     public static final double BARGE_BACK_SETPOINT_DEG = 69;
     public static final double BARGE_FORWARD_SETPOINT_DEG = 125;
     public static final double PROCESSOR_SETPOINT_DEG = 20;
