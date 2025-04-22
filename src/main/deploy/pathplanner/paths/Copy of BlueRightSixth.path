@@ -45,7 +45,19 @@
     }
   ],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "INTAKE_ALGAE_FROM_REEF",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "INTAKE_ALGAE_FROM_REEF"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.5,
     "maxAcceleration": 3.5,
@@ -59,7 +71,7 @@
     "rotation": -148.10920819815428
   },
   "reversed": false,
-  "folder": null,
+  "folder": "ProcessorAlgae",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -150.0

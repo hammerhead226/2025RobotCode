@@ -19,7 +19,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BlueMiddleLeftSecond"
+            "pathName": "BlueStealSecond "
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BlueStealThird"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "BARGE_SCORE"
           }
         },
         {
@@ -29,51 +41,39 @@
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "BlueMiddleLeftThird"
+            "waitTime": 0.5
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "SCORE_CORAL_NEW"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "BlueMiddleLeftFourth"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "SOURCE_INTAKE"
+            "waitTime": 0.5
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "BlueMiddleLeftFifth"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "SCORE_CORAL_NEW"
+            "pathName": "BlueStealFourth"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "BlueMiddleLeftSixth"
+            "pathName": "BlueStealFifth"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BlueStealSixth"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "SOURCE_INTAKE"
+            "name": "BARGE_SCORE"
           }
         }
       ]

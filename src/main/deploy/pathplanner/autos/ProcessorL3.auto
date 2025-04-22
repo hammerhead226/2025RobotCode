@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BlueLeftStart"
+            "pathName": "BlueLeftL3Start"
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BlueLeftSecond"
+            "pathName": "BlueLeftL3Second"
           }
         },
         {
@@ -29,19 +29,13 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.15
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "BlueLeftThird"
+                  "pathName": "BlueLeftL3Third"
                 }
               },
               {
@@ -62,7 +56,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BlueLeftFourth"
+            "pathName": "BlueLeftL3Fourth"
           }
         },
         {
@@ -72,19 +66,13 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.15
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "BlueLeftFifth"
+                  "pathName": "BlueLeftL3Fifth"
                 }
               },
               {
@@ -105,7 +93,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BlueLeftSixth"
+            "pathName": "BlueLeftL3Sixth"
           }
         },
         {
@@ -115,19 +103,13 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.15
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Copy of BlueLeftSeventh"
+                  "pathName": "BlueLeftL3Seventh"
                 }
               },
               {
@@ -142,7 +124,7 @@
         {
           "type": "named",
           "data": {
-            "name": "SCORE_CORAL_NEW"
+            "name": "SCORE_CORAL_NEW_L3"
           }
         }
       ]

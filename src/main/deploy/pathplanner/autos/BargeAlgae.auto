@@ -109,9 +109,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "INTAKE_ALGAE_FROM_REEF"
+            "waitTime": 0.25
           }
         },
         {

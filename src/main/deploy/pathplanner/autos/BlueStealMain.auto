@@ -11,75 +11,57 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "SCORE_CORAL_NEW"
+            "pathName": "BlueStealSecond "
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "BlueMiddleLeftSecond"
+            "pathName": "BlueStealThird"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "SOURCE_INTAKE"
+            "name": "BARGE_SCORE"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "BlueMiddleLeftThird"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "SCORE_CORAL_NEW"
+            "pathName": "BlueStealFourth"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "BlueMiddleLeftFourth"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "SOURCE_INTAKE"
+            "pathName": "BlueStealFifth"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "BlueMiddleLeftFifth"
+            "pathName": "BlueStealSixth"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "SCORE_CORAL_NEW"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "BlueMiddleLeftSixth"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "SOURCE_INTAKE"
+            "name": "BARGE_SCORE"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "L2 Variants",
   "choreoAuto": false
 }

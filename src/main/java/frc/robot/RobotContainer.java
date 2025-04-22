@@ -369,6 +369,24 @@ public class RobotContainer {
             .withTimeout(3.5));
 
     NamedCommands.registerCommand(
+        "SCORE_CORAL_NEW_L3",
+        new SequentialCommandGroup(
+                new WaitUntilCommand(() -> scoralRollers.seesCoral() == CoralState.SENSOR),
+                new ToReefHeight(
+                    elevator,
+                    scoralArm,
+                    SubsystemConstants.ElevatorConstants.L3_SETPOINT_INCHES,
+                    SubsystemConstants.ScoralArmConstants.L3_CORAL_SCORING_SETPOINT_DEG),
+                new WaitUntilCommand(
+                    () ->
+                        elevator.atGoal(2)
+                            && scoralArm.hasReachedGoal(
+                                ScoralArmConstants.L3_CORAL_SCORING_SETPOINT_DEG)),
+                scoralRollers.runVoltsCommmand(5),
+                new WaitCommand(0.14))
+            .withTimeout(3.5));
+
+    NamedCommands.registerCommand(
         "PROCESSOR_SETPOINTS", new MoveToProcessorSetpoints(scoralArm, elevator));
 
     NamedCommands.registerCommand(
@@ -397,21 +415,22 @@ public class RobotContainer {
 
     autos = new SendableChooser<>();
 
-    autos.addOption("hello", AutoBuilder.buildAuto("hello"));
-    autos.addOption("Processor", AutoBuilder.buildAuto("Processor"));
+    autos.addOption("ProcessorL3", AutoBuilder.buildAuto("ProcessorL3"));
+    // autos.addOption("Processor", AutoBuilder.buildAuto("Processor"));
     // autos.addOption("BlueLeftPush", AutoBuilder.buildAuto("BlueLeftPush"));
-    autos.addOption("CenterBarge", AutoBuilder.buildAuto("CenterBarge"));
-    autos.addOption("CenterProcessor", AutoBuilder.buildAuto("CenterProcessor"));
+    autos.addOption("BlueSteal", AutoBuilder.buildAuto("BlueSteal"));
+    // autos.addOption("CenterBarge", AutoBuilder.buildAuto("CenterBarge"));
+    // autos.addOption("CenterProcessor", AutoBuilder.buildAuto("CenterProcessor"));
     // autos.addOption("BlueMiddleLeft", AutoBuilder.buildAuto("BlueMiddleLeft"));
     // autos.addOption("BlueMiddleRight", AutoBuilder.buildAuto("BlueMiddleRight"));
-    autos.addOption("Barge", AutoBuilder.buildAuto("Barge"));
-    autos.addOption("ProcessorAlgae", AutoBuilder.buildAuto("ProcessorAlgae"));
-    autos.addOption("BlueLeft", AutoBuilder.buildAuto("BlueLeft"));
-    autos.addOption("BargeAlgae", AutoBuilder.buildAuto("BargeAlgae"));
-    // autos.addOption("Wait2BlueLeftL2", AutoBuilder.buildAuto("Wait2BlueLeftL2"));
+    // autos.addOption("Barge", AutoBuilder.buildAuto("Barge"));
+    // autos.addOption("ProcessorAlgae", AutoBuilder.buildAuto("ProcessorAlgae"));
+    // autos.addOption("BlueLeft", AutoBuilder.buildAuto("BlueLeft"));
+    // autos.addOption("BargeAlgae", AutoBuilder.buildAuto("BargeAlgae"));
+    autos.addOption("BlueStealMain", AutoBuilder.buildAuto("BlueStealMain"));
     // autos.addOption("Wait6BlueRightL2", AutoBuilder.buildAuto("Wait6BlueRightL2"));
     // autos.addOption("Wait2BlueRightL2", AutoBuilder.buildAuto("Wait2BlueRightL2"));
-    autos.addOption("Processor", AutoBuilder.buildAuto("Processor"));
+    // autos.addOption("Processor", AutoBuilder.buildAuto("Processor"));
     // autos.addOption("BlueLeftPushL2", AutoBuilder.buildAuto("BlueLeftPushL2"));
     // autos.addOption("BlueRightL2", AutoBuilder.buildAuto("BlueRightL2"));
 

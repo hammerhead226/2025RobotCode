@@ -59,7 +59,7 @@
     "rotation": -143.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "ProcessorAlgae",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -143.10280615323285

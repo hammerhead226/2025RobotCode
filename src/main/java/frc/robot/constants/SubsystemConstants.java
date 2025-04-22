@@ -191,7 +191,8 @@ public final class SubsystemConstants {
     L4,
     SCORING_CORAL,
     L1_SCORING_CORAL,
-    INTAKE_ALGAE
+    INTAKE_ALGAE,
+    INTAKE_ALGAE_FROM_REEF
   }
 
   public static final double CORAL_DIST = 4.0; // 1300; // CHANGE THIS

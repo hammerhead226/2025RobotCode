@@ -665,6 +665,7 @@ public class Drive extends SubsystemBase {
         && DriverStation.getAlliance().get() == Alliance.Blue) {
       return translation;
     }
+
     return translation.rotateAround(
         new Translation2d(FieldConstants.fieldLength / 2, FieldConstants.fieldWidth / 2),
         Rotation2d.kPi);

@@ -3,39 +3,39 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.9854,
-        "y": 2.8681
+        "x": 7.120696721311476,
+        "y": 3.8614309210526314
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.3756285085290054,
-        "y": 1.7337144253713126
+        "x": 6.746515830793673,
+        "y": 3.8596677367775234
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.726229508196721,
-        "y": 0.8182889344262299
+        "x": 5.744161184210526,
+        "y": 3.861
       },
       "prevControl": {
-        "x": 1.951618724163727,
-        "y": 0.979617846384004
+        "x": 6.475711084832168,
+        "y": 3.8593697196825794
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "BlueStealStart"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.0,
-      "maxWaypointRelativePos": 0.13698630136986462,
+      "minWaypointRelativePos": 0.5451612903225805,
+      "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 3.0,
+        "maxVelocity": 3.5,
         "maxAcceleration": 2.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
@@ -47,27 +47,20 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "STOW",
+      "name": "L4",
       "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": 0.42258064516129035,
+      "endWaypointRelativePos": 1.0,
       "command": {
-        "type": "sequential",
+        "type": "named",
         "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "STOW"
-              }
-            }
-          ]
+          "name": "L4"
         }
       }
     }
   ],
   "globalConstraints": {
     "maxVelocity": 3.5,
-    "maxAcceleration": 3.75,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -75,13 +68,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -38.5
+    "rotation": 90.0
   },
   "reversed": false,
-  "folder": "ProcessorAlgae",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 29.999999999999996
+    "rotation": 90.0
   },
   "useDefaultConstraints": false
 }
