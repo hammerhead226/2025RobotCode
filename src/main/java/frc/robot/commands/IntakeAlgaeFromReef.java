@@ -57,4 +57,33 @@ public class IntakeAlgaeFromReef extends SequentialCommandGroup {
         scoralRollers.runVoltsCommmand(-2),
         new SetElevatorTarget(elevator, height2, 1.5));
   }
+
+  public IntakeAlgaeFromReef(
+      Drive drive,
+      ScoralRollers scoralRollers,
+      ScoralArm scoralArm,
+      Elevator elevator,
+      LED led,
+      double height1,
+      double height2) {
+    this.drive = drive;
+    this.scoralArm = scoralArm;
+    this.scoralRollers = scoralRollers;
+    this.elevator = elevator;
+    this.led = led;
+    // Add your commands in the addCommands() call, e.g.
+    // addCommands(new FooCommand(), new BarCommand());
+    addCommands(
+        new InstantCommand(() -> led.setState(LED_STATE.PURPLE)),
+        new ParallelCommandGroup(
+            new SetElevatorTarget(elevator, height1, 15),
+            new SetScoralArmTarget(scoralArm, ScoralArmConstants.STOW_SETPOINT_DEG, 2)),
+        new SetScoralArmTarget(scoralArm, ScoralArmConstants.STOW_SETPOINT_DEG - 6, 2),
+        new WaitUntilCommand(() -> elevator.hasReachedGoal(height1)),
+        new InstantCommand(() -> scoralArm.setConstraints(300, 600)),
+        new SetScoralArmTarget(scoralArm, 78, 2),
+        new InstantCommand(() -> scoralArm.setConstraints(150, 300)),
+        scoralRollers.runVoltsCommmand(-2),
+        new SetElevatorTarget(elevator, height2, 1.5));
+  }
 }

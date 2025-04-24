@@ -3,48 +3,43 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.5,
-        "y": 6.65
+        "x": 11.796217105263157,
+        "y": 4.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.748136537910331,
-        "y": 6.680467335851287
+        "x": 11.591409125133396,
+        "y": 4.143365586090832
       },
       "isLocked": false,
-      "linkedName": "ScoreBarge"
+      "linkedName": "BlueStealStole"
     },
     {
       "anchor": {
-        "x": 10.0,
-        "y": 6.65
+        "x": 10.227878289473683,
+        "y": 4.9390625
       },
       "prevControl": {
-        "x": 9.750038076210902,
-        "y": 6.64563689839068
+        "x": 10.46504911398631,
+        "y": 4.86000555849579
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "BlueStealCross"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.29756795422031473,
-      "rotationDegrees": 135.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "L1",
+      "name": "BARGE_EXTEND",
       "waypointRelativePos": 0,
-      "endWaypointRelativePos": 1.0,
+      "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "L1"
+          "name": "BARGE_EXTEND"
         }
       }
     }
@@ -59,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 135.0
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": -90.0
   },
   "useDefaultConstraints": false
 }

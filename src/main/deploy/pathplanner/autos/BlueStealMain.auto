@@ -11,15 +11,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "BlueStealSecond "
+            "name": "INTAKE_ALGAE_FROM_REEF"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "BlueStealThird"
+            "pathName": "BlueStealSecond"
           }
         },
         {
@@ -37,19 +37,19 @@
         {
           "type": "path",
           "data": {
+            "pathName": "BlueStealThird"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "INTAKE_ALGAE_FROM_REEF_AUTON_2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
             "pathName": "BlueStealFourth"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "BlueStealFifth"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "BlueStealSixth"
           }
         },
         {

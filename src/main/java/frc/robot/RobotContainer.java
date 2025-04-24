@@ -411,12 +411,23 @@ public class RobotContainer {
                       drive, scoralArm, scoralRollers, elevator, led, height1, height2);
                 })));
 
+    NamedCommands.registerCommand(
+        "INTAKE_ALGAE_FROM_REEF_AUTON_2",
+        new SequentialCommandGroup(
+            new WaitUntilCommand(() -> elevator.atGoal(2) && scoralArm.atGoal(2)),
+            new ReinitializingCommand(
+                () -> {
+                  double height1 = SubsystemConstants.ElevatorConstants.STOW_SETPOINT_INCH;
+                  double height2 = 2;
+                  return new IntakeAlgaeFromReef(
+                      drive, scoralRollers, scoralArm, elevator, led, height1, height2);
+                })));
     // NamedCommands.registerCommand("Stow", new Stow(elevator, csArm));
 
     autos = new SendableChooser<>();
 
     autos.addOption("ProcessorL3", AutoBuilder.buildAuto("ProcessorL3"));
-    // autos.addOption("Processor", AutoBuilder.buildAuto("Processor"));
+    autos.addOption("CenterBarge", AutoBuilder.buildAuto("CenterBarge"));
     // autos.addOption("BlueLeftPush", AutoBuilder.buildAuto("BlueLeftPush"));
     autos.addOption("BlueSteal", AutoBuilder.buildAuto("BlueSteal"));
     // autos.addOption("CenterBarge", AutoBuilder.buildAuto("CenterBarge"));
