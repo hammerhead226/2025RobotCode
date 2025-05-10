@@ -216,3 +216,27 @@ spotless {
         endWithNewline()
     }
 }
+tasks.register('javadocJar', Jar) {
+    archiveClassifier.set('javadoc')  // ✅ new syntax
+    from tasks.javadoc
+}
+
+
+tasks.register('customJavadoc', Javadoc) {
+    description = 'Generates Javadoc for frc.robot'
+    group = 'documentation'
+
+    source = sourceSets.main.allJava
+
+    // This includes both external libs and compiled/generated sources
+    classpath = files(
+            sourceSets.main.output,         // includes generated classes like LED_IOInputsAutoLogged
+            sourceSets.main.compileClasspath
+            )
+
+    destinationDir = file("$buildDir/../docs")
+
+    options.encoding = 'UTF-8'
+    options.memberLevel = JavadocMemberLevel.PUBLIC
+    options.addStringOption('Xdoclint:none', '-quiet')
+}
