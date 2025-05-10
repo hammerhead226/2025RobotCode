@@ -24,6 +24,8 @@ import java.util.function.BooleanSupplier;
 import org.littletonrobotics.junction.Logger;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
+
+/** This is a test for java doc. Open in /docs/frc/robot/commands/AdjustToReefPost.html */
 public class AdjustToReefPost extends Command {
   /** Creates a new AdjustToReefPost. */
   enum AlignState {
