@@ -9,10 +9,19 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import java.util.function.Supplier;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
+/**
+ * Command that on start up gets a command from a supplier and then runs it (effectively a wrapper).
+ * Given to triggers so that they do not get locked to one command on inital evalutation. 
+ * @author Devin Huang
+ */
 public class ReinitializingCommand extends Command {
   Supplier<Command> commandSupplier;
   Command command;
 
+  /**
+   * @param commandSupplier the supplier which returns a command to be run each time this command is reinitalized
+   * @param requirements optional parameters to specify any number of subsystems required
+   */
   public ReinitializingCommand(Supplier<Command> commandSupplier, Subsystem... requirements) {
     this.commandSupplier = commandSupplier;
     addRequirements(requirements);
@@ -32,6 +41,9 @@ public class ReinitializingCommand extends Command {
   }
 
   // Called once the command ends or is interrupted.
+  /*
+   * on end, the ReinitializingCommand also completely cancels the command its running
+   */
   @Override
   public void end(boolean interrupted) {
     command.cancel();

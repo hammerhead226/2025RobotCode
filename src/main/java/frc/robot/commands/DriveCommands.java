@@ -141,6 +141,7 @@ public class DriveCommands {
           double speedDebuff = 0.75;
           targetPose = null;
 
+          // TODO: ask David again why the targetPose logic was removed this way
           if (2 == 1) {
             if (superStructure.getWantedState() == SuperStructureState.SOURCE) {
               targetPose = drive.getNearestSource();
