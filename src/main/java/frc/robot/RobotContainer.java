@@ -526,7 +526,12 @@ public class RobotContainer {
     manipControls();
   }
 
+  /**
+   * Binds driveController buttons to commands
+   */
   private void driverControls() {
+
+    // reset odometry pose
     driveController
         .start()
         .onTrue(
@@ -537,6 +542,7 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
+    // joystick controls driving
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
@@ -546,16 +552,17 @@ public class RobotContainer {
             () -> -driveController.getLeftX(),
             () -> -driveController.getRightX()));
 
+    // align to the nearest reef face's most clockwise post (left when facing the reef) 
     driveController
         .leftTrigger()
         .and(() -> !driveController.rightTrigger().getAsBoolean())
         .whileTrue(
             new ParallelCommandGroup(
-                new ConditionalCommand(
+                new ConditionalCommand( // get any coral in the intake in position
                     new IntakingCoral(scoralRollers),
                     new InstantCommand(),
                     () -> scoralRollers.seesCoral() != CoralState.SENSOR),
-                new SequentialCommandGroup(
+                new SequentialCommandGroup( // sequence for driving to the reef
                     new ApproachReef(
                         drive,
                         led,
@@ -570,6 +577,8 @@ public class RobotContainer {
                         superStructure,
                         false,
                         () -> driveController.leftTrigger().getAsBoolean()))));
+
+    // align to the nearest reef face's most counterclockwise post (right when facing the reef)
     driveController
         .rightTrigger()
         .and(() -> !driveController.leftTrigger().getAsBoolean())
@@ -595,8 +604,10 @@ public class RobotContainer {
                         true,
                         () -> driveController.rightTrigger().getAsBoolean()))));
 
+    // turns the led red when either reef align button is pressed
     autoAlignRelease.onTrue(new InstantCommand(() -> led.setState(LED_STATE.RED)));
 
+    // runs the next command given by the superStructure
     driveController
         .rightBumper()
         .onTrue(
@@ -614,6 +625,8 @@ public class RobotContainer {
 
     // driveController.x().onTrue(climbCommands);
     // driveController.x().onFalse(new InstantCommand(() -> winch.stop()));
+
+    // move arms down and out to be ready for climb
     driveController
         .a()
         .onTrue(
@@ -621,9 +634,11 @@ public class RobotContainer {
                 new SetScoralArmTarget(scoralArm, 29, 2),
                 new SetClimberArmTarget(climberArm, 60, 2)));
 
+    // winch (brings down the climb mechanism)
     driveController.x().onTrue(new InstantCommand(() -> winch.runVolts(-5)));
     driveController.x().onFalse(new InstantCommand(() -> winch.stop()));
 
+    // intake algae from reef
     driveController
         .b()
         .whileTrue(
@@ -638,6 +653,7 @@ public class RobotContainer {
                             led)
                         .andThen(new InstantCommand(() -> superStructure.nextState()))));
 
+    // align to barge
     driveController
         .leftBumper()
         .whileTrue(
@@ -650,10 +666,12 @@ public class RobotContainer {
                         superStructure,
                         () -> driveController.leftBumper().getAsBoolean())));
 
+    // TODO: remove following trigger since it is redundant with the led setting within the superStructure
     driveController
         .leftBumper()
         .onFalse(new InstantCommand(() -> led.setState(LED_STATE.PINK_LAVENDER)));
 
+    // returns robot to stow position
     driveController
         .povDown()
         .onTrue(
@@ -668,6 +686,7 @@ public class RobotContainer {
                             led)
                         .andThen(new InstantCommand(() -> superStructure.nextState()))));
 
+    // move arm to L4 (used in the case of getting stuck on the reef)
     driveController
         .back()
         .onTrue(
@@ -683,7 +702,11 @@ public class RobotContainer {
                     () -> superStructure.setWantedState(SuperStructureState.SCORING_CORAL))));
   }
 
+  /**
+   * Binds manipController (operator) buttons to commands
+   */
   private void manipControls() {
+    // set scoring level
     manipController
         .x()
         .onTrue(new InstantCommand(() -> superStructure.setWantedState(SuperStructureState.L3)));
@@ -697,6 +720,7 @@ public class RobotContainer {
         .b()
         .onTrue(new InstantCommand(() -> superStructure.setWantedState(SuperStructureState.L1)));
 
+    // returns robot to stow position
     manipController
         .povDown()
         .onTrue(
@@ -716,6 +740,7 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(() -> superStructure.setWantedState(SuperStructureState.SOURCE)));
 
+    // enables picking up algae off the reef after scoring coral
     manipController
         .povLeft()
         .onTrue(new InstantCommand(() -> superStructure.enableAlgaeMode(true)));
@@ -737,6 +762,7 @@ public class RobotContainer {
             new InstantCommand(
                 () -> superStructure.setWantedState(SuperStructureState.CORAL_INTAKE_ALGAE)));
 
+    // move arms down and out to be ready for climb
     manipController
         .leftTrigger()
         .onTrue(
