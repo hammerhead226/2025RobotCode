@@ -13,11 +13,18 @@ import frc.robot.subsystems.scoral.ScoralArm;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+
+/**
+This sequential command group is supposed to extend the elevator 
+to the required position to climb the barge and then set the 
+scoral arm to the required position to initiate the climb
+*/
+
 public class BargeExtend extends SequentialCommandGroup {
-  /** Creates a new BargeExtend. */
   public BargeExtend(Elevator elevator, ScoralArm scoralArm) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+    
     addCommands(
         new SetElevatorTarget(elevator, SubsystemConstants.ElevatorConstants.BARGE_SETPOINT, 15),
         new WaitUntilCommand(() -> elevator.atGoal(15)),

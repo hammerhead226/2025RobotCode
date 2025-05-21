@@ -4,14 +4,16 @@
 
 package frc.robot.commands;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import java.util.function.Supplier;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 /**
  * Command that on start up gets a command from a supplier and then runs it (effectively a wrapper).
- * Given to triggers so that they do not get locked to one command on initial evaluation. 
+ * Given to triggers so that they do not get locked to one command on inital evalutation.
+ *
  * @author Devin Huang
  */
 public class ReinitializingCommand extends Command {
@@ -19,7 +21,8 @@ public class ReinitializingCommand extends Command {
   Command command;
 
   /**
-   * @param commandSupplier the supplier which returns a command to be run each time this command is reinitialized
+   * @param commandSupplier the supplier which returns a command to be run each time this command is
+   *     reinitalized
    * @param requirements optional parameters to specify any number of subsystems required
    */
   public ReinitializingCommand(Supplier<Command> commandSupplier, Subsystem... requirements) {
