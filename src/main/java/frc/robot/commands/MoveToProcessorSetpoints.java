@@ -13,6 +13,13 @@ import frc.robot.subsystems.scoral.ScoralArm;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+
+/**
+ * This ParallelCommandGroup is meant to move the elevator and the scoral
+ * to the required setpoints for depositing an algaue in the processor
+ * at the same time.
+ */
+
 public class MoveToProcessorSetpoints extends ParallelCommandGroup {
   private final ScoralArm scoralArm;
   private final Elevator elevator;
