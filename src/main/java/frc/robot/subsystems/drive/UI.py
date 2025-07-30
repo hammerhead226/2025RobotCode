@@ -60,25 +60,26 @@ h1 {
       border-radius: 6px;
       cursor: pointer;
       font-size: 14px;
-       z-index: 2;
+       z-index: 1px;
   position: relative;
 
     }
     
     .algae-btn {
-  background-color: #00cc88;
+   background-color: #00cc88;
   color: white;
   width: 75px;
   height: 75px;
-  z-index: 1;
-  position: relative;
-
+  position: absolute; /* Key change */
   border: 2px dashed #FFFFFF;
   border-radius: 50%;
   cursor: pointer;
-  
   font-size: 18px;
-
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 0;
+  pointer-events: auto; 
 }
 
 
@@ -295,23 +296,23 @@ h1 {
     
     <button class="algae-btn">5</button>
   </div>
-  <div class="column" style="transform: translateX(200px) translateY(-2075px);">
+  <div class="column" style="transform: translateX(200px) translateY(-2000px);">
     
     <button class="algae-btn">1</button>
   </div>
-  <div class="column" style="transform: translateX(425px) translateY(-1700px);">
+  <div class="column" style="transform: translateX(425px) translateY(-1550px);">
     
     <button class="algae-btn">4</button>
   </div>
-  <div class="column" style="transform: translateX(425px) translateY(-2225px);">
+  <div class="column" style="transform: translateX(425px) translateY(-2000px);">
     
     <button class="algae-btn">2</button>
   </div>
-  <div class="column" style="transform: translateX(100px) translateY(-2075px);">
+  <div class="column" style="transform: translateX(100px) translateY(-1775px);">
     
     <button class="algae-btn">6</button>
   </div>
-  <div class="column" style="transform: translateX(525px) translateY(-2150px);">
+  <div class="column" style="transform: translateX(525px) translateY(-1775px);">
     
     <button class="algae-btn">3</button>
   </div>
