@@ -17,8 +17,9 @@ import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerMotorArrangement;
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -160,12 +161,92 @@ public class Robot extends LoggedRobot {
     LimelightHelpers.setLimelightNTDouble("limelight-reef", "throttle_set", 50);
   }
 
+  private NetworkTable table;
+  private NetworkTableEntry a4Button, a3Button, a2Button, a1Button;
+  private NetworkTableEntry b4Button, b3Button, b2Button, b1Button;
+  private NetworkTableEntry c4Button, c3Button, c2Button, c1Button;
+  private NetworkTableEntry d4Button, d3Button, d2Button, d1Button;
+  private NetworkTableEntry e4Button, e3Button, e2Button, e1Button;
+  private NetworkTableEntry f4Button, f3Button, f2Button, f1Button;
+  private NetworkTableEntry g4Button, g3Button, g2Button, g1Button;
+  private NetworkTableEntry h4Button, h3Button, h2Button, h1Button;
+  private NetworkTableEntry i4Button, i3Button, i2Button, i1Button;
+  private NetworkTableEntry j4Button, j3Button, j2Button, j1Button;
+  private NetworkTableEntry k4Button, k3Button, k2Button, k1Button;
+  private NetworkTableEntry l4Button, l3Button, l2Button, l1Button;
+  private NetworkTableEntry Alg1, Alg2, Alg3, Alg4, Alg5, Alg6;
+  private NetworkTableEntry leftCoralStation, rightCoralStation;
+  private NetworkTableEntry algaeInBarge, proccesor;
+
   @Override
   public void robotInit() {
     ReefPositionsUtil.printOffsetPoses();
-    UsbCamera cam = CameraServer.startAutomaticCapture();
+    NetworkTableInstance.getDefault().startClient4("tabletUI-sim");
+    NetworkTableInstance.getDefault().startDSClient();
 
-    cam.setResolution(640, 480);
+    table = NetworkTableInstance.getDefault().getTable("Reef");
+    a4Button = table.getEntry("A4");
+    a3Button = table.getEntry("A3");
+    a2Button = table.getEntry("A2");
+    a1Button = table.getEntry("A1");
+    b4Button = table.getEntry("B4");
+    b3Button = table.getEntry("B3");
+    b2Button = table.getEntry("B2");
+    b1Button = table.getEntry("B1");
+    c4Button = table.getEntry("C4");
+    c3Button = table.getEntry("C3");
+    c2Button = table.getEntry("C2");
+    c1Button = table.getEntry("C1");
+    d4Button = table.getEntry("D4");
+    d3Button = table.getEntry("D3");
+    d2Button = table.getEntry("D2");
+    d1Button = table.getEntry("D1");
+    e4Button = table.getEntry("E4");
+    e3Button = table.getEntry("E3");
+    e2Button = table.getEntry("E2");
+    e1Button = table.getEntry("E1");
+    f4Button = table.getEntry("F4");
+    f3Button = table.getEntry("F3");
+    f2Button = table.getEntry("F2");
+    f1Button = table.getEntry("F1");
+    g4Button = table.getEntry("G4");
+    g3Button = table.getEntry("G3");
+    g2Button = table.getEntry("G2");
+    g1Button = table.getEntry("G1");
+    h4Button = table.getEntry("H4");
+    h3Button = table.getEntry("H3");
+    h2Button = table.getEntry("H2");
+    h1Button = table.getEntry("H1");
+    i4Button = table.getEntry("I4");
+    i3Button = table.getEntry("I3");
+    i2Button = table.getEntry("I2");
+    i1Button = table.getEntry("I1");
+    j4Button = table.getEntry("J4");
+    j3Button = table.getEntry("J3");
+    j2Button = table.getEntry("J2");
+    j1Button = table.getEntry("J1");
+    k4Button = table.getEntry("K4");
+    k3Button = table.getEntry("K3");
+    k2Button = table.getEntry("K2");
+    k1Button = table.getEntry("K1");
+    l4Button = table.getEntry("L4");
+    l3Button = table.getEntry("L3");
+    l2Button = table.getEntry("L2");
+    l1Button = table.getEntry("L1");
+    Alg1 = table.getEntry("Alg1");
+    Alg2 = table.getEntry("Alg2");
+    Alg3 = table.getEntry("Alg3");
+    Alg4 = table.getEntry("Alg4");
+    Alg5 = table.getEntry("Alg5");
+    Alg6 = table.getEntry("Alg6");
+    leftCoralStation = table.getEntry("leftCoralStation");
+    rightCoralStation = table.getEntry("rightCoralStation");
+    algaeInBarge = table.getEntry("algaeInBarge");
+    proccesor = table.getEntry("proccesor");
+
+    // UsbCamera cam = CameraServer.startAutomaticCapture();
+
+    // cam.setResolution(640, 480);
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
@@ -262,5 +343,251 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically whilst in simulation. */
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+    if (a4Button.getBoolean(false)) {
+      System.out.println("A4 button pressed!");
+      a4Button.setBoolean(false);
+    }
+    if (a3Button.getBoolean(false)) {
+      System.out.println("A3 button pressed!");
+      a3Button.setBoolean(false);
+    }
+    if (a2Button.getBoolean(false)) {
+      System.out.println("A2 button pressed!");
+      a2Button.setBoolean(false);
+    }
+    if (a1Button.getBoolean(false)) {
+      System.out.println("A1 button pressed!");
+      a1Button.setBoolean(false);
+    }
+
+    if (b4Button.getBoolean(false)) {
+      System.out.println("B4 button pressed!");
+      b4Button.setBoolean(false);
+    }
+    if (b3Button.getBoolean(false)) {
+      System.out.println("B3 button pressed!");
+      b3Button.setBoolean(false);
+    }
+    if (b2Button.getBoolean(false)) {
+      System.out.println("B2 button pressed!");
+      b2Button.setBoolean(false);
+    }
+    if (b1Button.getBoolean(false)) {
+      System.out.println("B1 button pressed!");
+      b1Button.setBoolean(false);
+    }
+
+    if (c4Button.getBoolean(false)) {
+      System.out.println("C4 button pressed!");
+      c4Button.setBoolean(false);
+    }
+    if (c3Button.getBoolean(false)) {
+      System.out.println("C3 button pressed!");
+      c3Button.setBoolean(false);
+    }
+    if (c2Button.getBoolean(false)) {
+      System.out.println("C2 button pressed!");
+      c2Button.setBoolean(false);
+    }
+    if (c1Button.getBoolean(false)) {
+      System.out.println("C1 button pressed!");
+      c1Button.setBoolean(false);
+    }
+
+    if (d4Button.getBoolean(false)) {
+      System.out.println("D4 button pressed!");
+      d4Button.setBoolean(false);
+    }
+    if (d3Button.getBoolean(false)) {
+      System.out.println("D3 button pressed!");
+      d3Button.setBoolean(false);
+    }
+    if (d2Button.getBoolean(false)) {
+      System.out.println("D2 button pressed!");
+      d2Button.setBoolean(false);
+    }
+    if (d1Button.getBoolean(false)) {
+      System.out.println("D1 button pressed!");
+      d1Button.setBoolean(false);
+    }
+
+    if (e4Button.getBoolean(false)) {
+      System.out.println("E4 button pressed!");
+      e4Button.setBoolean(false);
+    }
+    if (e3Button.getBoolean(false)) {
+      System.out.println("E3 button pressed!");
+      e3Button.setBoolean(false);
+    }
+    if (e2Button.getBoolean(false)) {
+      System.out.println("E2 button pressed!");
+      e2Button.setBoolean(false);
+    }
+    if (e1Button.getBoolean(false)) {
+      System.out.println("E1 button pressed!");
+      e1Button.setBoolean(false);
+    }
+
+    if (f4Button.getBoolean(false)) {
+      System.out.println("F4 button pressed!");
+      f4Button.setBoolean(false);
+    }
+    if (f3Button.getBoolean(false)) {
+      System.out.println("F3 button pressed!");
+      f3Button.setBoolean(false);
+    }
+    if (f2Button.getBoolean(false)) {
+      System.out.println("F2 button pressed!");
+      f2Button.setBoolean(false);
+    }
+    if (f1Button.getBoolean(false)) {
+      System.out.println("F1 button pressed!");
+      f1Button.setBoolean(false);
+    }
+
+    if (g4Button.getBoolean(false)) {
+      System.out.println("G4 button pressed!");
+      g4Button.setBoolean(false);
+    }
+    if (g3Button.getBoolean(false)) {
+      System.out.println("G3 button pressed!");
+      g3Button.setBoolean(false);
+    }
+    if (g2Button.getBoolean(false)) {
+      System.out.println("G2 button pressed!");
+      g2Button.setBoolean(false);
+    }
+    if (g1Button.getBoolean(false)) {
+      System.out.println("G1 button pressed!");
+      g1Button.setBoolean(false);
+    }
+
+    if (h4Button.getBoolean(false)) {
+      System.out.println("H4 button pressed!");
+      h4Button.setBoolean(false);
+    }
+    if (h3Button.getBoolean(false)) {
+      System.out.println("H3 button pressed!");
+      h3Button.setBoolean(false);
+    }
+    if (h2Button.getBoolean(false)) {
+      System.out.println("H2 button pressed!");
+      h2Button.setBoolean(false);
+    }
+    if (h1Button.getBoolean(false)) {
+      System.out.println("H1 button pressed!");
+      h1Button.setBoolean(false);
+    }
+
+    if (i4Button.getBoolean(false)) {
+      System.out.println("I4 button pressed!");
+      i4Button.setBoolean(false);
+    }
+    if (i3Button.getBoolean(false)) {
+      System.out.println("I3 button pressed!");
+      i3Button.setBoolean(false);
+    }
+    if (i2Button.getBoolean(false)) {
+      System.out.println("I2 button pressed!");
+      i2Button.setBoolean(false);
+    }
+    if (i1Button.getBoolean(false)) {
+      System.out.println("I1 button pressed!");
+      i1Button.setBoolean(false);
+    }
+
+    if (j4Button.getBoolean(false)) {
+      System.out.println("J4 button pressed!");
+      j4Button.setBoolean(false);
+    }
+    if (j3Button.getBoolean(false)) {
+      System.out.println("J3 button pressed!");
+      j3Button.setBoolean(false);
+    }
+    if (j2Button.getBoolean(false)) {
+      System.out.println("J2 button pressed!");
+      j2Button.setBoolean(false);
+    }
+    if (j1Button.getBoolean(false)) {
+      System.out.println("J1 button pressed!");
+      j1Button.setBoolean(false);
+    }
+
+    if (k4Button.getBoolean(false)) {
+      System.out.println("K4 button pressed!");
+      k4Button.setBoolean(false);
+    }
+    if (k3Button.getBoolean(false)) {
+      System.out.println("K3 button pressed!");
+      k3Button.setBoolean(false);
+    }
+    if (k2Button.getBoolean(false)) {
+      System.out.println("K2 button pressed!");
+      k2Button.setBoolean(false);
+    }
+    if (k1Button.getBoolean(false)) {
+      System.out.println("K1 button pressed!");
+      k1Button.setBoolean(false);
+    }
+
+    if (l4Button.getBoolean(false)) {
+      System.out.println("L4 button pressed!");
+      l4Button.setBoolean(false);
+    }
+    if (l3Button.getBoolean(false)) {
+      System.out.println("L3 button pressed!");
+      l3Button.setBoolean(false);
+    }
+    if (l2Button.getBoolean(false)) {
+      System.out.println("L2 button pressed!");
+      l2Button.setBoolean(false);
+    }
+    if (l1Button.getBoolean(false)) {
+      System.out.println("L1 button pressed!");
+      l1Button.setBoolean(false);
+    }
+
+    if (Alg1.getBoolean(false)) {
+      System.out.println("Alg1 button pressed!");
+      Alg1.setBoolean(false);
+    }
+    if (Alg2.getBoolean(false)) {
+      System.out.println("Alg2 button pressed!");
+      Alg2.setBoolean(false);
+    }
+    if (Alg3.getBoolean(false)) {
+      System.out.println("Alg3 button pressed!");
+      Alg3.setBoolean(false);
+    }
+    if (Alg4.getBoolean(false)) {
+      System.out.println("Alg4 button pressed!");
+      Alg4.setBoolean(false);
+    }
+    if (Alg5.getBoolean(false)) {
+      System.out.println("Alg5 button pressed!");
+      Alg5.setBoolean(false);
+    }
+    if (Alg6.getBoolean(false)) {
+      System.out.println("Alg6 button pressed!");
+      Alg6.setBoolean(false);
+    }
+
+    if (leftCoralStation.getBoolean(false)) {
+      System.out.println("Left Coral Station button pressed!");
+      leftCoralStation.setBoolean(false);
+    }
+    if (rightCoralStation.getBoolean(false)) {
+      System.out.println("Right Coral Station button pressed!");
+      rightCoralStation.setBoolean(false);
+    }
+    if (algaeInBarge.getBoolean(false)) {
+      System.out.println("Algae In Barge button pressed!");
+      algaeInBarge.setBoolean(false);
+    }
+    if (proccesor.getBoolean(false)) {
+      System.out.println("Processor button pressed!");
+      proccesor.setBoolean(false);
+    }
+  }
 }
