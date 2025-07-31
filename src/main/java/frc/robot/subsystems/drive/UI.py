@@ -64,7 +64,7 @@ h1 {
   position: relative;
 
     }
-    
+   
     .algae-btn {
    background-color: #00cc88;
   color: white;
@@ -79,7 +79,7 @@ h1 {
   justify-content: center;
   align-items: center;
   z-index: 0;
-  pointer-events: auto; 
+  pointer-events: auto;
 }
 
 
@@ -145,15 +145,15 @@ h1 {
 
  
   <!--<h1>Reef Control Panel</h1>-->
-  
+ 
   <div class="reef-container">
 
    <div class="column" style="transform: translateX(0px) translateY(80px);">
-    
+   
     <button class="btn">J4</button>
-    
+   
   </div>
-  
+ 
    <div class="column" style="transform: translateX(50px) translateY(40px);">
     <button class="btn">I4</button>
     <button class="btn">J3</button>
@@ -169,7 +169,7 @@ h1 {
   <div class="column" style="transform: translateX(200px) translateY(-80px);">
     <button class="btn">I1</button>
   </div>
-  <div class="column" style="transform: translateX(300px) translateY(-320px);">
+  <div class="column" style="transform: translateX(300px) translateY(-310px);">
     <button class="btn">G4</button>
     <button class="btn">G3</button>
     <button class="btn">G2</button>
@@ -181,55 +181,55 @@ h1 {
     <button class="btn">H2</button>
     <button class="btn">H1</button>
   </div>
-  <div class="column" style="transform: translateX(450px) translateY(-440px);">
+  <div class="column" style="transform: translateX(450px) translateY(-450px);">
     <button class="btn">F1</button>
   </div>
-  <div class="column" style="transform: translateX(500px) translateY(-520px);">
+  <div class="column" style="transform: translateX(500px) translateY(-535px);">
     <button class="btn">F2</button>
     <button class="btn">E1</button>
   </div>
-  <div class="column" style="transform: translateX(550px) translateY(-640px);">
+  <div class="column" style="transform: translateX(550px) translateY(-662px);">
     <button class="btn">F3</button>
     <button class="btn">E2</button>
   </div>
-  <div class="column" style="transform: translateX(600px) translateY(-760px);">
+  <div class="column" style="transform: translateX(600px) translateY(-790px);">
     <button class="btn">F4</button>
     <button class="btn">E3</button>
   </div>
-  <div class="column" style="transform: translateX(650px) translateY(-840px);">
+  <div class="column" style="transform: translateX(650px) translateY(-872px);">
     <button class="btn">E4</button>
   </div>
-  
+ 
   <!---------------------------------------------------- ------------------------------>
  
 
-   <div class="column" style="transform: translateX(0px) translateY(-400px);">
-    
+   <div class="column" style="transform: translateX(0px) translateY(-370px);">
+   
     <button class="btn">K4</button>
-    
+   
   </div>
-  <div class="column" style="transform: translateX(50px) translateY(-480px);">
-    
+  <div class="column" style="transform: translateX(50px) translateY(-455px);">
+   
     <button class="btn">K3</button>
     <button class="btn">L4</button>
-    
+   
   </div>
-  <div class="column" style="transform: translateX(100px) translateY(-600px);">
-    
+  <div class="column" style="transform: translateX(100px) translateY(-580px);">
+   
     <button class="btn">K2</button>
     <button class="btn">L3</button>
-    
+   
   </div>
-  <div class="column" style="transform: translateX(150px) translateY(-720px);">
-    
+  <div class="column" style="transform: translateX(150px) translateY(-705px);">
+   
     <button class="btn">K1</button>
     <button class="btn">L2</button>
-    
+   
   </div>
-  <div class="column" style="transform: translateX(200px) translateY(-800px);">
-    
+  <div class="column" style="transform: translateX(200px) translateY(-790px);">
+   
     <button class="btn">L1</button>
-    
+   
   </div>
   <div class="column" style="transform: translateX(300px) translateY(-760px);">
     <button class="btn">A1</button>
@@ -237,87 +237,87 @@ h1 {
     <button class="btn">A3</button>
     <button class="btn">A4</button>
   </div>
-  <div class="column" style="transform: translateX(350px) translateY(-920px);">
+  <div class="column" style="transform: translateX(350px) translateY(-930px);">
     <button class="btn">B1</button>
     <button class="btn">B2</button>
     <button class="btn">B3</button>
     <button class="btn">B4</button>
   </div>
    <div class="column" style="transform: translateX(450px) translateY(-1160px);">
-    
+   
     <button class="btn">C1</button>
-    
+   
   </div>
   <div class="column" style="transform: translateX(500px) translateY(-1200px);">
-    
+   
     <button class="btn">D1</button>
     <button class="btn">C2</button>
-    
+   
   </div>
   <div class="column" style="transform: translateX(550px) translateY(-1240px);">
-    
+   
     <button class="btn">D2</button>
     <button class="btn">C3</button>
-    
+   
   </div>
   <div class="column" style="transform: translateX(600px) translateY(-1280px);">
-    
+   
     <button class="btn">D3</button>
     <button class="btn">C4</button>
-    
+   
   </div>
   <div class="column" style="transform: translateX(650px) translateY(-1320px);">
-    
+   
     <button class="btn">D4</button>
-    
+   
   </div>
-  <div class="column" style="transform: translateX(-25px) translateY(-1240px);">
-    
+  <div class="column" style="transform: translateX(150px) translateY(-1575px);">
+   
     <button class="btn">leftCoralStation</button>
-    
+   
   </div>
-  <div class="column" style="transform: translateX(600px) translateY(-1280px);">
-    
+  <div class="column" style="transform: translateX(400px) translateY(-1615px);">
+   
     <button class="btn">rightCoralStation</button>
-    
+   
   </div>
-  <div class="column" style="transform: translateX(-25px) translateY(-2050px);">
-    
+  <div class="column" style="transform: translateX(-25px) translateY(-2100px);">
+   
     <button class="btn">algaeInBarge</button>
-    
+   
   </div>
   <div class="column" style="transform: translateX(680px) translateY(-2100px);">
     <div class = "rotated-90">
     <button class="btn">proccesor</button>
     </div>
-    
+   
   </div>
   <div class="column" style="transform: translateX(200px) translateY(-1550px);">
-    
+   
     <button class="algae-btn">5</button>
   </div>
-  <div class="column" style="transform: translateX(200px) translateY(-2000px);">
-    
+  <div class="column" style="transform: translateX(200px) translateY(-2100px);">
+   
     <button class="algae-btn">1</button>
   </div>
   <div class="column" style="transform: translateX(425px) translateY(-1550px);">
-    
+   
     <button class="algae-btn">4</button>
   </div>
-  <div class="column" style="transform: translateX(425px) translateY(-2000px);">
-    
+  <div class="column" style="transform: translateX(425px) translateY(-2100px);">
+   
     <button class="algae-btn">2</button>
   </div>
-  <div class="column" style="transform: translateX(100px) translateY(-1775px);">
-    
+  <div class="column" style="transform: translateX(100px) translateY(-1850px);">
+   
     <button class="algae-btn">6</button>
   </div>
-  <div class="column" style="transform: translateX(525px) translateY(-1775px);">
-    
+  <div class="column" style="transform: translateX(525px) translateY(-1850px);">
+   
     <button class="algae-btn">3</button>
   </div>
   </div>
-  
+ 
  
 </body>
 </html>

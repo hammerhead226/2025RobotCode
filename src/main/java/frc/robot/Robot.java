@@ -17,7 +17,6 @@ import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerMotorArrangement;
-import frc.robot.subsystems.drive.tabletCommands;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -27,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.SimConstants;
 import frc.robot.constants.SubsystemConstants.LED_STATE;
 import frc.robot.constants.TunerConstants;
+import frc.robot.subsystems.drive.tabletCommands;
 import frc.robot.util.LimelightHelpers;
 import frc.robot.util.ReefPositionsUtil;
 import org.littletonrobotics.junction.LogFileUtil;
@@ -180,7 +180,6 @@ public class Robot extends LoggedRobot {
   private NetworkTableEntry algaeInBarge, proccesor;
 
   tabletCommands tablet = new tabletCommands();
-
 
   @Override
   public void robotInit() {
@@ -943,5 +942,5 @@ public class Robot extends LoggedRobot {
       tablet.setPrcsrVal(true);
       proccesor.setBoolean(false);
     }
-}
+  }
 }

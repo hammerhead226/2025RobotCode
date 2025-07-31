@@ -1,6 +1,5 @@
 package frc.robot;
 
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -21,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.subsystems.drive.tabletCommands;
 import frc.robot.commands.AdjustToReefPost;
 import frc.robot.commands.AlignToBarge;
 import frc.robot.commands.ApproachReef;
@@ -67,6 +65,7 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.drive.tabletCommands;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
@@ -127,7 +126,7 @@ public class RobotContainer {
   private final SendableChooser<Command> autos;
   private DigitalInput brakeSwitch;
 
- tabletCommands tablet = new tabletCommands();
+  tabletCommands tablet = new tabletCommands();
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     switch (SimConstants.currentMode) {
@@ -267,8 +266,6 @@ public class RobotContainer {
     // Set up auto routines
     // NamedCommands.registerCommand("AlignToReefAuto", new AlignToReefAuto(drive,
     // led));
-
-    
 
     NamedCommands.registerCommand(
         "L1",
