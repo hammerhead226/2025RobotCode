@@ -15,13 +15,11 @@ import frc.robot.subsystems.scoral.ScoralRollers;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 
-/** 
- * This sequential command group is meant for intaking a coral 
- * into the rollers. It does this by running the scoral rollers
- * until a coral is detected via a sensor, after which it will
- * run for another quarter of a second before stopping.
+/**
+ * This sequential command group is meant for intaking a coral into the rollers. It does this by
+ * running the scoral rollers until a coral is detected via a sensor, after which it will run for
+ * another quarter of a second before stopping.
  */
-
 public class IntakingCoral extends SequentialCommandGroup {
   /** Creates a new goToSource. */
   private final ScoralRollers scoralRollers;

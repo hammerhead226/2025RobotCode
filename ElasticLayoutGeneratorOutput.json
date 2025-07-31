@@ -1,0 +1,632 @@
+{
+  "name": "Coral",
+  "grid_layout": {
+    "layouts": [
+      {
+        "title": "A",
+        "x": 256.0,
+        "y": 256.0,
+        "width": 128.0,
+        "height": 192.0,
+        "type": "List Layout",
+        "properties": {
+          "label_position": "HIDDEN"
+        },
+        "children": [
+          {
+            "title": "Filled A L4",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled A L4",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Filled A L3",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled A L3",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Filled A L2",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled A L2",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          }
+        ]
+      },
+      {
+        "title": "B",
+        "x": 384.0,
+        "y": 256.0,
+        "width": 128.0,
+        "height": 192.0,
+        "type": "List Layout",
+        "properties": {
+          "label_position": "HIDDEN"
+        },
+        "children": [
+          {
+            "title": "Filled B L4",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled B L4",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Filled B L3",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled B L3",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Filled B L2",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled B L2",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          }
+        ]
+      },
+      {
+        "title": "C",
+        "x": 512.0,
+        "y": 256.0,
+        "width": 128.0,
+        "height": 192.0,
+        "type": "List Layout",
+        "properties": {
+          "label_position": "HIDDEN"
+        },
+        "children": [
+          {
+            "title": "Filled C L4",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled C L4",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Filled C L3",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled C L3",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Filled C L2",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled C L2",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          }
+        ]
+      },
+      {
+        "title": "D",
+        "x": 640.0,
+        "y": 256.0,
+        "width": 128.0,
+        "height": 192.0,
+        "type": "List Layout",
+        "properties": {
+          "label_position": "HIDDEN"
+        },
+        "children": [
+          {
+            "title": "Filled D L4",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled D L4",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Filled D L3",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled D L3",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Filled D L2",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled D L2",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          }
+        ]
+      },
+      {
+        "title": "E",
+        "x": 640.0,
+        "y": 64.0,
+        "width": 128.0,
+        "height": 192.0,
+        "type": "List Layout",
+        "properties": {
+          "label_position": "HIDDEN"
+        },
+        "children": [
+          {
+            "title": "Filled E L4",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled E L4",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Filled E L3",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled E L3",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Filled E L2",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled E L2",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          }
+        ]
+      },
+      {
+        "title": "F",
+        "x": 512.0,
+        "y": 64.0,
+        "width": 128.0,
+        "height": 192.0,
+        "type": "List Layout",
+        "properties": {
+          "label_position": "HIDDEN"
+        },
+        "children": [
+          {
+            "title": "Filled F L4",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled F L4",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Filled F L3",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled F L3",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Filled F L2",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled F L2",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          }
+        ]
+      },
+      {
+        "title": "G",
+        "x": 384.0,
+        "y": 64.0,
+        "width": 128.0,
+        "height": 192.0,
+        "type": "List Layout",
+        "properties": {
+          "label_position": "HIDDEN"
+        },
+        "children": [
+          {
+            "title": "Filled G L4",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled G L4",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Filled G L3",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled G L3",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Filled G L2",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled G L2",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          }
+        ]
+      },
+      {
+        "title": "H",
+        "x": 256.0,
+        "y": 64.0,
+        "width": 128.0,
+        "height": 192.0,
+        "type": "List Layout",
+        "properties": {
+          "label_position": "HIDDEN"
+        },
+        "children": [
+          {
+            "title": "Filled H L4",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled H L4",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Filled H L3",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled H L3",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Filled H L2",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled H L2",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          }
+        ]
+      },
+      {
+        "title": "I",
+        "x": 128.0,
+        "y": 64.0,
+        "width": 128.0,
+        "height": 192.0,
+        "type": "List Layout",
+        "properties": {
+          "label_position": "HIDDEN"
+        },
+        "children": [
+          {
+            "title": "Filled I L4",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled I L4",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Filled I L3",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled I L3",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Filled I L2",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled I L2",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          }
+        ]
+      },
+      {
+        "title": "J",
+        "x": 0.0,
+        "y": 64.0,
+        "width": 128.0,
+        "height": 192.0,
+        "type": "List Layout",
+        "properties": {
+          "label_position": "HIDDEN"
+        },
+        "children": [
+          {
+            "title": "Filled J L4",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled J L4",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Filled J L3",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled J L3",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Filled J L2",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled J L2",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          }
+        ]
+      },
+      {
+        "title": "K",
+        "x": 0.0,
+        "y": 256.0,
+        "width": 128.0,
+        "height": 192.0,
+        "type": "List Layout",
+        "properties": {
+          "label_position": "HIDDEN"
+        },
+        "children": [
+          {
+            "title": "Filled K L4",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled K L4",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Filled K L3",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled K L3",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Filled K L2",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled K L2",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          }
+        ]
+      },
+      {
+        "title": "L",
+        "x": 128.0,
+        "y": 256.0,
+        "width": 128.0,
+        "height": 192.0,
+        "type": "List Layout",
+        "properties": {
+          "label_position": "HIDDEN"
+        },
+        "children": [
+          {
+            "title": "Filled L L4",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled L L4",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Filled L L3",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled L L3",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Filled L L2",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Filled L L2",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          }
+        ]
+      }
+    ],
+    "containers": []
+  }
+}

@@ -147,6 +147,23 @@ public class FieldConstants {
         branchPositions.add(fillLeft);
       }
     }
+
+    // unlike the hashmap, 0-11 -> A-L
+    // public static Pose2d getBranchPositionPose2d(int branch) {
+    //   int branchPositionsIndex = 13 - branch + (AllianceFlipUtil.shouldFlip() ? 6 : 0);
+    //   branchPositionsIndex %= 12;
+    //   Pose2d branchPose =
+    //       FieldConstants.Reef.branchPositions
+    //           .get(branchPositionsIndex)
+    //           .get(FieldConstants.ReefHeight.L1)
+    //           .toPose2d();
+
+    //   // you may ask why we're using the old Drive.transformPerAlliance
+    //   // instead of the newer AllianceFlipUtil functions
+    //   // this is because the former rotates and the later mirrors
+    //   // and I cannot be bothered to condense them into a more sane implementation
+    //   return Drive.transformPerAlliance(branchPose);
+    // }
   }
 
   public static class StagingPositions {

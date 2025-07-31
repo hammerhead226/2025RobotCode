@@ -162,12 +162,11 @@ public class Elevator extends SubsystemBase {
   // TODO fix the fact this information is pipped through so many different classes
   /**
    * determines if the robot should drive slow to avoid tipping due to high center of mass
-   * 
-   * used in SuperStructure's shouldSlowMode()
-   * which is read by RobotContainer to create a trigger
-   * and that trigger is used exclusively to mirror the slow mode boolean in Drive
-   * finally Drive's isSlowMode() is used in AdjustToReef and DriveCommands
-   * 
+   *
+   * <p>used in SuperStructure's shouldSlowMode() which is read by RobotContainer to create a
+   * trigger and that trigger is used exclusively to mirror the slow mode boolean in Drive finally
+   * Drive's isSlowMode() is used in AdjustToReef and DriveCommands
+   *
    * @return whether the robot should be in "slow mode"
    */
   public boolean shouldSlowMode() {

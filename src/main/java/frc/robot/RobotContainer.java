@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.AdjustToReefPost;
 import frc.robot.commands.AlignToBarge;
+import frc.robot.commands.ApproachBranch;
 import frc.robot.commands.ApproachReef;
 import frc.robot.commands.BargeExtend;
 import frc.robot.commands.DriveCommands;
@@ -39,6 +40,7 @@ import frc.robot.commands.SetClimberArmTarget;
 import frc.robot.commands.SetElevatorTarget;
 import frc.robot.commands.SetScoralArmTarget;
 import frc.robot.commands.ToReefHeight;
+import frc.robot.constants.Branch;
 import frc.robot.constants.RobotMap;
 import frc.robot.constants.SimConstants;
 import frc.robot.constants.SubsystemConstants;
@@ -119,6 +121,8 @@ public class RobotContainer {
   private Trigger resetLimelight;
   private Trigger turnLimelightON;
   private Trigger autoAlignRelease;
+  private Trigger L1CoralPlusOne;
+  private Trigger L1CoralMinusOne;
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -453,6 +457,8 @@ public class RobotContainer {
                     || (drive.isBargeAutoAlignDone));
     resetLimelight = new Trigger(() -> SmartDashboard.getBoolean("Reset", false));
     turnLimelightON = new Trigger(() -> SmartDashboard.getBoolean("Enable", false));
+    L1CoralPlusOne = new Trigger(() -> SmartDashboard.getBoolean("L1 Coral +1", false));
+    L1CoralMinusOne = new Trigger(() -> SmartDashboard.getBoolean("L1 Coral -1", false));
 
     autoAlignRelease =
         new Trigger(
@@ -499,6 +505,21 @@ public class RobotContainer {
   private void configureButtonBindings() {
     resetLimelight.onTrue(vision.resetLimelight().ignoringDisable(true));
     turnLimelightON.onTrue(vision.activateLimelight().ignoringDisable(true));
+
+    L1CoralPlusOne.onTrue(
+        new InstantCommand(
+            () -> {
+              SmartDashboard.putNumber("L1 Coral", 1 + SmartDashboard.getNumber("L1 Coral", 0));
+              SmartDashboard.putBoolean("L1 Coral +1", false);
+            }));
+
+    L1CoralMinusOne.onTrue(
+        new InstantCommand(
+            () -> {
+              SmartDashboard.putNumber("L1 Coral", -1 + SmartDashboard.getNumber("L1 Coral", 0));
+              SmartDashboard.putBoolean("L1 Coral -1", false);
+            }));
+
     slowModeTrigger.onTrue(new InstantCommand(() -> drive.enableSlowMode(true)));
     slowModeTrigger.onFalse(new InstantCommand(() -> drive.enableSlowMode(false)));
     reefAutoAlignTrigger.onTrue(
@@ -526,9 +547,7 @@ public class RobotContainer {
     manipControls();
   }
 
-  /**
-   * Binds driveController buttons to commands
-   */
+  /** Binds driveController buttons to commands */
   private void driverControls() {
 
     // reset odometry pose
@@ -552,7 +571,7 @@ public class RobotContainer {
             () -> -driveController.getLeftX(),
             () -> -driveController.getRightX()));
 
-    // align to the nearest reef face's most clockwise post (left when facing the reef) 
+    // align to the nearest reef face's most clockwise post (left when facing the reef)
     driveController
         .leftTrigger()
         .and(() -> !driveController.rightTrigger().getAsBoolean())
@@ -603,6 +622,75 @@ public class RobotContainer {
                         superStructure,
                         true,
                         () -> driveController.rightTrigger().getAsBoolean()))));
+
+    // driveController
+    //     .y()
+    //     .and(() -> !driveController.leftTrigger().getAsBoolean())
+    //     .whileTrue(
+    //         new ParallelCommandGroup(
+    //             new ConditionalCommand(
+    //                 new IntakingCoral(scoralRollers),
+    //                 new InstantCommand(),
+    //                 () -> scoralRollers.seesCoral() != CoralState.SENSOR),
+    //             new SequentialCommandGroup(
+    //                 new ApproachReef(
+    //                     drive, led, superStructure, true, () ->
+    // driveController.y().getAsBoolean()),
+    //                 new WaitUntilCommand(
+    //                     () -> superStructure.atGoals() && superStructure.isCurrentAReefState()),
+    //                 new AdjustToReefPost(
+    //                     drive,
+    //                     scoralArm,
+    //                     superStructure,
+    //                     true,
+    //                     () -> driveController.y().getAsBoolean()))));
+
+    driveController
+        .y()
+        .whileTrue(
+            new ConditionalCommand(
+                new ParallelCommandGroup(
+                    new InstantCommand(
+                        () -> {
+                          Branch branch = drive.getAutoScoreBranch();
+                          SuperStructureState state;
+                          switch (branch.getLevel()) {
+                            case 2:
+                              state = SuperStructureState.L2;
+                              break;
+                            case 3:
+                              state = SuperStructureState.L3;
+                              break;
+                            case 4:
+                              state = SuperStructureState.L4;
+                              break;
+                            default:
+                              state = SuperStructureState.L1;
+                              break;
+                          }
+                          superStructure.setWantedState(state);
+                        }),
+                    new ConditionalCommand(
+                        new IntakingCoral(scoralRollers),
+                        new InstantCommand(),
+                        () -> scoralRollers.seesCoral() != CoralState.SENSOR),
+                    new SequentialCommandGroup(
+                        new ApproachBranch(
+                            drive,
+                            led,
+                            superStructure,
+                            drive::getAutoScoreBranch,
+                            () -> driveController.y().getAsBoolean()),
+                        new WaitUntilCommand(
+                            () -> superStructure.atGoals() && superStructure.isCurrentAReefState()),
+                        new AdjustToReefPost(
+                            drive,
+                            scoralArm,
+                            superStructure,
+                            true,
+                            () -> driveController.y().getAsBoolean()))),
+                new InstantCommand(() -> led.setState(LED_STATE.AUTOSCORE_FAIL_WHITE)),
+                () -> drive.getAutoScoreBranch() != null));
 
     // turns the led red when either reef align button is pressed
     autoAlignRelease.onTrue(new InstantCommand(() -> led.setState(LED_STATE.RED)));
@@ -666,7 +754,8 @@ public class RobotContainer {
                         superStructure,
                         () -> driveController.leftBumper().getAsBoolean())));
 
-    // TODO: remove following trigger since it is redundant with the led setting within the superStructure
+    // TODO: remove following trigger since it is redundant with the led setting within the
+    // superStructure
     driveController
         .leftBumper()
         .onFalse(new InstantCommand(() -> led.setState(LED_STATE.PINK_LAVENDER)));
@@ -702,9 +791,7 @@ public class RobotContainer {
                     () -> superStructure.setWantedState(SuperStructureState.SCORING_CORAL))));
   }
 
-  /**
-   * Binds manipController (operator) buttons to commands
-   */
+  /** Binds manipController (operator) buttons to commands */
   private void manipControls() {
     // set scoring level
     manipController

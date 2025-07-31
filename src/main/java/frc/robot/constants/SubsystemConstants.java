@@ -120,7 +120,8 @@ public final class SubsystemConstants {
     FLASHING_RED,
     FLASHING_BLUE,
     FIRE,
-    OFF
+    OFF,
+    AUTOSCORE_FAIL_WHITE
   }
 
   public static enum Mode {

@@ -11,10 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 
-/**
- * This command is meant to vibrate the controller for 200 milliseconds.
- */
-
+/** This command is meant to vibrate the controller for 200 milliseconds. */
 public class Rumble extends Command {
   CommandXboxController controller;
   Timer timer;

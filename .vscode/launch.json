@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "ElasticLayoutGenerator",
+      "request": "launch",
+      "mainClass": "frc.robot.util.ElasticLayoutGenerator",
+      "projectName": "2025RobotCode"
+    },
+    {
+      "type": "java",
       "name": "Main",
       "request": "launch",
       "mainClass": "frc.robot.Main",

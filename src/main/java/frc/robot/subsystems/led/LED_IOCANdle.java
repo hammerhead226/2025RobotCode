@@ -92,8 +92,12 @@ public class LED_IOCANdle implements LED_IO {
 
   @Override
   public void setLEDState(LED_STATE state) {
-    ledState = state;
+    ledState = state; // TODO: why is this a variable?
     switch (ledState) {
+      case AUTOSCORE_FAIL_WHITE:
+        candle.clearAnimation(0);
+        candle.setLEDs(255, 255, 255, 255, 0, SubsystemConstants.LEDConstants.NUMBER_LEDS);
+        break;
       case RED:
         // TODO:: reef level selected
         candle.clearAnimation(0);

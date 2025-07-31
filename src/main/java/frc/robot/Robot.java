@@ -20,6 +20,7 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerMotorArrangement;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.Threads;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.SimConstants;
@@ -114,6 +115,22 @@ public class Robot extends LoggedRobot {
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
+
+    for (char pipe = 'A'; pipe <= 'L'; pipe++) {
+      for (int level = 2; level <= 4; level++) {
+        SmartDashboard.putBoolean("Filled " + pipe + " L" + level, false);
+      }
+    }
+
+    for (char pipe = 'A'; pipe <= 'L'; pipe += 2) {
+      SmartDashboard.putBoolean("Algae " + pipe + (char) (pipe + 1), true);
+    }
+
+    SmartDashboard.putBoolean("L1 Coral +1", false);
+    SmartDashboard.putNumber("L1 Coral", 0);
+    SmartDashboard.putBoolean("L1 Coral -1", false);
+
+    SmartDashboard.putBoolean("Coop", false);
   }
 
   /** This function is called periodically during all modes. */

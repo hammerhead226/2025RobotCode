@@ -45,10 +45,12 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.constants.Branch;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.SimConstants;
 import frc.robot.constants.SimConstants.Mode;
@@ -60,6 +62,10 @@ import frc.robot.subsystems.scoral.DistanceSensorIOInputsAutoLogged;
 import frc.robot.subsystems.vision.ObjectDetection;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.LocalADStarAK;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -139,6 +145,8 @@ public class Drive extends SubsystemBase {
       };
   private SwerveDrivePoseEstimator poseEstimator =
       new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+
+  private Branch autoScoreBranch = null;
 
   public Drive(
       GyroIO gyroIO,
@@ -281,6 +289,8 @@ public class Drive extends SubsystemBase {
     Logger.recordOutput("Swerve/overallChassisSpeed", chassisSpeedMetersPerSec);
 
     Logger.recordOutput("should pid align", shouldEndPath());
+
+    autoScoreBranch = updateAutoScoreBranch();
   }
 
   /**
@@ -515,6 +525,67 @@ public class Drive extends SubsystemBase {
   // return nearestSide;
   // }
 
+  private Branch updateAutoScoreBranch() {
+    List<Branch> emptyBranches = new ArrayList<>();
+    int[] scoredPerLevel = {-1, 0, 0, 0, 0}; // unused, L1, L2, L3, L4
+
+    for (int pipe = 0; pipe < 12; pipe++) {
+      for (int level = 2; level <= 4; level++) {
+        String branchKey = "Filled " + (char) ('A' + pipe) + " L" + level;
+        boolean branchFilled = SmartDashboard.getBoolean(branchKey, true);
+        String algaeKey = "Algae " + (char) ('A' + pipe / 2 * 2) + (char) ('A' + pipe / 2 * 2 + 1);
+        boolean algaeFilled = SmartDashboard.getBoolean(algaeKey, true);
+        int algaeLevel = (pipe / 2 + 1) % 2 + 2;
+
+        if (!branchFilled && !(algaeFilled && level == algaeLevel)) {
+          emptyBranches.add(Branch.getBranch(pipe, level));
+        }
+
+        if (branchFilled) {
+          scoredPerLevel[level]++;
+        }
+      }
+    }
+
+    if (emptyBranches.size() == 0) {
+      return null;
+    }
+
+    scoredPerLevel[1] = (int) SmartDashboard.getNumber("L1 Coral", 0);
+    int reefRPLevelCount = 0;
+    for (int numScored : scoredPerLevel) {
+      if (numScored > 7) {
+        reefRPLevelCount++;
+      }
+    }
+    if (SmartDashboard.getBoolean("Coop", false)) {
+      reefRPLevelCount++;
+    }
+    boolean reefRPFufilled = reefRPLevelCount >= 4;
+
+    Comparator<Branch> comparator = Comparator.comparing((Branch b) -> 0); // blank for convenience
+
+    comparator =
+        comparator.thenComparing(
+            (Branch b) -> scoredPerLevel[b.getLevel()] < 7 ? 1 : 0); // contributes to coral RP
+    comparator =
+        comparator.thenComparing(
+            (Branch b) ->
+                -1
+                    * this.getPose()
+                        .getTranslation()
+                        .getDistance(
+                            transformPerAlliance(
+                                b.getPose().toPose2d().getTranslation()))); // lowest distance
+    comparator = comparator.thenComparing((Branch b) -> b.getLevel()); // highest level
+
+    return Collections.max(emptyBranches, comparator);
+  }
+
+  public Branch getAutoScoreBranch() {
+    return autoScoreBranch;
+  }
+
   public Pose2d getNearestCenter() {
     int index = getNearestParition(6);
     Logger.recordOutput("Debug Driver Alignment/align to reef center target index", index);
@@ -558,9 +629,9 @@ public class Drive extends SubsystemBase {
     return lastReefFieldPose;
   }
 
-  public Pose2d getLastReefFieldPose() {
-    return lastReefFieldPose;
-  }
+  // public Pose2d getLastReefFieldPose() {
+  //   return lastReefFieldPose;
+  // }
 
   public int getNearestParition(int partitions) {
     Translation2d start = transformPerAlliance(FieldConstants.Reef.center);
