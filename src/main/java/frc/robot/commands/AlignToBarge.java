@@ -20,6 +20,7 @@ import org.littletonrobotics.junction.Logger;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AlignToBarge extends Command {
+
   private final Drive drive;
   private final LED led;
   private boolean pointsTooClose;
@@ -49,6 +50,7 @@ public class AlignToBarge extends Command {
   @Override
   public void initialize() {
     drive.isBargeAutoAlignDone = false;
+    drive.isBargeAutoExtendReady = false;
     isPathFinished = false;
     led.setState(LED_STATE.FLASHING_RED);
 
@@ -89,6 +91,10 @@ public class AlignToBarge extends Command {
   public void execute() {
     distanceToTarget = drive.getPose().getTranslation().getDistance(targetPose.getTranslation());
     if (!pointsTooClose) {
+      if (distanceToTarget <= 0.6 /*meters*/) {
+        drive.isBargeAutoExtendReady = true;
+      }
+
       isPathFinished = pathCommand.isFinished();
       pathCommand.execute();
     }
@@ -98,6 +104,7 @@ public class AlignToBarge extends Command {
   @Override
   public void end(boolean interrupted) {
     drive.stop();
+    drive.isBargeAutoExtendReady = false;
     if (!pointsTooClose) {
       pathCommand.cancel();
 

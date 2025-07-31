@@ -129,6 +129,7 @@ public class Drive extends SubsystemBase {
   public boolean slowMode = false;
   public boolean isReefAutoAlignDone = false;
   public boolean isBargeAutoAlignDone = false;
+  public boolean isBargeAutoExtendReady = false;
 
   private SwerveModulePosition[] lastModulePositions = // For delta tracking
       new SwerveModulePosition[] {

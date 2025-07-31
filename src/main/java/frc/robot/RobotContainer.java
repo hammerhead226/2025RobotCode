@@ -119,6 +119,7 @@ public class RobotContainer {
   private Trigger resetLimelight;
   private Trigger turnLimelightON;
   private Trigger autoAlignRelease;
+  private Trigger autoBargeExtend;
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -451,6 +452,7 @@ public class RobotContainer {
                         && superStructure.atGoals()
                         && superStructure.isCurrentAReefState())
                     || (drive.isBargeAutoAlignDone));
+    autoBargeExtend = new Trigger(() -> drive.isBargeAutoExtendReady);
     resetLimelight = new Trigger(() -> SmartDashboard.getBoolean("Reset", false));
     turnLimelightON = new Trigger(() -> SmartDashboard.getBoolean("Enable", false));
 
@@ -516,6 +518,17 @@ public class RobotContainer {
             .andThen(new Rumble(driveController))
             .andThen(new InstantCommand(() -> drive.isBargeAutoAlignDone = false))
             .andThen(new InstantCommand(() -> drive.isReefAutoAlignDone = false)));
+
+    autoBargeExtend.onTrue(
+        new InstantCommand(() -> superStructure.setWantedState(SuperStructureState.BARGE_EXTEND))
+            .andThen(
+                new ReinitializingCommand(
+                        () -> superStructure.getSuperStructureCommand(),
+                        elevator,
+                        scoralArm,
+                        scoralRollers,
+                        led)
+                    .andThen(new InstantCommand(() -> superStructure.nextState()))));
 
     elevatorBrakeTrigger.onTrue(
         new InstantCommand(() -> elevator.setBrake(false)).ignoringDisable(true));
