@@ -17,6 +17,7 @@ import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerMotorArrangement;
+import frc.robot.subsystems.drive.tabletCommands;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -178,6 +179,9 @@ public class Robot extends LoggedRobot {
   private NetworkTableEntry leftCoralStation, rightCoralStation;
   private NetworkTableEntry algaeInBarge, proccesor;
 
+  tabletCommands tablet = new tabletCommands();
+
+
   @Override
   public void robotInit() {
     ReefPositionsUtil.printOffsetPoses();
@@ -335,216 +339,256 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
-
-  /** This function is called once when the robot is first started up. */
-  @Override
-  public void simulationInit() {}
-
-  /** This function is called periodically whilst in simulation. */
-  @Override
-  public void simulationPeriodic() {
+  public void testPeriodic() {
     if (a4Button.getBoolean(false)) {
       System.out.println("A4 button pressed!");
+      tablet.setA4Val(true);
       a4Button.setBoolean(false);
     }
     if (a3Button.getBoolean(false)) {
       System.out.println("A3 button pressed!");
+      tablet.setA3Val(true);
       a3Button.setBoolean(false);
     }
     if (a2Button.getBoolean(false)) {
       System.out.println("A2 button pressed!");
+      tablet.setA2Val(true);
       a2Button.setBoolean(false);
     }
     if (a1Button.getBoolean(false)) {
       System.out.println("A1 button pressed!");
+      tablet.setA1Val(true);
       a1Button.setBoolean(false);
     }
 
     if (b4Button.getBoolean(false)) {
       System.out.println("B4 button pressed!");
+      tablet.setB4Val(true);
       b4Button.setBoolean(false);
     }
     if (b3Button.getBoolean(false)) {
       System.out.println("B3 button pressed!");
+      tablet.setB3Val(true);
       b3Button.setBoolean(false);
     }
     if (b2Button.getBoolean(false)) {
       System.out.println("B2 button pressed!");
+      tablet.setB2Val(true);
       b2Button.setBoolean(false);
     }
     if (b1Button.getBoolean(false)) {
       System.out.println("B1 button pressed!");
+      tablet.setB1Val(true);
       b1Button.setBoolean(false);
     }
 
     if (c4Button.getBoolean(false)) {
       System.out.println("C4 button pressed!");
+      tablet.setC4Val(true);
       c4Button.setBoolean(false);
     }
     if (c3Button.getBoolean(false)) {
       System.out.println("C3 button pressed!");
+      tablet.setC3Val(true);
       c3Button.setBoolean(false);
     }
     if (c2Button.getBoolean(false)) {
       System.out.println("C2 button pressed!");
+      tablet.setC2Val(true);
       c2Button.setBoolean(false);
     }
     if (c1Button.getBoolean(false)) {
       System.out.println("C1 button pressed!");
+      tablet.setC1Val(true);
       c1Button.setBoolean(false);
     }
 
     if (d4Button.getBoolean(false)) {
       System.out.println("D4 button pressed!");
+      tablet.setD4Val(true);
       d4Button.setBoolean(false);
     }
     if (d3Button.getBoolean(false)) {
       System.out.println("D3 button pressed!");
+      tablet.setD3Val(true);
       d3Button.setBoolean(false);
     }
     if (d2Button.getBoolean(false)) {
       System.out.println("D2 button pressed!");
+      tablet.setD2Val(true);
       d2Button.setBoolean(false);
     }
     if (d1Button.getBoolean(false)) {
       System.out.println("D1 button pressed!");
+      tablet.setD1Val(true);
       d1Button.setBoolean(false);
     }
 
     if (e4Button.getBoolean(false)) {
       System.out.println("E4 button pressed!");
+      tablet.setE4Val(true);
       e4Button.setBoolean(false);
     }
     if (e3Button.getBoolean(false)) {
       System.out.println("E3 button pressed!");
+      tablet.setE3Val(true);
       e3Button.setBoolean(false);
     }
     if (e2Button.getBoolean(false)) {
       System.out.println("E2 button pressed!");
+      tablet.setE2Val(true);
       e2Button.setBoolean(false);
     }
     if (e1Button.getBoolean(false)) {
       System.out.println("E1 button pressed!");
+      tablet.setE1Val(true);
       e1Button.setBoolean(false);
     }
 
     if (f4Button.getBoolean(false)) {
       System.out.println("F4 button pressed!");
+      tablet.setF4Val(true);
       f4Button.setBoolean(false);
     }
     if (f3Button.getBoolean(false)) {
       System.out.println("F3 button pressed!");
+      tablet.setF3Val(true);
       f3Button.setBoolean(false);
     }
     if (f2Button.getBoolean(false)) {
       System.out.println("F2 button pressed!");
+      tablet.setF2Val(true);
       f2Button.setBoolean(false);
     }
     if (f1Button.getBoolean(false)) {
       System.out.println("F1 button pressed!");
+      tablet.setF1Val(true);
       f1Button.setBoolean(false);
     }
 
     if (g4Button.getBoolean(false)) {
       System.out.println("G4 button pressed!");
+      tablet.setG4Val(true);
       g4Button.setBoolean(false);
     }
     if (g3Button.getBoolean(false)) {
       System.out.println("G3 button pressed!");
+      tablet.setG3Val(true);
       g3Button.setBoolean(false);
     }
     if (g2Button.getBoolean(false)) {
       System.out.println("G2 button pressed!");
+      tablet.setG2Val(true);
       g2Button.setBoolean(false);
     }
     if (g1Button.getBoolean(false)) {
       System.out.println("G1 button pressed!");
+      tablet.setG1Val(true);
       g1Button.setBoolean(false);
     }
 
     if (h4Button.getBoolean(false)) {
       System.out.println("H4 button pressed!");
+      tablet.setH4Val(true);
       h4Button.setBoolean(false);
     }
     if (h3Button.getBoolean(false)) {
       System.out.println("H3 button pressed!");
+      tablet.setH3Val(true);
       h3Button.setBoolean(false);
     }
     if (h2Button.getBoolean(false)) {
       System.out.println("H2 button pressed!");
+      tablet.setH2Val(true);
       h2Button.setBoolean(false);
     }
     if (h1Button.getBoolean(false)) {
       System.out.println("H1 button pressed!");
+      tablet.setH1Val(true);
       h1Button.setBoolean(false);
     }
 
     if (i4Button.getBoolean(false)) {
       System.out.println("I4 button pressed!");
+      tablet.setI4Val(true);
       i4Button.setBoolean(false);
     }
     if (i3Button.getBoolean(false)) {
       System.out.println("I3 button pressed!");
+      tablet.setI3Val(true);
       i3Button.setBoolean(false);
     }
     if (i2Button.getBoolean(false)) {
       System.out.println("I2 button pressed!");
+      tablet.setI2Val(true);
       i2Button.setBoolean(false);
     }
     if (i1Button.getBoolean(false)) {
       System.out.println("I1 button pressed!");
+      tablet.setI1Val(true);
       i1Button.setBoolean(false);
     }
 
     if (j4Button.getBoolean(false)) {
       System.out.println("J4 button pressed!");
+      tablet.setJ4Val(true);
       j4Button.setBoolean(false);
     }
     if (j3Button.getBoolean(false)) {
       System.out.println("J3 button pressed!");
+      tablet.setJ3Val(true);
       j3Button.setBoolean(false);
     }
     if (j2Button.getBoolean(false)) {
       System.out.println("J2 button pressed!");
+      tablet.setJ2Val(true);
       j2Button.setBoolean(false);
     }
     if (j1Button.getBoolean(false)) {
       System.out.println("J1 button pressed!");
+      tablet.setJ1Val(true);
       j1Button.setBoolean(false);
     }
 
     if (k4Button.getBoolean(false)) {
       System.out.println("K4 button pressed!");
+      tablet.setK4Val(true);
       k4Button.setBoolean(false);
     }
     if (k3Button.getBoolean(false)) {
       System.out.println("K3 button pressed!");
+      tablet.setK3Val(true);
       k3Button.setBoolean(false);
     }
     if (k2Button.getBoolean(false)) {
       System.out.println("K2 button pressed!");
+      tablet.setK2Val(true);
       k2Button.setBoolean(false);
     }
     if (k1Button.getBoolean(false)) {
       System.out.println("K1 button pressed!");
+      tablet.setK1Val(true);
       k1Button.setBoolean(false);
     }
 
     if (l4Button.getBoolean(false)) {
       System.out.println("L4 button pressed!");
+      tablet.setL4Val(true);
       l4Button.setBoolean(false);
     }
     if (l3Button.getBoolean(false)) {
       System.out.println("L3 button pressed!");
+      tablet.setL3Val(true);
       l3Button.setBoolean(false);
     }
     if (l2Button.getBoolean(false)) {
       System.out.println("L2 button pressed!");
+      tablet.setL2Val(true);
       l2Button.setBoolean(false);
     }
     if (l1Button.getBoolean(false)) {
       System.out.println("L1 button pressed!");
+      tablet.setL1Val(true);
       l1Button.setBoolean(false);
     }
 
@@ -575,19 +619,329 @@ public class Robot extends LoggedRobot {
 
     if (leftCoralStation.getBoolean(false)) {
       System.out.println("Left Coral Station button pressed!");
+      tablet.setLCSVal(true);
       leftCoralStation.setBoolean(false);
     }
     if (rightCoralStation.getBoolean(false)) {
       System.out.println("Right Coral Station button pressed!");
+      tablet.setRCSVal(true);
       rightCoralStation.setBoolean(false);
     }
     if (algaeInBarge.getBoolean(false)) {
       System.out.println("Algae In Barge button pressed!");
+      tablet.setBrgVal(true);
       algaeInBarge.setBoolean(false);
     }
     if (proccesor.getBoolean(false)) {
       System.out.println("Processor button pressed!");
+      tablet.setPrcsrVal(true);
       proccesor.setBoolean(false);
     }
   }
+
+  /** This function is called once when the robot is first started up. */
+  @Override
+  public void simulationInit() {}
+
+  /** This function is called periodically whilst in simulation. */
+  @Override
+  public void simulationPeriodic() {
+    if (a4Button.getBoolean(false)) {
+      System.out.println("A4 button pressed!");
+      tablet.setA4Val(true);
+      a4Button.setBoolean(false);
+    }
+    if (a3Button.getBoolean(false)) {
+      System.out.println("A3 button pressed!");
+      tablet.setA3Val(true);
+      a3Button.setBoolean(false);
+    }
+    if (a2Button.getBoolean(false)) {
+      System.out.println("A2 button pressed!");
+      tablet.setA2Val(true);
+      a2Button.setBoolean(false);
+    }
+    if (a1Button.getBoolean(false)) {
+      System.out.println("A1 button pressed!");
+      tablet.setA1Val(true);
+      a1Button.setBoolean(false);
+    }
+
+    if (b4Button.getBoolean(false)) {
+      System.out.println("B4 button pressed!");
+      tablet.setB4Val(true);
+      b4Button.setBoolean(false);
+    }
+    if (b3Button.getBoolean(false)) {
+      System.out.println("B3 button pressed!");
+      tablet.setB3Val(true);
+      b3Button.setBoolean(false);
+    }
+    if (b2Button.getBoolean(false)) {
+      System.out.println("B2 button pressed!");
+      tablet.setB2Val(true);
+      b2Button.setBoolean(false);
+    }
+    if (b1Button.getBoolean(false)) {
+      System.out.println("B1 button pressed!");
+      tablet.setB1Val(true);
+      b1Button.setBoolean(false);
+    }
+
+    if (c4Button.getBoolean(false)) {
+      System.out.println("C4 button pressed!");
+      tablet.setC4Val(true);
+      c4Button.setBoolean(false);
+    }
+    if (c3Button.getBoolean(false)) {
+      System.out.println("C3 button pressed!");
+      tablet.setC3Val(true);
+      c3Button.setBoolean(false);
+    }
+    if (c2Button.getBoolean(false)) {
+      System.out.println("C2 button pressed!");
+      tablet.setC2Val(true);
+      c2Button.setBoolean(false);
+    }
+    if (c1Button.getBoolean(false)) {
+      System.out.println("C1 button pressed!");
+      tablet.setC1Val(true);
+      c1Button.setBoolean(false);
+    }
+
+    if (d4Button.getBoolean(false)) {
+      System.out.println("D4 button pressed!");
+      tablet.setD4Val(true);
+      d4Button.setBoolean(false);
+    }
+    if (d3Button.getBoolean(false)) {
+      System.out.println("D3 button pressed!");
+      tablet.setD3Val(true);
+      d3Button.setBoolean(false);
+    }
+    if (d2Button.getBoolean(false)) {
+      System.out.println("D2 button pressed!");
+      tablet.setD2Val(true);
+      d2Button.setBoolean(false);
+    }
+    if (d1Button.getBoolean(false)) {
+      System.out.println("D1 button pressed!");
+      tablet.setD1Val(true);
+      d1Button.setBoolean(false);
+    }
+
+    if (e4Button.getBoolean(false)) {
+      System.out.println("E4 button pressed!");
+      tablet.setE4Val(true);
+      e4Button.setBoolean(false);
+    }
+    if (e3Button.getBoolean(false)) {
+      System.out.println("E3 button pressed!");
+      tablet.setE3Val(true);
+      e3Button.setBoolean(false);
+    }
+    if (e2Button.getBoolean(false)) {
+      System.out.println("E2 button pressed!");
+      tablet.setE2Val(true);
+      e2Button.setBoolean(false);
+    }
+    if (e1Button.getBoolean(false)) {
+      System.out.println("E1 button pressed!");
+      tablet.setE1Val(true);
+      e1Button.setBoolean(false);
+    }
+
+    if (f4Button.getBoolean(false)) {
+      System.out.println("F4 button pressed!");
+      tablet.setF4Val(true);
+      f4Button.setBoolean(false);
+    }
+    if (f3Button.getBoolean(false)) {
+      System.out.println("F3 button pressed!");
+      tablet.setF3Val(true);
+      f3Button.setBoolean(false);
+    }
+    if (f2Button.getBoolean(false)) {
+      System.out.println("F2 button pressed!");
+      tablet.setF2Val(true);
+      f2Button.setBoolean(false);
+    }
+    if (f1Button.getBoolean(false)) {
+      System.out.println("F1 button pressed!");
+      tablet.setF1Val(true);
+      f1Button.setBoolean(false);
+    }
+
+    if (g4Button.getBoolean(false)) {
+      System.out.println("G4 button pressed!");
+      tablet.setG4Val(true);
+      g4Button.setBoolean(false);
+    }
+    if (g3Button.getBoolean(false)) {
+      System.out.println("G3 button pressed!");
+      tablet.setG3Val(true);
+      g3Button.setBoolean(false);
+    }
+    if (g2Button.getBoolean(false)) {
+      System.out.println("G2 button pressed!");
+      tablet.setG2Val(true);
+      g2Button.setBoolean(false);
+    }
+    if (g1Button.getBoolean(false)) {
+      System.out.println("G1 button pressed!");
+      tablet.setG1Val(true);
+      g1Button.setBoolean(false);
+    }
+
+    if (h4Button.getBoolean(false)) {
+      System.out.println("H4 button pressed!");
+      tablet.setH4Val(true);
+      h4Button.setBoolean(false);
+    }
+    if (h3Button.getBoolean(false)) {
+      System.out.println("H3 button pressed!");
+      tablet.setH3Val(true);
+      h3Button.setBoolean(false);
+    }
+    if (h2Button.getBoolean(false)) {
+      System.out.println("H2 button pressed!");
+      tablet.setH2Val(true);
+      h2Button.setBoolean(false);
+    }
+    if (h1Button.getBoolean(false)) {
+      System.out.println("H1 button pressed!");
+      tablet.setH1Val(true);
+      h1Button.setBoolean(false);
+    }
+
+    if (i4Button.getBoolean(false)) {
+      System.out.println("I4 button pressed!");
+      tablet.setI4Val(true);
+      i4Button.setBoolean(false);
+    }
+    if (i3Button.getBoolean(false)) {
+      System.out.println("I3 button pressed!");
+      tablet.setI3Val(true);
+      i3Button.setBoolean(false);
+    }
+    if (i2Button.getBoolean(false)) {
+      System.out.println("I2 button pressed!");
+      tablet.setI2Val(true);
+      i2Button.setBoolean(false);
+    }
+    if (i1Button.getBoolean(false)) {
+      System.out.println("I1 button pressed!");
+      tablet.setI1Val(true);
+      i1Button.setBoolean(false);
+    }
+
+    if (j4Button.getBoolean(false)) {
+      System.out.println("J4 button pressed!");
+      tablet.setJ4Val(true);
+      j4Button.setBoolean(false);
+    }
+    if (j3Button.getBoolean(false)) {
+      System.out.println("J3 button pressed!");
+      tablet.setJ3Val(true);
+      j3Button.setBoolean(false);
+    }
+    if (j2Button.getBoolean(false)) {
+      System.out.println("J2 button pressed!");
+      tablet.setJ2Val(true);
+      j2Button.setBoolean(false);
+    }
+    if (j1Button.getBoolean(false)) {
+      System.out.println("J1 button pressed!");
+      tablet.setJ1Val(true);
+      j1Button.setBoolean(false);
+    }
+
+    if (k4Button.getBoolean(false)) {
+      System.out.println("K4 button pressed!");
+      tablet.setK4Val(true);
+      k4Button.setBoolean(false);
+    }
+    if (k3Button.getBoolean(false)) {
+      System.out.println("K3 button pressed!");
+      tablet.setK3Val(true);
+      k3Button.setBoolean(false);
+    }
+    if (k2Button.getBoolean(false)) {
+      System.out.println("K2 button pressed!");
+      tablet.setK2Val(true);
+      k2Button.setBoolean(false);
+    }
+    if (k1Button.getBoolean(false)) {
+      System.out.println("K1 button pressed!");
+      tablet.setK1Val(true);
+      k1Button.setBoolean(false);
+    }
+
+    if (l4Button.getBoolean(false)) {
+      System.out.println("L4 button pressed!");
+      tablet.setL4Val(true);
+      l4Button.setBoolean(false);
+    }
+    if (l3Button.getBoolean(false)) {
+      System.out.println("L3 button pressed!");
+      tablet.setL3Val(true);
+      l3Button.setBoolean(false);
+    }
+    if (l2Button.getBoolean(false)) {
+      System.out.println("L2 button pressed!");
+      tablet.setL2Val(true);
+      l2Button.setBoolean(false);
+    }
+    if (l1Button.getBoolean(false)) {
+      System.out.println("L1 button pressed!");
+      tablet.setL1Val(true);
+      l1Button.setBoolean(false);
+    }
+
+    if (Alg1.getBoolean(false)) {
+      System.out.println("Alg1 button pressed!");
+      Alg1.setBoolean(false);
+    }
+    if (Alg2.getBoolean(false)) {
+      System.out.println("Alg2 button pressed!");
+      Alg2.setBoolean(false);
+    }
+    if (Alg3.getBoolean(false)) {
+      System.out.println("Alg3 button pressed!");
+      Alg3.setBoolean(false);
+    }
+    if (Alg4.getBoolean(false)) {
+      System.out.println("Alg4 button pressed!");
+      Alg4.setBoolean(false);
+    }
+    if (Alg5.getBoolean(false)) {
+      System.out.println("Alg5 button pressed!");
+      Alg5.setBoolean(false);
+    }
+    if (Alg6.getBoolean(false)) {
+      System.out.println("Alg6 button pressed!");
+      Alg6.setBoolean(false);
+    }
+
+    if (leftCoralStation.getBoolean(false)) {
+      System.out.println("Left Coral Station button pressed!");
+      tablet.setLCSVal(true);
+      leftCoralStation.setBoolean(false);
+    }
+    if (rightCoralStation.getBoolean(false)) {
+      System.out.println("Right Coral Station button pressed!");
+      tablet.setRCSVal(true);
+      rightCoralStation.setBoolean(false);
+    }
+    if (algaeInBarge.getBoolean(false)) {
+      System.out.println("Algae In Barge button pressed!");
+      tablet.setBrgVal(true);
+      algaeInBarge.setBoolean(false);
+    }
+    if (proccesor.getBoolean(false)) {
+      System.out.println("Processor button pressed!");
+      tablet.setPrcsrVal(true);
+      proccesor.setBoolean(false);
+    }
+}
 }
