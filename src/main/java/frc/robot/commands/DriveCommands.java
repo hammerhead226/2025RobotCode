@@ -331,8 +331,7 @@ public class DriveCommands {
                       && DriverStation.getAlliance().get() == Alliance.Red;
               drive.runVelocity(
                   ChassisSpeeds
-                      .fromRobotRelativeSpeeds( // TODO: This looks important; we kind of changed
-                          // this for robot-centric.
+                      .fromFieldRelativeSpeeds(
                           speeds,
                           isFlipped
                               ? drive.getRotation().plus(new Rotation2d(Math.PI))
