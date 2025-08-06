@@ -37,6 +37,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
@@ -60,6 +61,8 @@ public class DriveCommands {
 
   private static Pose2d previousTargetPose;
   private static Pose2d targetPose;
+
+  private boolean FieldRelative = true;
 
   public static Pose2d getTargetPose() {
     return targetPose;
@@ -103,7 +106,8 @@ public class DriveCommands {
       LED led,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
-      DoubleSupplier omegaSupplier) {
+      DoubleSupplier omegaSupplier,
+      BooleanSupplier fieldRelativeSupplier) {
     // BooleanSupplier sourceAlignSupplier,
     // BooleanSupplier processorAlignSupplier,
     // BooleanSupplier anchorAlignSupplier) {
@@ -250,9 +254,12 @@ public class DriveCommands {
                   ? drive.getMaxLinearSpeedMetersPerSec() / totalInputSpeed
                   : 1;
 
-          ChassisSpeeds inputSpeeds =
-              ChassisSpeeds.fromRobotRelativeSpeeds(
-                  forwardSpeed, sidewaysSpeed, rotationSpeed, Rotation2d.kZero);
+            ChassisSpeeds inputSpeeds = fieldRelativeSupplier.getAsBoolean()
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(
+            forwardSpeed, sidewaysSpeed, rotationSpeed, isFlipped ? drive.getRotation().plus(Rotation2d.kPi) : drive.getRotation())
+            : ChassisSpeeds.fromRobotRelativeSpeeds(
+              forwardSpeed, sidewaysSpeed, rotationSpeed, Rotation2d.kZero);
+              
           // isFlipped ? drive.getRotation().plus(Rotation2d.kPi) : drive.getRotation());
 
           ChassisSpeeds assistSpeeds =

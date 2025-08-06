@@ -33,6 +33,7 @@
               }
             ]
           },
+          
           {
             "title": "Driver Controller",
             "x": 1024.0,
@@ -225,6 +226,23 @@
               "true_icon": "None",
               "false_icon": "None"
             }
+          },
+          {
+            "title": "Field Relative Mode",
+            "x": 1024.0,
+            "y": 512.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Toggle Button",
+            "properties": {
+              "topic": "/SmartDashboard/FieldRelative",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "Check",
+              "false_icon": "X"
+            }
           }
         ]
       }
@@ -265,6 +283,7 @@
               "period": 0.06
             }
           }
+          
         ]
       }
     }
