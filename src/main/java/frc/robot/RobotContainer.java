@@ -6,7 +6,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -85,6 +87,9 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 import java.util.function.BooleanSupplier;
+
+import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -125,7 +130,19 @@ public class RobotContainer {
   private final LoggedDashboardChooser<Command> autoChooser;
   private final SendableChooser<Command> autos;
   private DigitalInput brakeSwitch;
-  BooleanSupplier fieldRelativeSupplier = () -> SmartDashboard.getBoolean("FieldRelative", true);
+  private BooleanSupplier fieldRelativeSupplier =
+      () -> SmartDashboard.getBoolean("FieldRelative", true);
+  @AutoLogOutput
+  private boolean switchedToRobotRelative = false;
+  private Trigger autoSwitchToRobotRelative =
+      new Trigger(
+          () ->
+              !switchedToRobotRelative
+                  && DriverStation.isTeleop()
+                  && DriverStation.getMatchTime() <= 15.0
+                  && new Translation2d(driveController.getLeftX(), driveController.getLeftY())
+                          .getNorm()
+                      < 0.2);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -461,6 +478,19 @@ public class RobotContainer {
             () ->
                 driveController.leftTrigger().getAsBoolean()
                     || driveController.rightTrigger().getAsBoolean());
+
+    new Trigger(fieldRelativeSupplier)
+        .onFalse(
+            new InstantCommand(
+                () -> {
+                  switchedToRobotRelative = true;
+                }));
+    autoSwitchToRobotRelative.onTrue(
+        new InstantCommand(
+            () -> {
+              SmartDashboard.putBoolean("FieldRelative", false);
+              switchedToRobotRelative = true;
+            }));
 
     configureButtonBindings();
     // test();
