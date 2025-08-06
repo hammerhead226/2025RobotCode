@@ -85,9 +85,6 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 import java.util.function.BooleanSupplier;
-
-
-
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -129,7 +126,6 @@ public class RobotContainer {
   private final SendableChooser<Command> autos;
   private DigitalInput brakeSwitch;
   BooleanSupplier fieldRelativeSupplier = () -> SmartDashboard.getBoolean("FieldRelative", true);
-
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {

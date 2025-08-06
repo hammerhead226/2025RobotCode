@@ -254,12 +254,16 @@ public class DriveCommands {
                   ? drive.getMaxLinearSpeedMetersPerSec() / totalInputSpeed
                   : 1;
 
-            ChassisSpeeds inputSpeeds = fieldRelativeSupplier.getAsBoolean()
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(
-            forwardSpeed, sidewaysSpeed, rotationSpeed, isFlipped ? drive.getRotation().plus(Rotation2d.kPi) : drive.getRotation())
-            : ChassisSpeeds.fromRobotRelativeSpeeds(
-              forwardSpeed, sidewaysSpeed, rotationSpeed, Rotation2d.kZero);
-              
+          ChassisSpeeds inputSpeeds =
+              fieldRelativeSupplier.getAsBoolean()
+                  ? ChassisSpeeds.fromFieldRelativeSpeeds(
+                      forwardSpeed,
+                      sidewaysSpeed,
+                      rotationSpeed,
+                      isFlipped ? drive.getRotation().plus(Rotation2d.kPi) : drive.getRotation())
+                  : ChassisSpeeds.fromRobotRelativeSpeeds(
+                      forwardSpeed, sidewaysSpeed, rotationSpeed, Rotation2d.kZero);
+
           // isFlipped ? drive.getRotation().plus(Rotation2d.kPi) : drive.getRotation());
 
           ChassisSpeeds assistSpeeds =
@@ -330,12 +334,11 @@ public class DriveCommands {
                   DriverStation.getAlliance().isPresent()
                       && DriverStation.getAlliance().get() == Alliance.Red;
               drive.runVelocity(
-                  ChassisSpeeds
-                      .fromFieldRelativeSpeeds(
-                          speeds,
-                          isFlipped
-                              ? drive.getRotation().plus(new Rotation2d(Math.PI))
-                              : drive.getRotation()));
+                  ChassisSpeeds.fromFieldRelativeSpeeds(
+                      speeds,
+                      isFlipped
+                          ? drive.getRotation().plus(new Rotation2d(Math.PI))
+                          : drive.getRotation()));
               double rotationSpeed;
             },
             drive)
