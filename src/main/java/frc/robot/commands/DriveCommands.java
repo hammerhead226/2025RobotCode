@@ -251,14 +251,12 @@ public class DriveCommands {
                   : 1;
 
           ChassisSpeeds inputSpeeds =
-              ChassisSpeeds.fromFieldRelativeSpeeds(
-                  forwardSpeed,
-                  sidewaysSpeed,
-                  rotationSpeed,
-                  isFlipped ? drive.getRotation().plus(Rotation2d.kPi) : drive.getRotation());
+              ChassisSpeeds.fromRobotRelativeSpeeds(
+                  forwardSpeed, sidewaysSpeed, rotationSpeed, Rotation2d.kZero);
+          // isFlipped ? drive.getRotation().plus(Rotation2d.kPi) : drive.getRotation());
 
           ChassisSpeeds assistSpeeds =
-              ChassisSpeeds.fromFieldRelativeSpeeds(
+              ChassisSpeeds.fromRobotRelativeSpeeds(
                   new ChassisSpeeds(0, 0, rotationAssistEffort), drive.getRotation());
 
           ChassisSpeeds finalInputSpeed = inputSpeeds.plus(assistSpeeds).times(scale);
@@ -325,11 +323,13 @@ public class DriveCommands {
                   DriverStation.getAlliance().isPresent()
                       && DriverStation.getAlliance().get() == Alliance.Red;
               drive.runVelocity(
-                  ChassisSpeeds.fromFieldRelativeSpeeds(
-                      speeds,
-                      isFlipped
-                          ? drive.getRotation().plus(new Rotation2d(Math.PI))
-                          : drive.getRotation()));
+                  ChassisSpeeds
+                      .fromRobotRelativeSpeeds( // TODO: This looks important; we kind of changed
+                          // this for robot-centric.
+                          speeds,
+                          isFlipped
+                              ? drive.getRotation().plus(new Rotation2d(Math.PI))
+                              : drive.getRotation()));
               double rotationSpeed;
             },
             drive)
