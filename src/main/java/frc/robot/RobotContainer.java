@@ -86,11 +86,9 @@ import frc.robot.subsystems.scoral.ScoralRollersIOTalonFX;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
-import java.util.function.BooleanSupplier;
-
-import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -130,10 +128,8 @@ public class RobotContainer {
   private final LoggedDashboardChooser<Command> autoChooser;
   private final SendableChooser<Command> autos;
   private DigitalInput brakeSwitch;
-  private BooleanSupplier fieldRelativeSupplier =
-      () -> SmartDashboard.getBoolean("FieldRelative", true);
-  @AutoLogOutput
-  private boolean switchedToRobotRelative = false;
+  private LoggedNetworkBoolean fieldRelative = new LoggedNetworkBoolean("FieldRelative", false);
+  @AutoLogOutput private boolean switchedToRobotRelative = false;
   private Trigger autoSwitchToRobotRelative =
       new Trigger(
           () ->
@@ -479,7 +475,7 @@ public class RobotContainer {
                 driveController.leftTrigger().getAsBoolean()
                     || driveController.rightTrigger().getAsBoolean());
 
-    new Trigger(fieldRelativeSupplier)
+    new Trigger(fieldRelative::get)
         .onFalse(
             new InstantCommand(
                 () -> {
@@ -488,7 +484,7 @@ public class RobotContainer {
     autoSwitchToRobotRelative.onTrue(
         new InstantCommand(
             () -> {
-              SmartDashboard.putBoolean("FieldRelative", false);
+              fieldRelative.set(false);
               switchedToRobotRelative = true;
             }));
 
@@ -515,7 +511,7 @@ public class RobotContainer {
             () -> -driveController.getLeftY(),
             () -> -driveController.getLeftX(),
             () -> -driveController.getRightX(),
-            fieldRelativeSupplier));
+            fieldRelative::get));
 
     driveController
         .leftTrigger()
@@ -578,7 +574,7 @@ public class RobotContainer {
             () -> -driveController.getLeftY(),
             () -> -driveController.getLeftX(),
             () -> -driveController.getRightX(),
-            fieldRelativeSupplier));
+            fieldRelative::get));
 
     driveController
         .leftTrigger()

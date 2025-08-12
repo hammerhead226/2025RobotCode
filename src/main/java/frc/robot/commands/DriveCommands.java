@@ -62,8 +62,6 @@ public class DriveCommands {
   private static Pose2d previousTargetPose;
   private static Pose2d targetPose;
 
-  private boolean FieldRelative = true;
-
   public static Pose2d getTargetPose() {
     return targetPose;
   }
