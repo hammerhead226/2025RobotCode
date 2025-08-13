@@ -128,7 +128,7 @@ public class RobotContainer {
   private final LoggedDashboardChooser<Command> autoChooser;
   private final SendableChooser<Command> autos;
   private DigitalInput brakeSwitch;
-  private LoggedNetworkBoolean fieldRelative = new LoggedNetworkBoolean("FieldRelative", false);
+  private LoggedNetworkBoolean fieldRelative = new LoggedNetworkBoolean("FieldRelative", true);
   @AutoLogOutput private boolean switchedToRobotRelative = false;
   private Trigger autoSwitchToRobotRelative =
       new Trigger(
