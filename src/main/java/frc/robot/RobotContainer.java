@@ -481,12 +481,12 @@ public class RobotContainer {
                 () -> {
                   switchedToRobotRelative = true;
                 }));
-    autoSwitchToRobotRelative.onTrue(
-        new InstantCommand(
-            () -> {
-              fieldRelative.set(false);
-              switchedToRobotRelative = true;
-            }));
+    // autoSwitchToRobotRelative.onTrue(
+    //     new InstantCommand(
+    //         () -> {
+    //           fieldRelative.set(false);
+    //           switchedToRobotRelative = true;
+    //         }));
 
     configureButtonBindings();
     // test();
@@ -667,6 +667,8 @@ public class RobotContainer {
                             scoralRollers,
                             led)
                         .andThen(new InstantCommand(() -> superStructure.nextState()))));
+
+    driveController.y().onTrue(new InstantCommand(() -> fieldRelative.set(!fieldRelative.get())));
 
     driveController
         .leftBumper()
