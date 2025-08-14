@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.726229508196721,
-        "y": 0.8182889344262299
+        "x": 1.626,
+        "y": 0.9179999999999999
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.707961515492844,
-        "y": 2.3975848374664617
+        "x": 3.607732007296123,
+        "y": 2.4972959030402317
       },
       "isLocked": false,
       "linkedName": "BlueLeftSource"
@@ -57,7 +57,7 @@
     "rotation": -29.999999999999996
   },
   "reversed": false,
-  "folder": "BlueLeftL2",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": -38.5
