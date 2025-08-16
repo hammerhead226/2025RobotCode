@@ -125,6 +125,8 @@ public class ScoralArm extends SubsystemBase {
   }
 
   public boolean hasReachedGoal(double goalDegs) {
+    Logger.recordOutput(
+        "Debug arm has reached goal", Math.abs(saInputs.positionDegs - goalDegs) <= 8);
     return (Math.abs(saInputs.positionDegs - goalDegs) <= 8);
   }
 

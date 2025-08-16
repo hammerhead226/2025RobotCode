@@ -416,12 +416,15 @@ public class RobotContainer {
 
     autos.addOption("hello", AutoBuilder.buildAuto("hello"));
     autos.addOption("Processor", AutoBuilder.buildAuto("Processor"));
+    autos.addOption("Processor_0.5SEC", AutoBuilder.buildAuto("Processor_0.5SEC"));
     // autos.addOption("BlueLeftPush", AutoBuilder.buildAuto("BlueLeftPush"));
     autos.addOption("CenterBarge", AutoBuilder.buildAuto("CenterBarge"));
+    autos.addOption("CenterBargeSTOP", AutoBuilder.buildAuto("CenterBargeSTOP"));
     autos.addOption("CenterProcessor", AutoBuilder.buildAuto("CenterProcessor"));
     // autos.addOption("BlueMiddleLeft", AutoBuilder.buildAuto("BlueMiddleLeft"));
     // autos.addOption("BlueMiddleRight", AutoBuilder.buildAuto("BlueMiddleRight"));
     autos.addOption("Barge", AutoBuilder.buildAuto("Barge"));
+    autos.addOption("Barge_0.5SEC", AutoBuilder.buildAuto("Barge_0.5SEC"));
     autos.addOption("BargeAlgae", AutoBuilder.buildAuto("BargeAlgae"));
     autos.addOption("ProcessorAlgae", AutoBuilder.buildAuto("ProcessorAlgae"));
 

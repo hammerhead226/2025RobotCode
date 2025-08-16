@@ -103,6 +103,8 @@ public class Elevator extends SubsystemBase {
   }
 
   public boolean atGoal(double threshold) {
+    Logger.recordOutput(
+        "Debug at elevator goal", Math.abs(eInputs.positionInch - goal) <= threshold);
     return (Math.abs(eInputs.positionInch - goal) <= threshold);
   }
 
