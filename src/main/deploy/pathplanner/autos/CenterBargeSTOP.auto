@@ -1,0 +1,79 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterBargeFirst"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SCORE_CORAL_NEW"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "STOW"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "INTAKE_ALGAE_FROM_REEF"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.15
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterBargeSecond"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "BARGE_SCORE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterBargeThird"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "INTAKE_ALGAE_FROM_REEF"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.15
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterBargeFourthSTOP"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
