@@ -9,7 +9,7 @@ import com.ctre.phoenix.led.CANdle.LEDStripType;
 import com.ctre.phoenix.led.CANdleConfiguration;
 import com.ctre.phoenix.led.ColorFlowAnimation;
 import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
-import com.ctre.phoenix.led.FireAnimation;
+import com.ctre.phoenix.led.SingleFadeAnimation;
 import com.ctre.phoenix.led.StrobeAnimation;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -38,8 +38,8 @@ public class LED_IOCANdle implements LED_IO {
   StrobeAnimation flashBlack = new StrobeAnimation(0, 0, 0, 0, 0.01, 57 + 24);
   StrobeAnimation flashCyan = new StrobeAnimation(204, 255, 255, 0, 0.01, 57 + 24);
 
-  FireAnimation rainbow =
-      new FireAnimation(0.3, 0.03, SubsystemConstants.LEDConstants.NUMBER_LEDS, 0.1, 0.1);
+  SingleFadeAnimation rainbow =
+      new SingleFadeAnimation(0, 0, 226, 226, 0.4, SubsystemConstants.LEDConstants.NUMBER_LEDS);
   // ColorFlowAnimation rainbow = new ColorFlowAnimation(0, 0, 255, 0, 0.343, 57,
   // Direction.Forward);
 
@@ -59,7 +59,7 @@ public class LED_IOCANdle implements LED_IO {
   public LED_IOCANdle(int channel, String CANBUS) {
     // led = new Spark(channel);
     candle = new CANdle(channel, CANBUS);
-    ledState = SubsystemConstants.LED_STATE.BLUE;
+    ledState = SubsystemConstants.LED_STATE.GREEN;
 
     CANdleConfiguration configs = new CANdleConfiguration();
     // CANdleControlFrame.CANdle_Control_1_General(0x4000);
@@ -116,7 +116,7 @@ public class LED_IOCANdle implements LED_IO {
         break;
       case GREEN:
         candle.clearAnimation(0);
-        candle.setLEDs(0, 255, 0, 0, 0, SubsystemConstants.LEDConstants.NUMBER_LEDS);
+        candle.setLEDs(0, 226, 0, 0, 0, SubsystemConstants.LEDConstants.NUMBER_LEDS);
         break;
       case PURPLE:
         // TODO:: INTAKE ALGAE FROM REEF

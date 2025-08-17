@@ -351,7 +351,8 @@ public class RobotContainer {
         "SEE_CORAL",
         new SequentialCommandGroup(
             // new WaitCommand(1.5),
-            new WaitUntilCommand(() -> scoralRollers.seesCoral() == CoralState.SENSOR).withTimeout(1.3),
+            new WaitUntilCommand(() -> scoralRollers.seesCoral() == CoralState.SENSOR)
+                .withTimeout(1.3),
             new InstantCommand(() -> scoralRollers.stop())));
 
     NamedCommands.registerCommand(
