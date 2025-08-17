@@ -13,6 +13,7 @@ import com.ctre.phoenix.led.FireAnimation;
 import com.ctre.phoenix.led.StrobeAnimation;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.constants.SubsystemConstants;
 import frc.robot.constants.SubsystemConstants.LED_STATE;
 
@@ -152,6 +153,13 @@ public class LED_IOCANdle implements LED_IO {
         break;
       default:
         break;
+    }
+  }
+
+  @Override
+  public void setLEDColors(Color8Bit[] colors) {
+    for (int i = 0; i < Math.min(colors.length, SubsystemConstants.LEDConstants.NUMBER_LEDS); i++) {
+      candle.setLEDs(colors[i].red, colors[i].green, colors[i].blue, 0, i, 1);
     }
   }
 }

@@ -23,10 +23,12 @@ import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.SimConstants;
+import frc.robot.constants.SubsystemConstants;
 import frc.robot.constants.SubsystemConstants.LED_STATE;
 import frc.robot.constants.TunerConstants;
 import frc.robot.util.LimelightHelpers;
 import frc.robot.util.ReefPositionsUtil;
+import frc.robot.util.WaveAnimation;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -158,6 +160,12 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledPeriodic() {
     LimelightHelpers.setLimelightNTDouble("limelight-reef", "throttle_set", 50);
+
+    robotContainer
+        .getLED()
+        .setLEDColors(
+            WaveAnimation.getColors(
+                SubsystemConstants.LEDConstants.NUMBER_LEDS, System.currentTimeMillis() / 1000.0));
 
     if (!robotContainer.getScoralArm().armAtSetpoint(10.0)) {
       robotContainer

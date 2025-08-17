@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.led;
 
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.constants.SubsystemConstants.LED_STATE;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -21,4 +22,6 @@ public interface LED_IO {
   public default void noBumpersPressed() {}
 
   public default void setLEDState(LED_STATE state) {}
+
+  public default void setLEDColors(Color8Bit[] colors) {}
 }
