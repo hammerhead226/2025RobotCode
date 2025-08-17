@@ -370,20 +370,25 @@ public class RobotContainer {
             new WaitCommand(0.25)));
     NamedCommands.registerCommand(
         "SCORE_CORAL_NEW",
-        new SequentialCommandGroup(
-                new WaitUntilCommand(() -> scoralRollers.seesCoral() == CoralState.SENSOR),
-                new ToReefHeight(
-                    elevator,
-                    scoralArm,
-                    SubsystemConstants.ElevatorConstants.L4_SETPOINT_INCHES,
-                    SubsystemConstants.ScoralArmConstants.L4_CORAL_SCORING_SETPOINT_DEG),
-                new WaitUntilCommand(
-                    () ->
-                        elevator.atGoal(2)
-                            && scoralArm.hasReachedGoal(
-                                ScoralArmConstants.L4_CORAL_SCORING_SETPOINT_DEG)),
-                scoralRollers.runVoltsCommmand(5),
-                new WaitCommand(0.14))
+        new WaitUntilCommand(() -> scoralRollers.seesCoral() == CoralState.SENSOR)
+            .withTimeout(1)
+            .andThen(
+                new ConditionalCommand(
+                    new SequentialCommandGroup(
+                        new ToReefHeight(
+                            elevator,
+                            scoralArm,
+                            SubsystemConstants.ElevatorConstants.L4_SETPOINT_INCHES,
+                            SubsystemConstants.ScoralArmConstants.L4_CORAL_SCORING_SETPOINT_DEG),
+                        new WaitUntilCommand(
+                            () ->
+                                elevator.atGoal(2)
+                                    && scoralArm.hasReachedGoal(
+                                        ScoralArmConstants.L4_CORAL_SCORING_SETPOINT_DEG)),
+                        scoralRollers.runVoltsCommmand(5),
+                        new WaitCommand(0.14)),
+                    new InstantCommand(() -> {}),
+                    () -> scoralRollers.seesCoral() == CoralState.SENSOR))
             .withTimeout(3.5));
 
     NamedCommands.registerCommand(
@@ -436,6 +441,8 @@ public class RobotContainer {
     autos.addOption("BlueLeftL2", AutoBuilder.buildAuto("BlueLeftL2"));
     // autos.addOption("BlueLeftPushL2", AutoBuilder.buildAuto("BlueLeftPushL2"));
     // autos.addOption("BlueRightL2", AutoBuilder.buildAuto("BlueRightL2"));
+
+    autos.addOption("zzzDONTCHOOSE", AutoBuilder.buildAuto("zzzDONTCHOOSE"));
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", autos);
 
