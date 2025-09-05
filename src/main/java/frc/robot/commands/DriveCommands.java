@@ -28,11 +28,18 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.constants.*;
+import frc.robot.constants.SubsystemConstants.CoralState;
 import frc.robot.constants.SubsystemConstants.SuperStructureState;
 import frc.robot.subsystems.SuperStructure;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.led.LED;
+import frc.robot.subsystems.scoral.DistanceSensorCANRangeIO;
+import frc.robot.subsystems.scoral.ScoralArm;
+import frc.robot.subsystems.scoral.ScoralRollers;
 import frc.robot.util.SlewRateLimiter;
+
+import static edu.wpi.first.units.Units.Rotation;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
@@ -52,6 +59,7 @@ public class DriveCommands {
   private static final double FF_RAMP_RATE = 0.1; // Volts/Sec
   private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
   private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
+  public static boolean passiveAlign;
 
   private static double rotationErrorDegrees = 0;
 
@@ -102,6 +110,7 @@ public class DriveCommands {
       Drive drive,
       SuperStructure superStructure,
       LED led,
+      ScoralRollers scoralRollers,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
       DoubleSupplier omegaSupplier,
@@ -143,32 +152,48 @@ public class DriveCommands {
           double speedDebuff = 0.75;
           targetPose = null;
 
-          if (2 == 1) {
-            if (superStructure.getWantedState() == SuperStructureState.SOURCE) {
+          if (omegaSupplier.getAsDouble() != 0.0) {passiveAlign = false;}
+
+          if (passiveAlign == true) {
+            if (drive.getPose().getX() <= 5 && scoralRollers.seesCoral() != CoralState.SENSOR) {
               targetPose = drive.getNearestSource();
-              targetPose =
-                  new Pose2d(
-                      new Translation2d(0, 0),
-                      targetPose.getRotation().plus(Rotation2d.fromDegrees(-90)));
-              // Logger.recordOutput("Debug Driver Alignment/drive targetPose name", "source");
-            } else if (superStructure.getWantedState() == SuperStructureState.PROCESSOR) {
-              targetPose = Drive.transformPerAlliance(FieldConstants.Processor.centerFace);
-              targetPose =
-                  rotateAndNudge(targetPose, new Translation2d(-0.5, 0), new Rotation2d(Math.PI));
-              targetPose =
-                  new Pose2d(
-                      targetPose.getTranslation(),
-                      targetPose.getRotation().plus(Rotation2d.fromDegrees(-90)));
-              // Logger.recordOutput("Debug Driver Alignment/drive targetPose name", "processor");
             }
-          } else {
-            // Logger.recordOutput("Debug Driver Alignment/drive targetPose name", "none");
+            if ( 
+             drive.getPose().getX() >= 2
+             && drive.getPose().getX() <= 12 && drive.getPose().getY() <= 10 
+             && drive.getPose().getY() >= 2 
+             && scoralRollers.seesCoral() == CoralState.SENSOR) {
+              // if it isn't too close to the walls and it has an object align to reef center
+              targetPose = new Pose2d(5, 5, Rotation2d.fromDegrees(Math.atan2(drive.getPose().getY() - 5, drive.getPose().getX() - 5)));
+            }
           }
+
+          // if (2 == 1) {
+          //   if (superStructure.getWantedState() == SuperStructureState.SOURCE) {
+          //     targetPose = drive.getNearestSource();
+          //     targetPose =
+          //         new Pose2d(
+          //             new Translation2d(0, 0),
+          //             targetPose.getRotation().plus(Rotation2d.fromDegrees(-90)));
+          //     // Logger.recordOutput("Debug Driver Alignment/drive targetPose name", "source");
+          //   } else if (superStructure.getWantedState() == SuperStructureState.PROCESSOR) {
+          //     targetPose = Drive.transformPerAlliance(FieldConstants.Processor.centerFace);
+          //     targetPose =
+          //         rotateAndNudge(targetPose, new Translation2d(-0.5, 0), new Rotation2d(Math.PI));
+          //     targetPose =
+          //         new Pose2d(
+          //             targetPose.getTranslation(),
+          //             targetPose.getRotation().plus(Rotation2d.fromDegrees(-90)));
+          //     // Logger.recordOutput("Debug Driver Alignment/drive targetPose name", "processor");
+          //   }
+          // } else {
+          //   // Logger.recordOutput("Debug Driver Alignment/drive targetPose name", "none");
+          // }
 
           if (targetPose != null && !targetPose.equals(previousTargetPose)) {
             previousTargetPose = targetPose;
 
-            rotationPID.reset(drive.getRotation().getDegrees());
+           rotationPID.reset(drive.getRotation().getDegrees());
           }
 
           Logger.recordOutput("Debug Driver Alignment/drive targetPose", targetPose);
