@@ -6,16 +6,10 @@ import frc.robot.constants.FieldConstants;
 
 public class Bounds {
 
-  double robotWidth;
-  double centerOffset;
+  public static double robotWidth = 0.9;
+  public static double centerOffset = 1;
 
-  public Bounds() {
-
-    double robotWidth = 0.9;
-    double centerOffset = 1; // change number
-  }
-
-  public boolean isInBounds(Pose2d currentPose) {
+  public static boolean isInBounds(Pose2d currentPose) {
     double leftEdge = FieldConstants.fieldWidth - robotWidth;
     double rightEdge = robotWidth;
 
@@ -34,7 +28,7 @@ public class Bounds {
         && (driveY <= leftEdge && driveY >= rightEdge);
   }
 
-  public boolean rectangleBounds(
+  public static boolean rectangleBounds(
       Pose2d bottomLeftCorner, double Length, double Width, Pose2d currentPose) {
     // left corner is the lower x and y value corner so the corner closest to (0,0)
 
@@ -46,7 +40,7 @@ public class Bounds {
     double yMax =
         (!AllianceFlipUtil.shouldFlip())
             ? bottomLeftCorner.getY() + Width
-            : bottomLeftCorner.getY() + Length + FieldConstants.fieldLength / 2;
+            : bottomLeftCorner.getY();
 
     double xMin =
         (!AllianceFlipUtil.shouldFlip())
@@ -56,7 +50,7 @@ public class Bounds {
     double yMin =
         (!AllianceFlipUtil.shouldFlip())
             ? bottomLeftCorner.getY()
-            : bottomLeftCorner.getY() + FieldConstants.fieldLength / 2;
+            : bottomLeftCorner.getY();
 
     double driveX = currentPose.getX();
     double driveY = currentPose.getY();
@@ -64,14 +58,11 @@ public class Bounds {
     return (driveX <= xMax && driveX >= xMin) && (driveY <= yMax && driveY >= yMin);
   }
 
-  public boolean circleBounds(Translation2d circlePose, double circleRadius, Pose2d currentPose) {
+  public static boolean circleBounds(Translation2d circlePose, double circleRadius, Pose2d currentPose) {
     circlePose =
-        (!AllianceFlipUtil.shouldFlip())
-            ? circlePose
-            : circlePose.plus(new Translation2d(0, 13.522325));
-
+    AllianceFlipUtil.apply(circlePose);
     Translation2d robotPose = currentPose.getTranslation();
     double distance = robotPose.getDistance(circlePose);
-    return (distance > circleRadius + robotWidth);
+    return (distance > circleRadius);
   }
 }
