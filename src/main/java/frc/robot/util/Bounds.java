@@ -59,8 +59,7 @@ public class Bounds {
   }
 
   public static boolean circleBounds(Translation2d circlePose, double circleRadius, Pose2d currentPose) {
-    circlePose =
-    AllianceFlipUtil.apply(circlePose);
+    circlePose = AllianceFlipUtil.apply(circlePose);
     Translation2d robotPose = currentPose.getTranslation();
     double distance = robotPose.getDistance(circlePose);
     return (distance > circleRadius);
