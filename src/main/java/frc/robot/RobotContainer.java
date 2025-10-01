@@ -588,10 +588,7 @@ public class RobotContainer {
             () -> -driveController.getLeftX(),
             () -> -driveController.getRightX(),
             fieldRelative::get));
-
-    if (driveController.getRightX() >= 0.0 || driveController.getRightX() <= -0.0) {
-      DriveCommands.passiveAlign = false;
-    }
+// boolean for if the dashboard button is pressed or if the turn stick is being moved
 
     driveController
         .leftTrigger()
