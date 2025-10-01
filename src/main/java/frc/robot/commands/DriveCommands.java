@@ -29,7 +29,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.constants.*;
 import frc.robot.constants.FieldConstants.Reef;
-import frc.robot.constants.SubsystemConstants.CoralState;
 import frc.robot.subsystems.SuperStructure;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.led.LED;
@@ -158,9 +157,12 @@ public class DriveCommands {
           // targetPose = drive.getNearestSource();
           // }
 
-          Translation2d reefPose = AllianceFlipUtil.apply(Reef.center);
+          Translation2d reefPose =
+              (!AllianceFlipUtil.shouldFlip())
+                  ? Reef.center
+                  : Reef.center.plus(new Translation2d(0, 13.522325));
           Translation2d robotPose = drive.getPose().getTranslation();
-          double reefRadius = 1.3;
+          double reefRadius = 1.5;
           double distance = robotPose.getDistance(reefPose);
           Bounds bounds = new Bounds();
           if (bounds.isInBounds(drive.getPose())
@@ -170,14 +172,11 @@ public class DriveCommands {
             // if it isn't too close to the walls and it has an object align to reef center
             targetPose =
                 new Pose2d(
-                    reefPose.getX(),
-                    reefPose.getY(),
+                    4.5,
+                    4,
                     Rotation2d.fromRadians(
-                        Math.atan2(drive.getPose().getY() - reefPose.getY(), drive.getPose().getX() - reefPose.getX())));
-          } else if (scoralRollers.seesCoral() != CoralState.SENSOR) {
-        // if it doesn't have an object then align to the nearest reef 
-        targetPose = drive.getNearestSource();
-      }
+                        Math.atan2(drive.getPose().getY() - 4, drive.getPose().getX() - 4.5)));
+          }
           //     }
 
           // if (2 == 1) {
