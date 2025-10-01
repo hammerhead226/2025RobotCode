@@ -519,7 +519,6 @@ public class RobotContainer {
             drive,
             superStructure,
             led,
-            scoralRollers,
             () -> -driveController.getLeftY(),
             () -> -driveController.getLeftX(),
             () -> -driveController.getRightX(),
@@ -583,12 +582,10 @@ public class RobotContainer {
             drive,
             superStructure,
             led,
-            scoralRollers,
             () -> -driveController.getLeftY(),
             () -> -driveController.getLeftX(),
             () -> -driveController.getRightX(),
             fieldRelative::get));
-// boolean for if the dashboard button is pressed or if the turn stick is being moved
 
     driveController
         .leftTrigger()
