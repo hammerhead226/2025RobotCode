@@ -123,6 +123,8 @@ public class RobotContainer {
   private Trigger resetLimelight;
   private Trigger turnLimelightON;
   private Trigger autoAlignRelease;
+  
+  private boolean shouldHoldAlgaePostAuto = false;
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -415,6 +417,8 @@ public class RobotContainer {
                   return new IntakeAlgaeFromReef(
                       drive, scoralArm, scoralRollers, elevator, led, height1, height2);
                 })));
+    
+    NamedCommands.registerCommand("HOLD_ALGAE_POST_AUTO", new InstantCommand(() -> shouldHoldAlgaePostAuto = true));
 
     // NamedCommands.registerCommand("Stow", new Stow(elevator, csArm));
 
@@ -502,6 +506,12 @@ public class RobotContainer {
     configureButtonBindings();
     // test();
   }
+
+  public void holdAlgaePostAuto() {
+    if (shouldHoldAlgaePostAuto) {
+        scoralRollers.runVolts(-2);
+    }
+}
 
   private void test() {
     // drive.setDefaultCommand(
@@ -594,7 +604,7 @@ public class RobotContainer {
             new ParallelCommandGroup(
                 new ConditionalCommand(
                     new IntakingCoral(scoralRollers),
-                    new InstantCommand(),
+                    new InstantCommand(scoralRollers::stop),
                     () -> scoralRollers.seesCoral() != CoralState.SENSOR),
                 new SequentialCommandGroup(
                     new ApproachReef(
@@ -618,7 +628,7 @@ public class RobotContainer {
             new ParallelCommandGroup(
                 new ConditionalCommand(
                     new IntakingCoral(scoralRollers),
-                    new InstantCommand(),
+                    new InstantCommand(scoralRollers::stop),
                     () -> scoralRollers.seesCoral() != CoralState.SENSOR),
                 new SequentialCommandGroup(
                     new ApproachReef(
