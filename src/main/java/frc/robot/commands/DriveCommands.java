@@ -162,8 +162,9 @@ public class DriveCommands {
           Translation2d robotPose = drive.getPose().getTranslation();
           double reefRadius = 1.3;
           double distance = robotPose.getDistance(reefPose);
-          if (Bounds.isInBounds(drive.getPose())
-              && Bounds.circleBounds(reefPose, reefRadius, drive.getPose())
+          Bounds bounds = new Bounds();
+          if (bounds.isInBounds(drive.getPose())
+              && bounds.circleBounds(reefPose, reefRadius, drive.getPose())
           // && scoralRollers.seesCoral() == CoralState.SENSOR
           ) {
             // if it isn't too close to the walls and it has an object align to reef center
