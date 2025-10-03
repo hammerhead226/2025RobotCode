@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.SimConstants;
 import frc.robot.constants.SubsystemConstants.LED_STATE;
-import frc.robot.subsystems.scoral.ScoralRollers;
 import frc.robot.constants.TunerConstants;
 import frc.robot.util.LimelightHelpers;
 import frc.robot.util.ReefPositionsUtil;
@@ -241,7 +240,7 @@ public class Robot extends LoggedRobot {
     robotContainer
         .getElevator()
         .setElevatorGoal(robotContainer.getElevator().getElevatorPosition());
-    
+
     // robotContainer.holdAlgaePostAuto();
   }
 

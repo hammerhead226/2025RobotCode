@@ -79,12 +79,19 @@ public class ScoralRollers extends SubsystemBase {
     sensor.updateInputs(sInputs);
     Logger.processInputs("Scoral Rollers", inputs);
     Logger.processInputs("Scoral Rollers/CANrange", sInputs);
+    Logger.recordOutput("Debug Scoral Rollers/running command", getCurrentCommand() != null);
+    Logger.recordOutput(
+        "Debug Scoral Rollers/running command name",
+        getCurrentCommand() == null ? "" : getCurrentCommand().getName());
 
     updateTunableNumbers();
   }
 
   /** Run open loop at the specified voltage. */
+  int runVoltsCount = 1;
+
   public void runVolts(double volts) {
+    Logger.recordOutput("Debug Rollers/runVoltsCount", runVoltsCount++);
     rollers.setVoltage(volts);
   }
 
@@ -158,7 +165,10 @@ public class ScoralRollers extends SubsystemBase {
     return inputs.velocityRadPerSec;
   }
 
+  int count = 0;
+
   public CoralState seesCoral() {
+    Logger.recordOutput("Debug Rollers/see coral called", count++);
     Logger.recordOutput("Debug Rollers/see coral val", "default");
 
     if ((sInputs.distanceInches < SubsystemConstants.CORAL_DIST)) {
