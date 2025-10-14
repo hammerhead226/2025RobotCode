@@ -174,10 +174,10 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotInit() {
-    ReefPositionsUtil.printOffsetPoses();
-    UsbCamera cam = CameraServer.startAutomaticCapture();
+    //ReefPositionsUtil.printOffsetPoses();
+    //UsbCamera cam = CameraServer.startAutomaticCapture();
 
-    cam.setResolution(640, 480);
+    //cam.setResolution(640, 480);
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
